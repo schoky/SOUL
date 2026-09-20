@@ -1,10 +1,10 @@
 # SOUL
 
-Browser multiplayer card game.
+Браузерная мультиплеерная карточная игра
 
-## Structure
+## Структура проекта
 
-- apps/client — React client
-- apps/server — Node.js game server
-- packages/shared — shared types and contracts
-- packages/game-engine — game rules
+- apps/client — React клиент
+- apps/server — Node.js игровой сервер
+- packages/shared — общие типы
+- packages/game-engine — игровые правила
