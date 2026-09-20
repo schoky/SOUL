@@ -1,0 +1,5 @@
+export const GAME_RULES = {
+	STARTING_SOUL: 3,
+	CHARACTERS_PER_PLAYER: 2,
+	WINNING_SOUL: 15
+} as const;
