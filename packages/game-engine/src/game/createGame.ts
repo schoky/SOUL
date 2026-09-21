@@ -1,4 +1,7 @@
-import type {GameState, Player} from '@soul/shared';
+import type {
+	GameState,
+	Player
+} from '@soul/shared';
 
 import {events} from '../data/events.js';
 import {createEventDeck} from '../deck/createEventDeck.js';
@@ -21,6 +24,7 @@ export function createGame(
 		currentEvent: null,
 		eventDeck,
 		turnNumber: 0,
-		winnerId: null
+		winnerId: null,
+		finalRoundStartedBy: null
 	};
 }

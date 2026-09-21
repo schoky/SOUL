@@ -12,41 +12,45 @@ export function dealCharacters(
 	characters: Character[],
 	random: () => number = Math.random
 ): Player[] {
-	const requiredCharacters =
-		players.length *
-		GAME_RULES.CHARACTERS_PER_PLAYER;
-	
 	if (
 		characters.length <
-		requiredCharacters
+		GAME_RULES.CHARACTERS_PER_PLAYER
 	) {
 		throw new Error(
-			`Not enough characters: required ${requiredCharacters}, available ${characters.length}`
+			`Not enough character types: required at least ${GAME_RULES.CHARACTERS_PER_PLAYER}, available ${characters.length}`
 		);
 	}
 	
-	const shuffledCharacters = shuffle(
-		characters,
-		random
-	);
-	
 	return players.map(
-		(player, playerIndex) => {
-			const startIndex =
-				playerIndex *
-				GAME_RULES.CHARACTERS_PER_PLAYER;
+		(player) => {
+			const shuffledCharacters =
+				shuffle(
+					characters,
+					random
+				);
 			
-			const endIndex =
-				startIndex +
-				GAME_RULES.CHARACTERS_PER_PLAYER;
+			const selectedCharacters =
+				shuffledCharacters.slice(
+					0,
+					GAME_RULES.CHARACTERS_PER_PLAYER
+				);
+			
+			const playerCharacters =
+				selectedCharacters.map(
+					(character, index) => ({
+						cardId:
+							`${player.id}-character-${index + 1}`,
+						characterId:
+						character.id,
+						exhausted: false,
+						abilityUsed: false
+					})
+				);
 			
 			return {
 				...player,
 				characters:
-					shuffledCharacters.slice(
-						startIndex,
-						endIndex
-					)
+				playerCharacters
 			};
 		}
 	);

@@ -1,16 +1,18 @@
-import type {Character, EventCard, StatType} from '@soul/shared';
-
-const STAT_TYPES: StatType[] = [
-	'farmila',
-	'perekup',
-	'tuller'
-];
+import type {
+	CharacterStats,
+	EventCard
+} from '@soul/shared';
 
 export function checkRequirements(
-	character: Character,
+	stats: CharacterStats,
 	event: EventCard
 ): boolean {
-	return STAT_TYPES.every((stat) => {
-		return character.stats[stat] >= event.requirements[stat];
-	});
+	return (
+		stats.farmila >=
+		event.requirements.farmila &&
+		stats.perekup >=
+		event.requirements.perekup &&
+		stats.tuller >=
+		event.requirements.tuller
+	);
 }

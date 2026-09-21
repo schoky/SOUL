@@ -1,6 +1,6 @@
-import type {EventCard} from './event.ts';
+import type {EventCard} from './event.js';
 import type {EventDeck} from './event-deck.js';
-import type {Player} from './player.ts';
+import type {Player} from './player.js';
 
 export type GameStatus =
 	| 'waiting'
@@ -16,4 +16,5 @@ export type GameState = {
 	eventDeck: EventDeck;
 	turnNumber: number;
 	winnerId: string | null;
+	finalRoundStartedBy: string | null;
 };

@@ -1,39 +1,53 @@
 import {describe, expect, it} from 'vitest';
 
-import {characters} from '../../src/data/characters';
-import {events} from '../../src/data/events';
+import type {
+	CharacterStats,
+	EventCard
+} from '@soul/shared';
+
 import {checkRequirements} from '../../src/rules/checkRequirements';
 
+const stats: CharacterStats = {
+	farmila: 5,
+	perekup: 4,
+	tuller: 7
+};
+
+const event: EventCard = {
+	id: 'test-event',
+	name: 'Тестовое событие',
+	requirements: {
+		farmila: 5,
+		perekup: 3,
+		tuller: 7
+	},
+	mainStat: 'tuller',
+	reward: 2,
+	description: 'Тестовое событие.'
+};
+
 describe('checkRequirements', () => {
-	it('возвращает true, если персонаж соответствует всем требованиям', () => {
-		const killer = characters.find(
-			(character) => character.id === 'killer'
-		);
-		
-		const raid = events.find(
-			(event) => event.id === 'raid-on-warehouse'
-		);
-		
-		if (!killer || !raid) {
-			throw new Error('Тестовые данные не найдены');
-		}
-		
-		expect(checkRequirements(killer, raid)).toBe(true);
+	it('возвращает true, если все характеристики соответствуют требованиям', () => {
+		expect(
+			checkRequirements(
+				stats,
+				event
+			)
+		).toBe(true);
 	});
 	
-	it('возвращает false, если хотя бы одна характеристика ниже требования', () => {
-		const workaholic = characters.find(
-			(character) => character.id === 'workaholic'
-		);
+	it('возвращает false, если хотя бы одна характеристика недостаточна', () => {
+		const insufficientStats: CharacterStats = {
+			farmila: 5,
+			perekup: 2,
+			tuller: 7
+		};
 		
-		const raid = events.find(
-			(event) => event.id === 'raid-on-warehouse'
-		);
-		
-		if (!workaholic || !raid) {
-			throw new Error('Тестовые данные не найдены');
-		}
-		
-		expect(checkRequirements(workaholic, raid)).toBe(false);
+		expect(
+			checkRequirements(
+				insufficientStats,
+				event
+			)
+		).toBe(false);
 	});
 });

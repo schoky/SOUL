@@ -1,4 +1,8 @@
-import {describe, expect, it} from 'vitest';
+import {
+	describe,
+	expect,
+	it
+} from 'vitest';
 
 import type {Player} from '@soul/shared';
 
@@ -29,7 +33,10 @@ describe('endTurn', () => {
 	it('передаёт ход следующему игроку', () => {
 		const game = createGame(
 			'game-1',
-			[player1, player2],
+			[
+				player1,
+				player2
+			],
 			() => 0
 		);
 		
@@ -45,17 +52,22 @@ describe('endTurn', () => {
 			() => 0
 		);
 		
-		expect(result.currentPlayerId).toBe(
-			player2.id
-		);
+		expect(
+			result.currentPlayerId
+		).toBe(player2.id);
 		
-		expect(result.turnNumber).toBe(2);
+		expect(
+			result.turnNumber
+		).toBe(2);
 	});
 	
 	it('вытягивает новое событие для следующего хода', () => {
 		const game = createGame(
 			'game-1',
-			[player1, player2],
+			[
+				player1,
+				player2
+			],
 			() => 0
 		);
 		
@@ -67,19 +79,93 @@ describe('endTurn', () => {
 		};
 		
 		const expectedEvent =
-			startedGame.eventDeck.drawPile[0];
+			startedGame
+				.eventDeck
+				.drawPile[0];
 		
 		const result = endTurn(
 			startedGame,
 			() => 0
 		);
 		
-		expect(result.currentEvent).toBe(
-			expectedEvent
-		);
+		expect(
+			result.currentEvent
+		).toBe(expectedEvent);
 		
 		expect(
 			result.eventDeck.discardPile
-		).toContain(expectedEvent);
+		).toContain(
+			expectedEvent
+		);
+	});
+	
+	it('завершает игру, когда финальный раунд возвращается к его инициатору', () => {
+		const finalPlayer1: Player = {
+			id: 'player-1',
+			name: 'Игрок 1',
+			soul: 15,
+			characters: [],
+			status: null,
+			isReady: false,
+			skipNextTurn: false
+		};
+		
+		const finalPlayer2: Player = {
+			id: 'player-2',
+			name: 'Игрок 2',
+			soul: 18,
+			characters: [],
+			status: null,
+			isReady: false,
+			skipNextTurn: false
+		};
+		
+		const finalPlayer3: Player = {
+			id: 'player-3',
+			name: 'Игрок 3',
+			soul: 16,
+			characters: [],
+			status: null,
+			isReady: false,
+			skipNextTurn: false
+		};
+		
+		const game = {
+			...createGame(
+				'game-1',
+				[
+					finalPlayer1,
+					finalPlayer2,
+					finalPlayer3
+				]
+			),
+			status: 'playing' as const,
+			currentPlayerId:
+			finalPlayer3.id,
+			turnNumber: 3,
+			finalRoundStartedBy:
+			finalPlayer1.id
+		};
+		
+		const result = endTurn(
+			game,
+			() => 0
+		);
+		
+		expect(
+			result.status
+		).toBe('finished');
+		
+		expect(
+			result.winnerId
+		).toBe(finalPlayer2.id);
+		
+		expect(
+			result.currentPlayerId
+		).toBeNull();
+		
+		expect(
+			result.currentEvent
+		).toBeNull();
 	});
 });

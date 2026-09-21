@@ -1,6 +1,7 @@
 import type {GameState} from '@soul/shared';
 
 import {drawEvent} from '../deck/drawEvent.js';
+import {finishGame} from '../game/finishGame.js';
 import {nextTurn} from '../game/nextTurn.js';
 
 export function endTurn(
@@ -13,12 +14,24 @@ export function endTurn(
 		);
 	}
 	
-	const nextGame = nextTurn(game);
+	const nextGame =
+		nextTurn(game);
 	
-	const nextEvent = drawEvent(
-		nextGame.eventDeck,
-		random
-	);
+	if (
+		game.finalRoundStartedBy &&
+		nextGame.currentPlayerId ===
+		game.finalRoundStartedBy
+	) {
+		return finishGame(
+			nextGame
+		);
+	}
+	
+	const nextEvent =
+		drawEvent(
+			nextGame.eventDeck,
+			random
+		);
 	
 	return {
 		...nextGame,

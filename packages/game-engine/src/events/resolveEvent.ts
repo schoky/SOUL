@@ -1,8 +1,15 @@
-import type {EventCard, Player} from '@soul/shared';
+import type {
+	EventCard,
+	Player
+} from '@soul/shared';
 
+import {characters} from '../data/characters.js';
+import {resolveCharacterAbilities} from '../players/resolveCharacterAbilities.js';
+import {resolveCharacters} from '../players/resolveCharacters.js';
 import {checkRequirements} from '../rules/checkRequirements.js';
 import {changeSoul} from '../rules/changeSoul.js';
 import {resolveFailure} from '../rules/resolveFailure.js';
+import {resolveRisk} from '../rules/resolveRisk.js';
 
 export type EventResult = {
 	success: boolean;
@@ -10,41 +17,167 @@ export type EventResult = {
 	status: Player['status'];
 	skipNextTurn: boolean;
 	gambleWon: boolean | null;
+	riskWon: boolean | null;
+	abilityUsedCardIds: string[];
 };
 
 export function resolveEvent(
 	player: Player,
-	characterId: string,
+	characterCardIds: string[],
 	event: EventCard,
+	risk = false,
 	random: () => number = Math.random
 ): EventResult {
-	const character = player.characters.find(
-		(item) => item.id === characterId
-	);
+	const resolvedCharacters =
+		resolveCharacters(
+			player,
+			characterCardIds
+		);
 	
-	if (!character) {
-		throw new Error(`Character "${characterId}" not found`);
-	}
+	const success =
+		checkRequirements(
+			resolvedCharacters.stats,
+			event
+		);
 	
-	const success = checkRequirements(character, event);
-	
-	if (success) {
+	if (!success) {
+		if (risk) {
+			throw new Error(
+				'Cannot risk event: requirements are not met'
+			);
+		}
+		
+		const failure =
+			resolveFailure(
+				player,
+				event,
+				random
+			);
+		
+		const abilityResult =
+			resolveCharacterAbilities({
+				player,
+				cards:
+				resolvedCharacters.cards,
+				characters:
+				resolvedCharacters.characters,
+				event,
+				success: false,
+				currentSoul: failure.soul
+			});
+		
 		return {
-			success: true,
-			soul: changeSoul(player.soul, event.reward),
-			status: null,
-			skipNextTurn: false,
-			gambleWon: null
+			success: false,
+			soul: abilityResult.soul,
+			status: failure.status,
+			skipNextTurn:
+			failure.skipNextTurn,
+			gambleWon:
+			failure.gambleWon,
+			riskWon: null,
+			abilityUsedCardIds:
+			abilityResult
+				.abilityUsedCardIds
 		};
 	}
 	
-	const failure = resolveFailure(player, event, random);
+	if (!risk) {
+		const baseSoul =
+			changeSoul(
+				player.soul,
+				event.reward
+			);
+		
+		const abilityResult =
+			resolveCharacterAbilities({
+				player,
+				cards:
+				resolvedCharacters.cards,
+				characters:
+				resolvedCharacters.characters,
+				event,
+				success: true,
+				currentSoul: baseSoul
+			});
+		
+		return {
+			success: true,
+			soul: abilityResult.soul,
+			status: null,
+			skipNextTurn: false,
+			gambleWon: null,
+			riskWon: null,
+			abilityUsedCardIds:
+			abilityResult
+				.abilityUsedCardIds
+		};
+	}
+	
+	const riskWon =
+		resolveRisk(random);
+	
+	if (riskWon) {
+		const baseSoul =
+			changeSoul(
+				player.soul,
+				event.riskReward
+			);
+		
+		const abilityResult =
+			resolveCharacterAbilities({
+				player,
+				cards:
+				resolvedCharacters.cards,
+				characters:
+				resolvedCharacters.characters,
+				event,
+				success: true,
+				currentSoul: baseSoul
+			});
+		
+		return {
+			success: true,
+			soul: abilityResult.soul,
+			status: null,
+			skipNextTurn: false,
+			gambleWon: null,
+			riskWon: true,
+			abilityUsedCardIds:
+			abilityResult
+				.abilityUsedCardIds
+		};
+	}
+	
+	const failure =
+		resolveFailure(
+			player,
+			event,
+			random
+		);
+	
+	const abilityResult =
+		resolveCharacterAbilities({
+			player,
+			cards:
+			resolvedCharacters.cards,
+			characters:
+			resolvedCharacters.characters,
+			event,
+			success: false,
+			currentSoul: failure.soul
+		});
 	
 	return {
 		success: false,
-		soul: failure.soul,
+		soul: abilityResult.soul,
 		status: failure.status,
-		skipNextTurn: failure.skipNextTurn,
-		gambleWon: failure.gambleWon
+		skipNextTurn:
+		failure.skipNextTurn,
+		gambleWon:
+		failure.gambleWon,
+		riskWon: false,
+		abilityUsedCardIds:
+		abilityResult
+			.abilityUsedCardIds
 	};
 }

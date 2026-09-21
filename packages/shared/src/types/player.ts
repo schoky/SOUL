@@ -1,11 +1,11 @@
-import type {Character} from './character.js';
+import type {PlayerCharacter} from './player-character.js';
 import type {Status} from './status.js';
 
 export type Player = {
 	id: string;
 	name: string;
 	soul: number;
-	characters: Character[];
+	characters: PlayerCharacter[];
 	status: Status | null;
 	isReady: boolean;
 	skipNextTurn: boolean;

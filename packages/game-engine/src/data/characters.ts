@@ -12,8 +12,10 @@ export const characters: Character[] = [
 		},
 		
 		ability: {
+			id: 'cold-blooded',
 			name: 'Хладнокровие',
-			description: 'Первый провал по Туллеру за игру не отнимает Soul.'
+			description:
+				'Первый провал по Туллеру за игру не отнимает Soul.'
 		}
 	},
 	
@@ -28,8 +30,10 @@ export const characters: Character[] = [
 		},
 		
 		ability: {
+			id: 'profitable-deal',
 			name: 'Выгодная сделка',
-			description: 'При успешном событии с Перекупом получает на 1 Soul больше.'
+			description:
+				'При успешном событии с Перекупом получает на 1 Soul больше.'
 		}
 	},
 	
@@ -44,8 +48,10 @@ export const characters: Character[] = [
 		},
 		
 		ability: {
+			id: 'work-to-exhaustion',
 			name: 'На износ',
-			description: 'При успешном событии с Фармилой получает дополнительный Soul.'
+			description:
+				'При успешном событии с Фармилой получает дополнительный Soul.'
 		}
 	}
 ];

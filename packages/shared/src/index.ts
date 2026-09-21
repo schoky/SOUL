@@ -18,7 +18,11 @@ export type {
 
 export type {
 	Player
-} from './types/player.js';
+} from './types/player.js'
+
+export type {
+	PlayerCharacter
+} from './types/player-character.js';
 
 export type {
 	Status

@@ -1,8 +1,11 @@
-import {describe, expect, it} from 'vitest';
+import {
+	describe,
+	expect,
+	it
+} from 'vitest';
 
 import type {Player} from '@soul/shared';
 
-import {createGame} from '../../src/game/createGame';
 import {nextTurn} from '../../src/game/nextTurn';
 
 const player1: Player = {
@@ -37,58 +40,68 @@ const player3: Player = {
 
 describe('nextTurn', () => {
 	it('передаёт ход следующему игроку', () => {
-		const game = createGame(
-			'game-1',
-			[
+		const game = {
+			id: 'game-1',
+			status: 'playing' as const,
+			players: [
 				player1,
 				player2,
 				player3
-			]
-		);
-		
-		const playingGame = {
-			...game,
-			status: 'playing' as const,
-			currentPlayerId: player1.id,
-			turnNumber: 1
+			],
+			currentPlayerId: 'player-1',
+			currentEvent: null,
+			eventDeck: {
+				drawPile: [],
+				discardPile: []
+			},
+			turnNumber: 1,
+			winnerId: null,
+			finalRoundStartedBy: null
 		};
 		
 		const result = nextTurn(
-			playingGame
+			game
 		);
 		
-		expect(result.currentPlayerId).toBe(
-			'player-2'
-		);
+		expect(
+			result.currentPlayerId
+		).toBe('player-2');
 		
-		expect(result.turnNumber).toBe(2);
+		expect(
+			result.turnNumber
+		).toBe(2);
 	});
 	
 	it('после последнего игрока возвращает ход первому', () => {
-		const game = createGame(
-			'game-1',
-			[
+		const game = {
+			id: 'game-1',
+			status: 'playing' as const,
+			players: [
 				player1,
 				player2,
 				player3
-			]
-		);
-		
-		const playingGame = {
-			...game,
-			status: 'playing' as const,
-			currentPlayerId: player3.id,
-			turnNumber: 3
+			],
+			currentPlayerId: 'player-3',
+			currentEvent: null,
+			eventDeck: {
+				drawPile: [],
+				discardPile: []
+			},
+			turnNumber: 3,
+			winnerId: null,
+			finalRoundStartedBy: null
 		};
 		
 		const result = nextTurn(
-			playingGame
+			game
 		);
 		
-		expect(result.currentPlayerId).toBe(
-			'player-1'
-		);
+		expect(
+			result.currentPlayerId
+		).toBe('player-1');
 		
-		expect(result.turnNumber).toBe(4);
+		expect(
+			result.turnNumber
+		).toBe(4);
 	});
 });

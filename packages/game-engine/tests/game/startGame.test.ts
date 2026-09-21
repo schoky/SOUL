@@ -8,7 +8,7 @@ import {startGame} from '../../src/game/startGame';
 const player: Player = {
 	id: 'player-1',
 	name: 'Игрок 1',
-	soul: 0,
+	soul: 3,
 	characters: [],
 	status: null,
 	isReady: false,
@@ -36,15 +36,17 @@ describe('startGame', () => {
 			'playing'
 		);
 		
-		expect(startedGame.currentPlayerId).toBe(
-			player.id
-		);
+		expect(
+			startedGame.currentPlayerId
+		).toBe(player.id);
 		
-		expect(startedGame.currentEvent).toBe(
-			expectedEvent
-		);
+		expect(
+			startedGame.currentEvent
+		).toBe(expectedEvent);
 		
-		expect(startedGame.turnNumber).toBe(1);
+		expect(
+			startedGame.turnNumber
+		).toBe(1);
 	});
 	
 	it('перемещает первое событие в discardPile', () => {
@@ -88,49 +90,51 @@ describe('startGame', () => {
 			'Player "unknown-player" not found'
 		);
 	});
-});
-
-it('выдаёт каждому игроку двух персонажей', () => {
-	const player2: Player = {
-		id: 'player-2',
-		name: 'Игрок 2',
-		soul: 3,
-		characters: [],
-		status: null,
-		isReady: true,
-		skipNextTurn: false
-	};
 	
-	const game = createGame(
-		'game-1',
-		[player, player2],
-		() => 0
-	);
-	
-	const startedGame = startGame(
-		game,
-		player.id,
-		() => 0
-	);
-	
-	expect(
-		startedGame.players[0].characters
-	).toHaveLength(2);
-	
-	expect(
-		startedGame.players[1].characters
-	).toHaveLength(2);
-	
-	const characterIds =
-		startedGame.players.flatMap(
-			(item) =>
-				item.characters.map(
-					(character) =>
-						character.id
-				)
+	it('выдаёт каждому игроку двух персонажей', () => {
+		const player2: Player = {
+			id: 'player-2',
+			name: 'Игрок 2',
+			soul: 3,
+			characters: [],
+			status: null,
+			isReady: true,
+			skipNextTurn: false
+		};
+		
+		const game = createGame(
+			'game-1',
+			[player, player2],
+			() => 0
 		);
-	
-	expect(
-		new Set(characterIds).size
-	).toBe(4);
+		
+		const startedGame = startGame(
+			game,
+			player.id,
+			() => 0
+		);
+		
+		expect(
+			startedGame.players[0].characters
+		).toHaveLength(2);
+		
+		expect(
+			startedGame.players[1].characters
+		).toHaveLength(2);
+		
+		const cardIds =
+			startedGame.players.flatMap(
+				(item) =>
+					item.characters.map(
+						(character) =>
+							character.cardId
+					)
+			);
+		
+		expect(cardIds).toHaveLength(4);
+		
+		expect(
+			new Set(cardIds).size
+		).toBe(4);
+	});
 });

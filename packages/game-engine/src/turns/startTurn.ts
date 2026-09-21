@@ -1,4 +1,7 @@
-import type {GameState, Player} from '@soul/shared';
+import type {
+	GameState,
+	Player
+} from '@soul/shared';
 
 export type TurnResult = {
 	game: GameState;
@@ -21,9 +24,12 @@ export function startTurn(
 		);
 	}
 	
-	const player = game.players.find(
-		(item) => item.id === game.currentPlayerId
-	);
+	const player =
+		game.players.find(
+			(item) =>
+				item.id ===
+				game.currentPlayerId
+		);
 	
 	if (!player) {
 		throw new Error(
@@ -31,40 +37,81 @@ export function startTurn(
 		);
 	}
 	
-	if (!player.skipNextTurn) {
+	if (player.skipNextTurn) {
+		const updatedPlayers =
+			game.players.map(
+				(item) => {
+					if (
+						item.id !==
+						player.id
+					) {
+						return item;
+					}
+					
+					return {
+						...item,
+						skipNextTurn: false,
+						status: null
+					};
+				}
+			);
+		
+		const updatedGame: GameState = {
+			...game,
+			players:
+			updatedPlayers
+		};
+		
+		const updatedPlayer =
+			updatedPlayers.find(
+				(item) =>
+					item.id ===
+					player.id
+			)!;
+		
 		return {
-			game,
-			player,
-			skipped: false
+			game: updatedGame,
+			player: updatedPlayer,
+			skipped: true
 		};
 	}
 	
-	const updatedPlayers = game.players.map(
-		(item) => {
-			if (item.id !== player.id) {
-				return item;
+	const updatedPlayers =
+		game.players.map(
+			(item) => {
+				if (
+					item.id !== player.id
+				) {
+					return item;
+				}
+				
+				return {
+					...item,
+					characters:
+						item.characters.map(
+							(character) => ({
+								...character,
+								exhausted: false
+							})
+						)
+				};
 			}
-			
-			return {
-				...item,
-				skipNextTurn: false,
-				status: null
-			};
-		}
-	);
+		);
 	
 	const updatedGame: GameState = {
 		...game,
 		players: updatedPlayers
 	};
 	
-	const updatedPlayer = updatedPlayers.find(
-		(item) => item.id === player.id
-	)!;
+	const updatedPlayer =
+		updatedPlayers.find(
+			(item) =>
+				item.id === player.id
+		)!;
 	
 	return {
 		game: updatedGame,
 		player: updatedPlayer,
-		skipped: true
+		skipped: false
 	};
 }

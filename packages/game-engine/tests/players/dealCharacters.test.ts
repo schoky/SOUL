@@ -68,38 +68,74 @@ const players: Player[] = [
 ];
 
 describe('dealCharacters', () => {
-	it('выдаёт каждому игроку по 2 персонажа', () => {
+	it('выдаёт каждому игроку по 2 карты персонажей', () => {
 		const result = dealCharacters(
 			players,
 			characters,
 			() => 0
-		);
-		
-		expect(result[0].characters)
-		.toHaveLength(2);
-		
-		expect(result[1].characters)
-		.toHaveLength(2);
-	});
-	
-	it('не выдаёт одного персонажа двум игрокам', () => {
-		const result = dealCharacters(
-			players,
-			characters,
-			() => 0
-		);
-		
-		const characterIds = result.flatMap(
-			(player) =>
-				player.characters.map(
-					(character) =>
-						character.id
-				)
 		);
 		
 		expect(
-			new Set(characterIds).size
-		).toBe(characterIds.length);
+			result[0].characters
+		).toHaveLength(2);
+		
+		expect(
+			result[1].characters
+		).toHaveLength(2);
+	});
+	
+	it('создаёт уникальные карты для каждого игрока', () => {
+		const result = dealCharacters(
+			players,
+			characters,
+			() => 0
+		);
+		
+		const cardIds = result.flatMap(
+			(player) =>
+				player.characters.map(
+					(character) =>
+						character.cardId
+				)
+		);
+		
+		expect(cardIds).toHaveLength(4);
+		
+		expect(
+			new Set(cardIds).size
+		).toBe(cardIds.length);
+	});
+	
+	it('может выдать один и тот же тип персонажа разным игрокам', () => {
+		const result = dealCharacters(
+			players,
+			characters,
+			() => 0
+		);
+		
+		const firstPlayerCharacterIds =
+			result[0].characters.map(
+				(character) =>
+					character.characterId
+			);
+		
+		const secondPlayerCharacterIds =
+			result[1].characters.map(
+				(character) =>
+					character.characterId
+			);
+		
+		const sharedCharacterIds =
+			firstPlayerCharacterIds.filter(
+				(characterId) =>
+					secondPlayerCharacterIds.includes(
+						characterId
+					)
+			);
+		
+		expect(
+			sharedCharacterIds.length
+		).toBeGreaterThan(0);
 	});
 	
 	it('не изменяет исходный массив персонажей', () => {
@@ -118,14 +154,14 @@ describe('dealCharacters', () => {
 		);
 	});
 	
-	it('выбрасывает ошибку при недостатке персонажей', () => {
+	it('выбрасывает ошибку, если недостаточно типов персонажей', () => {
 		expect(() => {
 			dealCharacters(
 				players,
-				characters.slice(0, 3)
+				characters.slice(0, 1)
 			);
 		}).toThrow(
-			'Not enough characters'
+			'Not enough character types'
 		);
 	});
 });

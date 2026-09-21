@@ -13,6 +13,7 @@ export const events: EventCard[] = [
 		
 		mainStat: 'tuller',
 		reward: 2,
+		riskReward: 4,
 		
 		description:
 			'Нужно пробраться на склад и забрать товар раньше, чем приедет охрана.'
@@ -30,6 +31,7 @@ export const events: EventCard[] = [
 		
 		mainStat: 'perekup',
 		reward: 2,
+		riskReward: 4,
 		
 		description:
 			'Нужно быстро найти покупателя и продать партию с максимальной выгодой.'
@@ -47,6 +49,7 @@ export const events: EventCard[] = [
 		
 		mainStat: 'farmila',
 		reward: 1,
+		riskReward: 3,
 		
 		description:
 			'Работа до утра. Главное — не сдаться и довести смену до конца.'
@@ -64,6 +67,7 @@ export const events: EventCard[] = [
 		
 		mainStat: 'perekup',
 		reward: 3,
+		riskReward: 5,
 		
 		description:
 			'Опасная сделка, где ошибка в цене может полностью изменить результат.'
@@ -81,6 +85,7 @@ export const events: EventCard[] = [
 		
 		mainStat: 'tuller',
 		reward: 3,
+		riskReward: 5,
 		
 		description:
 			'Охрана уже заметила неладное. Нужно выбраться со склада, не потеряв товар.'

@@ -1,14 +1,18 @@
-import {describe, expect, it} from 'vitest';
+import {
+	describe,
+	expect,
+	it
+} from 'vitest';
 
 import type {Player} from '@soul/shared';
 
-import {events} from '../../src/data/events.js';
-import {createGame} from '../../src/game/createGame.js';
+import {events} from '../../src/data/events';
+import {createGame} from '../../src/game/createGame';
 
 const player: Player = {
 	id: 'player-1',
 	name: 'Игрок 1',
-	soul: 0,
+	soul: 3,
 	characters: [],
 	status: null,
 	isReady: false,
@@ -22,13 +26,35 @@ describe('createGame', () => {
 			[player]
 		);
 		
-		expect(game.id).toBe('game-1');
-		expect(game.status).toBe('waiting');
-		expect(game.players).toEqual([player]);
-		expect(game.currentPlayerId).toBeNull();
-		expect(game.currentEvent).toBeNull();
+		expect(game.id).toBe(
+			'game-1'
+		);
+		
+		expect(game.status).toBe(
+			'waiting'
+		);
+		
+		expect(game.players).toEqual([
+			player
+		]);
+		
+		expect(
+			game.currentPlayerId
+		).toBeNull();
+		
+		expect(
+			game.currentEvent
+		).toBeNull();
+		
 		expect(game.turnNumber).toBe(0);
-		expect(game.winnerId).toBeNull();
+		
+		expect(
+			game.winnerId
+		).toBeNull();
+		
+		expect(
+			game.finalRoundStartedBy
+		).toBeNull();
 	});
 	
 	it('создаёт колоду событий', () => {
@@ -38,12 +64,14 @@ describe('createGame', () => {
 			() => 0
 		);
 		
-		expect(game.eventDeck.drawPile).toHaveLength(
+		expect(
+			game.eventDeck.drawPile
+		).toHaveLength(
 			events.length
 		);
 		
-		expect(game.eventDeck.discardPile).toHaveLength(
-			0
-		);
+		expect(
+			game.eventDeck.discardPile
+		).toHaveLength(0);
 	});
 });
