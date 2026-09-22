@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum RoomStatus {
+  WAITING
+  PLAYING
+  FINISHED
+}
+
+enum GameStatus {
+  PLAYING
+  FINISHED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+
+  role         UserRole @default(USER)
+  isBlocked    Boolean  @default(false)
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  profile Profile?
+  sessions Session[]
+
+  roomMembers RoomMember[]
+  hostedRooms Room[] @relation("RoomHost")
+  gamePlayers GamePlayer[]
+  wonGames    Game[] @relation("UserWonGames")
+  wonResults  GameResult[] @relation("UserWonResults")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  nickname  String   @unique
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime?
+
+  ipAddress String?
+  userAgent String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Room {
+  id          String     @id @default(cuid())
+  code        String     @unique
+  hostUserId  String
+  status      RoomStatus @default(WAITING)
+  maxPlayers  Int        @default(6)
+  createdAt   DateTime   @default(now())
+  startedAt   DateTime?
+  finishedAt  DateTime?
+
+  host User @relation("RoomHost", fields: [hostUserId], references: [id])
+
+  members RoomMember[]
+  games   Game[]
+}
+
+model RoomMember {
+  roomId   String
+  userId   String
+  isReady  Boolean  @default(false)
+  joinedAt DateTime @default(now())
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, userId])
+}
+
+model Game {
+  id         String     @id @default(cuid())
+  roomId     String
+  status     GameStatus @default(PLAYING)
+  winnerId   String?
+  startedAt  DateTime   @default(now())
+  finishedAt DateTime?
+
+  room Room @relation(fields: [roomId], references: [id])
+  winner User? @relation("UserWonGames", fields: [winnerId], references: [id])
+
+  players    GamePlayer[]
+  gameResult GameResult?
+}
+
+model GamePlayer {
+  gameId    String
+  userId    String
+  finalSoul Int?
+  place     Int?
+
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([gameId, userId])
+}
+
+model GameResult {
+  id        String   @id @default(cuid())
+  gameId    String   @unique
+  winnerId  String?
+  createdAt DateTime @default(now())
+
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  winner User? @relation("UserWonResults", fields: [winnerId], references: [id])
+}

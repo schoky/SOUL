@@ -9,5 +9,9 @@
 		"dev:server": "pnpm --filter @soul/server dev",
 		"build": "pnpm -r build",
 		"typecheck": "pnpm -r typecheck"
+	},
+	"devDependencies": {
+		"@schoky/prettier": "^1.1.7",
+		"prettier-plugin-prisma": "^5.0.0"
 	}
 }
