@@ -4,7 +4,7 @@ import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 
 import authRoutes from './routes/auth.js';
-
+import profileRoutes from './routes/profile.js';
 
 export async function createHttpApp() {
 	const app = Fastify({
@@ -22,6 +22,13 @@ export async function createHttpApp() {
 		authRoutes,
 		{
 			prefix: '/api/auth'
+		}
+	);
+	
+	await app.register(
+		profileRoutes,
+		{
+			prefix: '/api/profile'
 		}
 	);
 	

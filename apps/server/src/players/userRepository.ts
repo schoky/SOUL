@@ -92,3 +92,20 @@ export async function updateUserLastLoginAt(
 		}
 	});
 }
+
+export type UpdateUserProfileData = {
+	nickname?: string;
+	avatar?: string | null;
+};
+
+export async function updateUserProfile(
+	userId: string,
+	data: UpdateUserProfileData
+) {
+	return database.profile.update({
+		where: {
+			userId
+		},
+		data
+	});
+}
