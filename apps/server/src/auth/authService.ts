@@ -70,31 +70,31 @@ function validateRegisterInput(
 	
 	if (!email) {
 		throw new Error(
-			'Email is required'
+			'Почта обязательна'
 		);
 	}
 	
 	if (!email.includes('@')) {
 		throw new Error(
-			'Invalid email'
+			'Неверная почта'
 		);
 	}
 	
 	if (!input.password) {
 		throw new Error(
-			'Password is required'
+			'Требуется пароль'
 		);
 	}
 	
 	if (input.password.length < 8) {
 		throw new Error(
-			'Password must be at least 8 characters long'
+			'Пароль должен состоять не менее чем из 8 символов'
 		);
 	}
 	
 	if (!nickname) {
 		throw new Error(
-			'Nickname is required'
+			'Никнейм обязателен'
 		);
 	}
 	
@@ -103,7 +103,7 @@ function validateRegisterInput(
 		nickname.length > 20
 	) {
 		throw new Error(
-			'Nickname must be between 3 and 20 characters long'
+			'Никнейм должен содержать от 3 до 20 символов'
 		);
 	}
 }
@@ -125,7 +125,7 @@ function toAuthenticatedUser(
 ): AuthenticatedUser {
 	if (!user.profile) {
 		throw new Error(
-			'User profile not found'
+			'Профиль пользователя не найден'
 		);
 	}
 	
@@ -160,7 +160,7 @@ export async function registerUser(
 	
 	if (existingUser) {
 		throw new Error(
-			'User with this email already exists'
+			'Пользователь с таким адресом электронной почты уже существует'
 		);
 	}
 	
@@ -198,7 +198,7 @@ export async function loginUser(
 	
 	if (!email || !input.password) {
 		throw new Error(
-			'Email and password are required'
+			'Почта и пароль обязательны!'
 		);
 	}
 	
@@ -207,13 +207,13 @@ export async function loginUser(
 	
 	if (!user) {
 		throw new Error(
-			'Invalid email or password'
+			'Неверная почта или пароль'
 		);
 	}
 	
 	if (user.isBlocked) {
 		throw new Error(
-			'User is blocked'
+			'Пользователь заблокирован'
 		);
 	}
 	
@@ -225,7 +225,7 @@ export async function loginUser(
 	
 	if (!passwordValid) {
 		throw new Error(
-			'Invalid email or password'
+			'Неверная почта или пароль'
 		);
 	}
 	
