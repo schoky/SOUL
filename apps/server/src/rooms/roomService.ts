@@ -278,6 +278,30 @@ class RoomService {
   }
 
   /**
+   * Возвращает публичную информацию о комнате
+   * для превью по ссылке-приглашению.
+   *
+   * Доступно любому авторизованному пользователю,
+   * а не только участникам.
+   */
+  async getRoomPreview(roomId: string) {
+    const room = await roomRepository.findById(roomId);
+
+    if (!room) {
+      return null;
+    }
+
+    return {
+      id: room.id,
+      code: room.code,
+      status: room.status,
+      maxPlayers: room.maxPlayers,
+      membersCount: room.members.length,
+      hostNickname: room.host.profile?.nickname ?? "Игрок",
+    };
+  }
+
+  /**
    * Возвращает активную комнату пользователя
    * в любом статусе.
    */

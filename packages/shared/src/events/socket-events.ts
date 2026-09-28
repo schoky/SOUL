@@ -1,6 +1,7 @@
 import type { Character } from "../types/character.js";
 import type { GameState } from "../types/game.js";
 import type { RoomDto } from "../types/room.js";
+import type { Status } from "../types/status.js";
 
 export const SOCKET_EVENTS = {
   CONNECTED: "connected",
@@ -25,6 +26,7 @@ export const SOCKET_EVENTS = {
   GAME_STATE_UPDATED: "game:state-updated",
   GAME_PLAY_EVENT: "game:play-event",
   GAME_END_TURN: "game:end-turn",
+  GAME_EVENT_RESOLVED: "game:event-resolved",
 
   ERROR: "error",
 } as const;
@@ -76,6 +78,19 @@ export type GamePlayEventPayload = {
 
 export type GameEndTurnPayload = {
   roomId: string;
+};
+
+export type GameEventResolvedPayload = {
+  playerId: string;
+  playerName: string;
+  success: boolean;
+  risk: boolean;
+  riskWon: boolean | null;
+  gambleWon: boolean | null;
+  soulBefore: number;
+  soulAfter: number;
+  status: Status | null;
+  skipNextTurn: boolean;
 };
 
 export type SocketErrorPayload = {

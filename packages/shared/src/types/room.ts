@@ -52,3 +52,16 @@ export type RoomErrorResponse = {
 export type CreateRoomRequest = {
   maxPlayers?: number;
 };
+
+export type RoomPreviewDto = {
+  id: string;
+  code: string;
+  status: RoomStatus;
+  maxPlayers: number;
+  membersCount: number;
+  hostNickname: string;
+};
+
+export type RoomPreviewResponse = {
+  room: RoomPreviewDto;
+};

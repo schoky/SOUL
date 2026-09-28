@@ -31,6 +31,7 @@ export type {
   GameStateUpdatedPayload,
   GamePlayEventPayload,
   GameEndTurnPayload,
+  GameEventResolvedPayload,
   SocketErrorPayload,
 } from "./events/socket-events.js";
 
@@ -40,8 +41,10 @@ export type {
   RoomUserDto,
   RoomMemberDto,
   RoomDto,
+  RoomPreviewDto,
   RoomListResponse,
   RoomResponse,
+  RoomPreviewResponse,
   RoomErrorResponse,
   CreateRoomRequest,
 } from "./types/room.js";

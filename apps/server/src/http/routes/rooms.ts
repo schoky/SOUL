@@ -64,7 +64,43 @@ export async function roomRoutes(app: FastifyInstance) {
       });
     },
   );
+  /**
+   * Публичное превью комнаты по ссылке-приглашению.
+   */
+  app.get<{
+    Params: {
+      id: string;
+    };
+  }>(
+    "/:id/preview",
+    {
+      preHandler: authenticateRequest,
+    },
+    async (request, reply) => {
+      const user = request.user;
 
+      if (!user) {
+        return reply.code(401).send({
+          error: "Not authenticated",
+        });
+      }
+
+      const preview = await roomService.getRoomPreview(request.params.id);
+
+      if (!preview) {
+        return reply.code(404).send({
+          error: {
+            code: "ROOM_NOT_FOUND",
+            message: "Комната не найдена",
+          },
+        });
+      }
+
+      return reply.send({
+        room: preview,
+      });
+    },
+  );
   /**
    * Получить конкретную комнату.
    */

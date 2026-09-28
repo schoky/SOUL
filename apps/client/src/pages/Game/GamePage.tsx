@@ -7,6 +7,7 @@ import {
   SOCKET_EVENTS,
   type Character,
   type GameEndTurnPayload,
+  type GameEventResolvedPayload,
   type GamePlayEventPayload,
   type GameSessionPayload,
   type GameStateUpdatedPayload,
@@ -25,6 +26,7 @@ import { socket } from "../../services/socket";
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
 import { useRoomStore } from "../../stores/roomStore";
+import { useToastStore } from "../../stores/toastStore";
 
 const MAX_CARDS_PER_ACTION = 2;
 
@@ -67,6 +69,8 @@ function GamePage() {
 
   const leaveRoom = useRoomStore((state) => state.leaveRoom);
 
+  const pushToast = useToastStore((state) => state.push);
+
   const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
 
   const [actionError, setActionError] = useState<string | null>(null);
@@ -102,6 +106,40 @@ function GamePage() {
 
     const handleSocketError = (payload: SocketErrorPayload) => {
       setActionError(payload.message);
+
+      pushToast("error", payload.message);
+    };
+
+    const handleEventResolved = (payload: GameEventResolvedPayload) => {
+      const isSelf = payload.playerId === user?.id;
+
+      const prefix = isSelf ? "Ты" : payload.playerName;
+
+      const soulDelta = payload.soulAfter - payload.soulBefore;
+
+      const soulText =
+        soulDelta > 0
+          ? `+${soulDelta} Soul`
+          : soulDelta < 0
+            ? `${soulDelta} Soul`
+            : "без изменений Soul";
+
+      if (!payload.risk) {
+        if (payload.success) {
+          pushToast("success", `${prefix}: успех! ${soulText}`);
+        } else {
+          pushToast("error", `${prefix}: провал. ${soulText}`);
+        }
+
+        return;
+      }
+
+      if (payload.riskWon) {
+        pushToast("success", `${prefix}: риск сработал! ${soulText}`);
+        return;
+      }
+
+      pushToast("error", `${prefix}: риск не сработал. ${soulText}`);
     };
 
     if (socket.connected) {
@@ -112,6 +150,7 @@ function GamePage() {
     socket.on(SOCKET_EVENTS.GAME_STATE, handleGameState);
     socket.on(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
     socket.on(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
+    socket.on(SOCKET_EVENTS.GAME_EVENT_RESOLVED, handleEventResolved);
     socket.on(SOCKET_EVENTS.ERROR, handleSocketError);
 
     return () => {
@@ -119,9 +158,10 @@ function GamePage() {
       socket.off(SOCKET_EVENTS.GAME_STATE, handleGameState);
       socket.off(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
       socket.off(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
+      socket.off(SOCKET_EVENTS.GAME_EVENT_RESOLVED, handleEventResolved);
       socket.off(SOCKET_EVENTS.ERROR, handleSocketError);
     };
-  }, [roomId, navigate, setGameSession]);
+  }, [roomId, navigate, setGameSession, pushToast, user?.id]);
 
   useEffect(() => {
     setSelectedCardIds([]);

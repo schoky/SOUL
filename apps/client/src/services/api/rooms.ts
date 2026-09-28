@@ -4,6 +4,7 @@ import type {
   CreateRoomRequest,
   RoomDto,
   RoomListResponse,
+  RoomPreviewDto,
   RoomResponse
 } from "@soul/shared";
 
@@ -19,12 +20,21 @@ export async function getRooms() {
 
 /**
  * Получает активную комнату текущего пользователя.
- *
- * Возвращает комнату в любом статусе
- * (WAITING, PLAYING, FINISHED) либо null.
  */
 export async function getCurrentRoom() {
   const response = await apiRequest<RoomResponse>("/api/rooms/current");
+
+  return response.room;
+}
+
+/**
+ * Получает публичное превью комнаты
+ * для ссылки-приглашения.
+ */
+export async function getRoomPreview(roomId: string): Promise<RoomPreviewDto> {
+  const response = await apiRequest<{
+    room: RoomPreviewDto;
+  }>(`/api/rooms/${roomId}/preview`);
 
   return response.room;
 }
@@ -55,8 +65,8 @@ export async function createRoom(data: CreateRoomRequest = {}) {
 }
 
 /**
- * Присоединяет текущего
- * авторизованного пользователя к комнате.
+ * Присоединяет текущего авторизованного
+ * пользователя к комнате.
  */
 export async function joinRoom(roomId: string) {
   const response = await apiRequest<{
@@ -69,8 +79,8 @@ export async function joinRoom(roomId: string) {
 }
 
 /**
- * Меняет готовность текущего
- * пользователя в комнате.
+ * Меняет готовность текущего пользователя
+ * в комнате.
  */
 export async function setReady(roomId: string, isReady: boolean) {
   const response = await apiRequest<{
@@ -84,8 +94,7 @@ export async function setReady(roomId: string, isReady: boolean) {
 }
 
 /**
- * Выводит текущего пользователя
- * из комнаты.
+ * Выводит текущего пользователя из комнаты.
  */
 export async function leaveRoom(roomId: string) {
   const response = await apiRequest<RoomResponse>(

@@ -25,6 +25,14 @@ type RoomStore = {
 
   error: string | null;
 
+  /**
+   * Код последней ошибки (например, NOT_ROOM_MEMBER).
+   *
+   * Нужен, чтобы на RoomPage отличить «комната не найдена»
+   * от «ты не участник» и показать экран присоединения.
+   */
+  errorCode: string | null;
+
   loadRooms: (userId?: string) => Promise<void>;
 
   loadRoom: (roomId: string) => Promise<void>;
@@ -58,6 +66,14 @@ const getErrorMessage = (error: unknown) => {
   return "Произошла неизвестная ошибка";
 };
 
+const getErrorCode = (error: unknown): string | null => {
+  if (error instanceof ApiError) {
+    return error.code ?? null;
+  }
+
+  return null;
+};
+
 const upsertRoom = (rooms: RoomDto[], room: RoomDto) => {
   const existingRoomIndex = rooms.findIndex((item) => item.id === room.id);
 
@@ -79,14 +95,13 @@ export const useRoomStore = create<RoomStore>((set) => ({
 
   error: null,
 
-  /**
-   * Загружает список открытых комнат
-   * и активную комнату пользователя.
-   */
+  errorCode: null,
+
   async loadRooms(userId) {
     set({
       isLoading: true,
       error: null,
+      errorCode: null,
     });
 
     try {
@@ -101,6 +116,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
       });
     } finally {
       set({
@@ -109,13 +125,11 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Загружает одну конкретную комнату.
-   */
   async loadRoom(roomId) {
     set({
       isLoading: true,
       error: null,
+      errorCode: null,
       currentRoom: null,
     });
 
@@ -130,6 +144,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
         currentRoom: null,
       });
     } finally {
@@ -139,13 +154,11 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Создаёт комнату.
-   */
   async createRoom(data = {}) {
     set({
       isMutating: true,
       error: null,
+      errorCode: null,
     });
 
     try {
@@ -161,6 +174,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
       });
 
       return null;
@@ -171,14 +185,11 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Присоединяет пользователя
-   * к комнате.
-   */
   async joinRoom(roomId) {
     set({
       isMutating: true,
       error: null,
+      errorCode: null,
     });
 
     try {
@@ -194,6 +205,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
       });
 
       return null;
@@ -204,14 +216,11 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Меняет готовность текущего
-   * пользователя.
-   */
   async setReady(roomId, isReady) {
     set({
       isMutating: true,
       error: null,
+      errorCode: null,
     });
 
     try {
@@ -227,6 +236,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
       });
 
       return null;
@@ -237,14 +247,11 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Выводит пользователя
-   * из комнаты.
-   */
   async leaveRoom(roomId) {
     set({
       isMutating: true,
       error: null,
+      errorCode: null,
     });
 
     try {
@@ -262,6 +269,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     } catch (error) {
       set({
         error: getErrorMessage(error),
+        errorCode: getErrorCode(error),
       });
 
       return null;
@@ -272,10 +280,6 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }
   },
 
-  /**
-   * Применяет обновление комнаты,
-   * полученное по сокету.
-   */
   applyRoomUpdate(room) {
     set((state) => ({
       currentRoom: state.currentRoom?.id === room.id ? room : state.currentRoom,
@@ -284,10 +288,6 @@ export const useRoomStore = create<RoomStore>((set) => ({
     }));
   },
 
-  /**
-   * Очищает текущую комнату
-   * (например, если она была удалена).
-   */
   clearCurrentRoom() {
     set({
       currentRoom: null,
@@ -297,6 +297,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
   clearError() {
     set({
       error: null,
+      errorCode: null,
     });
   },
 
@@ -307,6 +308,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
       isLoading: false,
       isMutating: false,
       error: null,
+      errorCode: null,
     });
   },
 }));

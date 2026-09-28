@@ -166,6 +166,8 @@ export function registerGameHandlers(socket: Socket): void {
       }
 
       try {
+        const soulBefore = game.players.find((p) => p.id === userId)?.soul ?? 0;
+
         const result = playEvent(
           game,
           payload.characterCardIds,
@@ -174,12 +176,32 @@ export function registerGameHandlers(socket: Socket): void {
 
         await gameManager.set(payload.roomId, result.game);
 
+        const updatedPlayer = result.game.players.find((p) => p.id === userId);
+
         const io = getIO();
 
         io.to(`room:${payload.roomId}`).emit(
           SOCKET_EVENTS.GAME_STATE_UPDATED,
           buildSession(result.game),
         );
+
+        if (updatedPlayer) {
+          io.to(`room:${payload.roomId}`).emit(
+            SOCKET_EVENTS.GAME_EVENT_RESOLVED,
+            {
+              playerId: userId,
+              playerName: updatedPlayer.name,
+              success: result.success,
+              risk: Boolean(payload.risk),
+              riskWon: result.riskWon,
+              gambleWon: result.gambleWon,
+              soulBefore,
+              soulAfter: updatedPlayer.soul,
+              status: updatedPlayer.status,
+              skipNextTurn: updatedPlayer.skipNextTurn,
+            },
+          );
+        }
       } catch (error) {
         const message =
           error instanceof Error
