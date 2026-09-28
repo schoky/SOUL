@@ -13,10 +13,10 @@ async function startServer() {
 
   await app.listen({
     port: 3000,
-    host: "localhost",
+    host: "127.0.0.1",
   });
 
-  console.log("SOUL server запущен на http://localhost:3000");
+  console.log("SOUL server запущен на http://127.0.0.1:3000");
 }
 
 startServer().catch((error) => {

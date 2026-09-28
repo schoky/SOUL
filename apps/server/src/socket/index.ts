@@ -15,7 +15,7 @@ import { setIO } from "./io.js";
 
 const SESSION_COOKIE = "soul_session";
 
-const CLIENT_ORIGIN = "http://localhost:5173";
+const CLIENT_ORIGIN = process.env.CLIENT_URL ?? "http://localhost:5173";
 
 const LOBBY_CHANNEL = "lobby";
 

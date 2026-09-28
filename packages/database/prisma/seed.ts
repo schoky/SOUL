@@ -82,6 +82,41 @@ const characters: CharacterSeed[] = [
         "При успешном событии с Фармилой получает дополнительный Soul.",
     },
   },
+  {
+    id: "sniper",
+    name: "Снайпер",
+    stats: { farmila: 3, perekup: 4, tuller: 4 },
+  },
+  {
+    id: "courier",
+    name: "Курьер",
+    stats: { farmila: 4, perekup: 4, tuller: 3 },
+  },
+  {
+    id: "mechanic",
+    name: "Механик",
+    stats: { farmila: 5, perekup: 2, tuller: 4 },
+  },
+  {
+    id: "smuggler",
+    name: "Контрабандист",
+    stats: { farmila: 3, perekup: 3, tuller: 5 },
+  },
+  {
+    id: "fixer",
+    name: "Решала",
+    stats: { farmila: 4, perekup: 5, tuller: 2 },
+  },
+  {
+    id: "medic",
+    name: "Медик",
+    stats: { farmila: 2, perekup: 4, tuller: 5 },
+  },
+  {
+    id: "informant",
+    name: "Информатор",
+    stats: { farmila: 6, perekup: 3, tuller: 2 },
+  },
 ];
 
 const events: EventSeed[] = [
@@ -139,6 +174,76 @@ const events: EventSeed[] = [
     riskReward: 5,
     description:
       "Охрана уже заметила неладное. Нужно выбраться со склада, не потеряв товар.",
+  },
+  {
+    id: "cargo-theft",
+    name: "Кража груза",
+    requirements: { farmila: 4, perekup: 3, tuller: 5 },
+    mainStat: "tuller",
+    reward: 3,
+    riskReward: 5,
+    description:
+      "Вагон с ценным грузом стоит под охраной. Нужно вскрыть его быстро и без шума.",
+  },
+  {
+    id: "police-raid",
+    name: "Облава",
+    requirements: { farmila: 5, perekup: 4, tuller: 4 },
+    mainStat: "farmila",
+    reward: 3,
+    riskReward: 6,
+    description:
+      "Облава накрывает район. Спастись можно только выдержкой и холодной головой.",
+  },
+  {
+    id: "street-race",
+    name: "Уличная гонка",
+    requirements: { farmila: 3, perekup: 6, tuller: 3 },
+    mainStat: "perekup",
+    reward: 2,
+    riskReward: 4,
+    description:
+      "Уличная гонка на выживание. Ставки высоки, а соперники не знают пощады.",
+  },
+  {
+    id: "safe-cracking",
+    name: "Вскрытие сейфа",
+    requirements: { farmila: 4, perekup: 5, tuller: 4 },
+    mainStat: "perekup",
+    reward: 4,
+    riskReward: 6,
+    description:
+      "Толстые стены, хитрая сигнализация и всего одна ночь. Сейф должен быть вскрыт.",
+  },
+  {
+    id: "deal-gone-wrong",
+    name: "Сделка сорвалась",
+    requirements: { farmila: 3, perekup: 3, tuller: 3 },
+    mainStat: "tuller",
+    reward: 1,
+    riskReward: 3,
+    description:
+      "Покупатель не пришёл, а товар уже на руках. Нужно срочно искать выход.",
+  },
+  {
+    id: "smuggling-tunnel",
+    name: "Тоннель контрабанды",
+    requirements: { farmila: 6, perekup: 3, tuller: 5 },
+    mainStat: "farmila",
+    reward: 3,
+    riskReward: 6,
+    description:
+      "Подземный ход завален и полон воды. Каждый шаг может стать последним.",
+  },
+  {
+    id: "night-convoy",
+    name: "Ночной конвой",
+    requirements: { farmila: 4, perekup: 4, tuller: 4 },
+    mainStat: "tuller",
+    reward: 2,
+    riskReward: 5,
+    description:
+      "Колонна идёт через город ночью. Нужно перехватить её и не попасться.",
   },
 ];
 

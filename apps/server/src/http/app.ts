@@ -19,7 +19,7 @@ export async function createHttpApp() {
   });
 
   await app.register(cors, {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL ?? "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
