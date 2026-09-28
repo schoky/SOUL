@@ -34,6 +34,8 @@ import { useToastStore } from "../../stores/toastStore";
 
 const MAX_CARDS_PER_ACTION = 2;
 
+const WINNING_SOUL = 15;
+
 function findCharacter(
   characters: Character[],
   characterId: string,
@@ -69,13 +71,23 @@ function GamePage() {
 
   const characters = useGameStore((state) => state.characters);
 
+  const history = useGameStore((state) => state.history);
+
   const setGameSession = useGameStore((state) => state.setGameSession);
+
+  const pushHistory = useGameStore((state) => state.pushHistory);
+
+  const clearHistory = useGameStore((state) => state.clearHistory);
 
   const pushToast = useToastStore((state) => state.push);
 
   const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
 
   const [actionError, setActionError] = useState<string | null>(null);
+
+  const [finalRoundStartTurn, setFinalRoundStartTurn] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!roomId) {
@@ -97,6 +109,10 @@ function GamePage() {
     };
 
     const handleGameStarted = (payload: GameStartedPayload) => {
+      clearHistory();
+
+      setFinalRoundStartTurn(null);
+
       setGameSession(payload.gameState, payload.characters);
     };
 
@@ -126,6 +142,19 @@ function GamePage() {
             ? `${soulDelta} Soul`
             : "без изменений Soul";
 
+      const currentGameState = useGameStore.getState().gameState;
+
+      pushHistory({
+        turnNumber: currentGameState?.turnNumber ?? 0,
+        playerId: payload.playerId,
+        playerName: payload.playerName,
+        eventName: currentGameState?.currentEvent?.name ?? "Событие",
+        success: payload.success,
+        risk: payload.risk,
+        riskWon: payload.riskWon,
+        soulDelta,
+      });
+
       if (!payload.risk) {
         if (payload.success) {
           pushToast("success", `${prefix}: успех! ${soulText}`);
@@ -138,6 +167,7 @@ function GamePage() {
 
       if (payload.riskWon) {
         pushToast("success", `${prefix}: риск сработал! ${soulText}`);
+
         return;
       }
 
@@ -163,7 +193,29 @@ function GamePage() {
       socket.off(SOCKET_EVENTS.GAME_EVENT_RESOLVED, handleEventResolved);
       socket.off(SOCKET_EVENTS.ERROR, handleSocketError);
     };
-  }, [roomId, navigate, setGameSession, pushToast, user?.id]);
+  }, [
+    roomId,
+    navigate,
+    setGameSession,
+    pushToast,
+    pushHistory,
+    clearHistory,
+    user?.id,
+  ]);
+
+  useEffect(() => {
+    if (!gameState) {
+      return;
+    }
+
+    if (gameState.finalRoundStartedBy && finalRoundStartTurn === null) {
+      setFinalRoundStartTurn(gameState.turnNumber);
+    }
+
+    if (!gameState.finalRoundStartedBy && finalRoundStartTurn !== null) {
+      setFinalRoundStartTurn(null);
+    }
+  }, [gameState, finalRoundStartTurn]);
 
   useEffect(() => {
     setSelectedCardIds([]);
@@ -344,9 +396,53 @@ function GamePage() {
   const isSelfFinalRoundInitiator =
     !!user && gameState.finalRoundStartedBy === user.id;
 
+  const maxSoul = gameState.players.reduce(
+    (acc, player) => Math.max(acc, player.soul),
+    0,
+  );
+
+  const soulToFinal = Math.max(0, WINNING_SOUL - maxSoul);
+
+  const soulProgressPercent = Math.min(
+    100,
+    Math.round((maxSoul / WINNING_SOUL) * 100),
+  );
+
+  const finalRoundTurnsRemaining =
+    isFinalRound && finalRoundStartTurn !== null
+      ? Math.max(
+          0,
+          gameState.players.length -
+            (gameState.turnNumber - finalRoundStartTurn),
+        )
+      : null;
+
   return (
     <MainLayout>
       <main className="game-page">
+        {!isFinalRound && (
+          <section className="game-page__progress">
+            <div className="game-page__progress-header">
+              <span className="game-page__progress-label">До финала</span>
+
+              <span className="game-page__progress-value">
+                {soulToFinal > 0 ? `${soulToFinal} Soul` : "готово"}
+              </span>
+            </div>
+
+            <div className="game-page__progress-bar">
+              <div
+                className="game-page__progress-fill"
+                style={{ width: `${soulProgressPercent}%` }}
+              />
+            </div>
+
+            <p className="game-page__progress-hint">
+              Лидер: {maxSoul} / {WINNING_SOUL} Soul
+            </p>
+          </section>
+        )}
+
         {isFinalRound && (
           <section
             className={[
@@ -379,6 +475,12 @@ function GamePage() {
                   ? "У тебя последний ход. Постарайся набрать больше Soul, чем лидер."
                   : "Все игроки доигрывают свои последние ходы. Победит тот, у кого больше Soul."}
             </p>
+
+            {finalRoundTurnsRemaining !== null && (
+              <p className="game-page__final-banner-turns">
+                Осталось ходов: {finalRoundTurnsRemaining}
+              </p>
+            )}
           </section>
         )}
 
@@ -520,6 +622,54 @@ function GamePage() {
                 );
               })}
             </div>
+
+            {history.length > 0 && (
+              <div className="game-page__history">
+                <p className="game-page__eyebrow">ИСТОРИЯ ХОДОВ</p>
+
+                <div className="game-page__history-list">
+                  {history.map((entry, index) => {
+                    const isRisk = entry.risk;
+
+                    const resultLabel = !isRisk
+                      ? entry.success
+                        ? "успех"
+                        : "провал"
+                      : entry.riskWon
+                        ? "риск сработал"
+                        : "риск не сработал";
+
+                    const soulText =
+                      entry.soulDelta > 0
+                        ? `+${entry.soulDelta}`
+                        : entry.soulDelta < 0
+                          ? `${entry.soulDelta}`
+                          : "0";
+
+                    return (
+                      <div
+                        className={[
+                          "game-page__history-entry",
+                          entry.success
+                            ? "game-page__history-entry--success"
+                            : "game-page__history-entry--failure",
+                        ].join(" ")}
+                        key={`${entry.turnNumber}-${index}`}
+                      >
+                        <span className="game-page__history-turn">
+                          Ход {entry.turnNumber}
+                        </span>
+
+                        <span className="game-page__history-text">
+                          <strong>{entry.playerName}</strong>: {resultLabel} (
+                          {soulText})
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </aside>
         </section>
 

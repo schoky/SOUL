@@ -185,17 +185,12 @@ export function registerGameHandlers(socket: Socket): void {
           Boolean(payload.risk),
         );
 
-        await gameManager.set(payload.roomId, result.game);
-
         const updatedPlayer = result.game.players.find((p) => p.id === userId);
 
         const io = getIO();
 
-        io.to(`room:${payload.roomId}`).emit(
-          SOCKET_EVENTS.GAME_STATE_UPDATED,
-          buildSession(result.game),
-        );
-
+        // Уведомление о результате — отдельным событием, до смены хода,
+        // чтобы клиент успел показать тост с дельтой Soul.
         if (updatedPlayer) {
           io.to(`room:${payload.roomId}`).emit(
             SOCKET_EVENTS.GAME_EVENT_RESOLVED,
@@ -212,6 +207,29 @@ export function registerGameHandlers(socket: Socket): void {
               skipNextTurn: updatedPlayer.skipNextTurn,
             },
           );
+        }
+
+        // Автоматически передаём ход следующему игроку.
+        // Правило: за ход играется не более 2 карт (MAX_CARDS_PER_ACTION),
+        // а у игрока всего 2 карты — значит, после события ход всегда
+        // переходит дальше.
+        let nextGame: GameState;
+
+        if (result.game.status === "playing") {
+          nextGame = advanceTurnLoop(result.game);
+        } else {
+          nextGame = result.game;
+        }
+
+        await gameManager.set(payload.roomId, nextGame);
+
+        io.to(`room:${payload.roomId}`).emit(
+          SOCKET_EVENTS.GAME_STATE_UPDATED,
+          buildSession(nextGame),
+        );
+
+        if (nextGame.status === "finished") {
+          await handleGameFinished(payload.roomId, nextGame);
         }
       } catch (error) {
         const message =

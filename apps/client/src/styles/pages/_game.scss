@@ -1917,3 +1917,213 @@
 		animation: none;
 	}
 }
+
+/* ============================================= */
+/*           Soul progress to final              */
+/* ============================================= */
+
+.game-page__progress {
+	display: flex;
+	flex-direction: column;
+
+	gap: 8px;
+
+	margin-bottom: 24px;
+	padding: 16px 20px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(13, 16, 23, 0.74);
+}
+
+.game-page__progress-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 12px;
+}
+
+.game-page__progress-label {
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.game-page__progress-value {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.game-page__progress-bar {
+	position: relative;
+
+	width: 100%;
+	height: 6px;
+
+	overflow: hidden;
+
+	border-radius: 3px;
+
+	background: rgba(122, 59, 192, 0.12);
+}
+
+.game-page__progress-fill {
+	height: 100%;
+
+	border-radius: 3px;
+
+	background: linear-gradient(
+		90deg,
+		var(--color-purple),
+		var(--color-purple-bright)
+	);
+
+	box-shadow: 0 0 12px rgba(183, 122, 243, 0.55);
+
+	transition: width 400ms ease;
+}
+
+.game-page__progress-hint {
+	margin: 0;
+
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+/* ============================================= */
+/*                  History                      */
+/* ============================================= */
+
+.game-page__history {
+	display: flex;
+	flex-direction: column;
+
+	gap: 10px;
+
+	margin-top: 20px;
+	padding-top: 20px;
+
+	border-top: 1px solid var(--color-border);
+}
+
+.game-page__history-list {
+	display: flex;
+	flex-direction: column;
+
+	gap: 6px;
+}
+
+.game-page__history-entry {
+	display: flex;
+	flex-direction: column;
+
+	gap: 2px;
+
+	padding: 8px 10px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: rgba(10, 13, 19, 0.72);
+
+	font-family: 'Manrope', sans-serif;
+}
+
+.game-page__history-entry--success {
+	border-left: 3px solid var(--color-success);
+}
+
+.game-page__history-entry--failure {
+	border-left: 3px solid var(--color-danger);
+}
+
+.game-page__history-turn {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.game-page__history-text {
+	color: var(--color-text-secondary);
+
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.game-page__history-text strong {
+	color: var(--color-text);
+
+	font-weight: 700;
+}
+
+/* -------- Final banner: turns remaining -------- */
+
+.game-page__final-banner-turns {
+	margin: 4px 0 0;
+
+	color: var(--color-purple-bright);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+/* -------- Media -------- */
+
+@media (max-width: 720px) {
+	.game-page__progress {
+		padding: 12px 14px;
+
+		margin-bottom: 18px;
+	}
+
+	.game-page__result-card {
+		padding: 24px 32px;
+
+		margin: 0 16px;
+	}
+
+	.game-page__result-title {
+		font-size: 20px;
+	}
+
+	.game-page__result-delta {
+		font-size: 32px;
+	}
+
+	.game-page__history-entry {
+		padding: 6px 8px;
+	}
+
+	.game-page__final-banner-turns {
+		font-size: 11px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.game-page__result-overlay,
+	.game-page__result-card {
+		animation: none;
+	}
+}
