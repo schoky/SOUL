@@ -48,6 +48,10 @@ function AdminDashboard() {
     { label: "Завершённых партий", value: stats.totalGames },
     { label: "Активных комнат", value: stats.activeRooms },
     { label: "Игр в процессе", value: stats.activeGames },
+    {
+      label: "Новостей без публикации",
+      value: stats.unpublishedNews,
+    },
   ];
 
   return (

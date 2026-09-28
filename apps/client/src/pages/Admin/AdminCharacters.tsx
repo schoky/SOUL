@@ -239,16 +239,24 @@ function AdminCharacters() {
             <tbody>
               {characters.map((character) => (
                 <tr key={character.id}>
-                  <td>
+                  <td data-label="Slug">
                     <code>{character.slug}</code>
                   </td>
-                  <td>
+
+                  <td data-label="Имя">
                     <strong>{character.name}</strong>
                   </td>
-                  <td>{character.farmila}</td>
-                  <td>{character.perekup}</td>
-                  <td>{character.tuller}</td>
-                  <td>{character.abilityName ?? "—"}</td>
+
+                  <td data-label="Фармила">{character.farmila}</td>
+
+                  <td data-label="Перекуп">{character.perekup}</td>
+
+                  <td data-label="Туллер">{character.tuller}</td>
+
+                  <td data-label="Способность">
+                    {character.abilityName ?? "—"}
+                  </td>
+
                   <td className="admin-table__actions">
                     <button
                       className="admin-button admin-button--small"

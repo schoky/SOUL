@@ -62,10 +62,11 @@ function AdminGames() {
             <tbody>
               {games.map((game) => (
                 <tr key={game.id}>
-                  <td>
+                  <td data-label="Комната">
                     <strong>{game.roomCode}</strong>
                   </td>
-                  <td>
+
+                  <td data-label="Статус">
                     <span
                       className={[
                         "admin-badge",
@@ -77,10 +78,18 @@ function AdminGames() {
                       {game.status}
                     </span>
                   </td>
-                  <td>{game.playersCount}</td>
-                  <td>{game.winner?.nickname ?? "—"}</td>
-                  <td>{new Date(game.startedAt).toLocaleString("ru-RU")}</td>
-                  <td>
+
+                  <td data-label="Игроков">{game.playersCount}</td>
+
+                  <td data-label="Победитель">
+                    {game.winner?.nickname ?? "—"}
+                  </td>
+
+                  <td data-label="Начало">
+                    {new Date(game.startedAt).toLocaleString("ru-RU")}
+                  </td>
+
+                  <td data-label="Конец">
                     {game.finishedAt
                       ? new Date(game.finishedAt).toLocaleString("ru-RU")
                       : "—"}

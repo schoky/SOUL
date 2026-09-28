@@ -271,3 +271,65 @@ export async function deleteAdminEvent(id: string): Promise<void> {
     method: "DELETE",
   });
 }
+
+// ---------- News ----------
+
+export type AdminNewsItem = {
+  id: string;
+  slug: string;
+  title: string;
+  body: string;
+  isPublished: boolean;
+  publishedAt: string | null;
+  authorId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminNewsInput = {
+  slug: string;
+  title: string;
+  body: string;
+  isPublished: boolean;
+};
+
+export async function getAdminNews(): Promise<AdminNewsItem[]> {
+  const response = await apiRequest<{
+    news: AdminNewsItem[];
+  }>("/api/admin/news");
+
+  return response.news;
+}
+
+export async function createAdminNews(
+  input: AdminNewsInput,
+): Promise<AdminNewsItem> {
+  const response = await apiRequest<{
+    item: AdminNewsItem;
+  }>("/api/admin/news", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+  return response.item;
+}
+
+export async function updateAdminNews(
+  id: string,
+  input: Partial<AdminNewsInput>,
+): Promise<AdminNewsItem> {
+  const response = await apiRequest<{
+    item: AdminNewsItem;
+  }>(`/api/admin/news/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+
+  return response.item;
+}
+
+export async function deleteAdminNews(id: string): Promise<void> {
+  await apiRequest<{ success: boolean }>(`/api/admin/news/${id}`, {
+    method: "DELETE",
+  });
+}

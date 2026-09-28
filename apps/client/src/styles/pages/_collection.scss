@@ -13,12 +13,10 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 11px;
 	font-weight: 700;
 
 	letter-spacing: 0.14em;
-
 	text-transform: uppercase;
 }
 
@@ -32,14 +30,11 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: clamp(32px, 5vw, 52px);
 	font-weight: 700;
 
 	line-height: 1.1;
-
 	letter-spacing: 0.03em;
-
 	text-transform: uppercase;
 
 	text-shadow: 0 0 18px rgba(122, 59, 192, 0.22);
@@ -53,19 +48,17 @@
 	color: var(--color-text-secondary);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 15px;
 	font-weight: 500;
-
 	line-height: 1.6;
 }
 
 .collection-page__tabs {
 	display: flex;
+
 	gap: 10px;
 
 	margin-bottom: 28px;
-
 	padding-bottom: 22px;
 
 	border-bottom: 1px solid var(--color-border);
@@ -74,6 +67,7 @@
 .collection-page__tab {
 	display: inline-flex;
 	align-items: center;
+
 	gap: 10px;
 
 	padding: 12px 20px;
@@ -210,6 +204,7 @@
 .collection-page__card-body {
 	display: flex;
 	flex-direction: column;
+
 	gap: 14px;
 
 	padding: 18px;
@@ -253,6 +248,7 @@
 .collection-page__card-requirements > div {
 	display: flex;
 	flex-direction: column;
+
 	gap: 3px;
 }
 
@@ -326,6 +322,7 @@
 .collection-page__card-main {
 	display: flex;
 	flex-direction: column;
+
 	gap: 3px;
 }
 
@@ -352,12 +349,14 @@
 
 .collection-page__card-rewards {
 	display: flex;
+
 	gap: 14px;
 }
 
 .collection-page__card-rewards > div {
 	display: flex;
 	flex-direction: column;
+
 	gap: 3px;
 
 	text-align: right;
@@ -381,13 +380,49 @@
 	font-weight: 700;
 }
 
-@media (max-width: 600px) {
+/* -------- Media -------- */
+
+@media (max-width: 720px) {
 	.collection-page {
-		padding: 48px 16px 72px;
+		padding: 40px 14px 64px;
+	}
+
+	.collection-page__title {
+		font-size: 28px;
 	}
 
 	.collection-page__tabs {
 		flex-direction: column;
+
+		gap: 8px;
+	}
+
+	.collection-page__tab {
+		width: 100%;
+
+		justify-content: center;
+	}
+
+	.collection-page__grid {
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+		gap: 14px;
+	}
+
+	.collection-page__card-body {
+		padding: 14px;
+
+		gap: 10px;
+	}
+
+	.collection-page__card-title {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 420px) {
+	.collection-page {
+		padding: 36px 12px 60px;
 	}
 
 	.collection-page__grid {

@@ -6,6 +6,7 @@ import { adminStatsRepository } from "../../admin/adminStatsRepository.js";
 import { adminUserRepository } from "../../admin/adminUserRepository.js";
 import { adminRoomRepository } from "../../admin/adminRoomRepository.js";
 import { adminCardRepository } from "../../admin/adminCardRepository.js";
+import { newsRepository } from "../../news/newsRepository.js";
 
 type ListUsersQuery = {
   search?: string;
@@ -44,6 +45,13 @@ type EventBody = {
   reward: number;
   riskReward: number;
   description: string;
+};
+
+type NewsBody = {
+  slug: string;
+  title: string;
+  body: string;
+  isPublished: boolean;
 };
 
 const adminRoutes: FastifyPluginAsync = async (app) => {
@@ -257,6 +265,123 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Не удалось удалить событие";
+
+        return reply.code(400).send({ error: message });
+      }
+    },
+  );
+
+  // ---------- Новости ----------
+
+  app.get("/news", { preHandler: requireAdmin }, async () => {
+    const items = await newsRepository.findAll();
+
+    return {
+      news: items.map((item) => ({
+        id: item.id,
+        slug: item.slug,
+        title: item.title,
+        body: item.body,
+        isPublished: item.isPublished,
+        publishedAt: item.publishedAt?.toISOString() ?? null,
+        authorId: item.authorId,
+        createdAt: item.createdAt.toISOString(),
+        updatedAt: item.updatedAt.toISOString(),
+      })),
+    };
+  });
+
+  app.post<{ Body: NewsBody }>(
+    "/news",
+    { preHandler: requireAdmin },
+    async (request, reply) => {
+      const me = request.user;
+
+      if (!me) {
+        return reply.code(401).send({
+          error: "Not authenticated",
+        });
+      }
+
+      try {
+        const created = await newsRepository.create({
+          slug: request.body.slug,
+          title: request.body.title,
+          body: request.body.body,
+          isPublished: request.body.isPublished,
+          authorId: me.id,
+        });
+
+        return reply.code(201).send({
+          item: {
+            id: created.id,
+            slug: created.slug,
+            title: created.title,
+            body: created.body,
+            isPublished: created.isPublished,
+            publishedAt: created.publishedAt?.toISOString() ?? null,
+            authorId: created.authorId,
+            createdAt: created.createdAt.toISOString(),
+            updatedAt: created.updatedAt.toISOString(),
+          },
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Не удалось создать новость";
+
+        return reply.code(400).send({ error: message });
+      }
+    },
+  );
+
+  app.patch<{
+    Params: { id: string };
+    Body: Partial<NewsBody>;
+  }>("/news/:id", { preHandler: requireAdmin }, async (request, reply) => {
+    try {
+      const updated = await newsRepository.update(
+        request.params.id,
+        request.body,
+      );
+
+      if (!updated) {
+        return reply.code(404).send({
+          error: "Новость не найдена",
+        });
+      }
+
+      return {
+        item: {
+          id: updated.id,
+          slug: updated.slug,
+          title: updated.title,
+          body: updated.body,
+          isPublished: updated.isPublished,
+          publishedAt: updated.publishedAt?.toISOString() ?? null,
+          authorId: updated.authorId,
+          createdAt: updated.createdAt.toISOString(),
+          updatedAt: updated.updatedAt.toISOString(),
+        },
+      };
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Не удалось обновить новость";
+
+      return reply.code(400).send({ error: message });
+    }
+  });
+
+  app.delete<{ Params: { id: string } }>(
+    "/news/:id",
+    { preHandler: requireAdmin },
+    async (request, reply) => {
+      try {
+        await newsRepository.delete(request.params.id);
+
+        return { success: true };
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Не удалось удалить новость";
 
         return reply.code(400).send({ error: message });
       }

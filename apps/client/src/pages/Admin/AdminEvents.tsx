@@ -244,18 +244,24 @@ function AdminEvents() {
             <tbody>
               {events.map((event) => (
                 <tr key={event.id}>
-                  <td>
+                  <td data-label="Slug">
                     <code>{event.slug}</code>
                   </td>
-                  <td>
+
+                  <td data-label="Название">
                     <strong>{event.name}</strong>
                   </td>
-                  <td>
+
+                  <td data-label="Требования">
                     {event.farmila} / {event.perekup} / {event.tuller}
                   </td>
-                  <td>{event.mainStat}</td>
-                  <td>+{event.reward}</td>
-                  <td>+{event.riskReward}</td>
+
+                  <td data-label="Основная">{event.mainStat}</td>
+
+                  <td data-label="Награда">+{event.reward}</td>
+
+                  <td data-label="Риск">+{event.riskReward}</td>
+
                   <td className="admin-table__actions">
                     <button
                       className="admin-button admin-button--small"

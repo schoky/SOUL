@@ -1,3 +1,7 @@
+/* ============================================= */
+/*           Game page — base layout             */
+/* ============================================= */
+
 .game-page {
 	width: 100%;
 	max-width: 1180px;
@@ -13,12 +17,10 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 11px;
 	font-weight: 700;
 
 	letter-spacing: 0.14em;
-
 	text-transform: uppercase;
 }
 
@@ -38,15 +40,11 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: clamp(32px, 5vw, 52px);
-
 	font-weight: 700;
 
 	line-height: 1.1;
-
 	letter-spacing: 0.03em;
-
 	text-transform: uppercase;
 }
 
@@ -58,10 +56,8 @@
 	color: var(--color-text-secondary);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 15px;
 	font-weight: 500;
-
 	line-height: 1.6;
 }
 
@@ -91,7 +87,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -99,7 +94,6 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 18px;
 
 	letter-spacing: 0.03em;
@@ -129,7 +123,9 @@
 	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
 }
 
-/* -------- Event image -------- */
+/* ============================================= */
+/*                    Event                      */
+/* ============================================= */
 
 .game-page__event-image {
 	width: 100%;
@@ -144,14 +140,11 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 26px;
 	font-weight: 700;
 
 	line-height: 1.2;
-
 	letter-spacing: 0.03em;
-
 	text-transform: uppercase;
 }
 
@@ -161,10 +154,8 @@
 	color: var(--color-text-secondary);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 14px;
 	font-weight: 500;
-
 	line-height: 1.6;
 }
 
@@ -199,7 +190,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -207,7 +197,6 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 22px;
 	font-weight: 700;
 }
@@ -235,7 +224,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -243,7 +231,6 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 15px;
 	font-weight: 700;
 
@@ -281,7 +268,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -289,10 +275,13 @@
 	color: var(--color-success);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 16px;
 	font-weight: 700;
 }
+
+/* ============================================= */
+/*                    Players                    */
+/* ============================================= */
 
 .game-page__players {
 	display: flex;
@@ -321,7 +310,8 @@
 
 	background: rgba(10, 13, 19, 0.72);
 
-	transition: border-color 160ms ease, background 160ms ease;
+	transition: border-color 160ms ease, background 160ms ease,
+	color 220ms ease;
 }
 
 .game-page__player--active {
@@ -342,7 +332,6 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 14px;
 	font-weight: 700;
 
@@ -365,7 +354,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 }
 
@@ -389,7 +377,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -397,12 +384,13 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 16px;
 	font-weight: 700;
 }
 
-/* -------- HAND (карточки персонажей) -------- */
+/* ============================================= */
+/*                    Hand                       */
+/* ============================================= */
 
 .game-page__hand {
 	margin-top: 28px;
@@ -418,6 +406,8 @@
 	);
 
 	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+
+	transition: border-color 240ms ease, box-shadow 240ms ease;
 }
 
 .game-page__section-header {
@@ -438,14 +428,11 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 24px;
 	font-weight: 700;
 
 	line-height: 1.2;
-
 	letter-spacing: 0.03em;
-
 	text-transform: uppercase;
 }
 
@@ -453,7 +440,6 @@
 	color: var(--color-text-muted);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 12px;
 	font-weight: 600;
 
@@ -470,7 +456,9 @@
 	margin-top: 22px;
 }
 
-/* -------- Character card -------- */
+/* ============================================= */
+/*                Character card                 */
+/* ============================================= */
 
 .game-page__card {
 	display: flex;
@@ -491,38 +479,14 @@
 
 	text-align: left;
 
-	transition: border-color 160ms ease,
-	background 160ms ease,
-	transform 160ms ease,
-	box-shadow 160ms ease;
-}
-
-.game-page__card:hover:not(:disabled) {
-	transform: translateY(-2px);
-
-	border-color: var(--color-border-purple);
-
-	background: rgba(122, 59, 192, 0.08);
-
-	box-shadow: 0 0 18px rgba(122, 59, 192, 0.18);
+	transition: border-color 160ms ease, background 160ms ease,
+	transform 160ms ease, box-shadow 160ms ease;
 }
 
 .game-page__card:disabled {
 	opacity: 0.55;
 
 	cursor: not-allowed;
-}
-
-.game-page__card--selected {
-	border-color: var(--color-purple-light);
-
-	background: rgba(122, 59, 192, 0.16);
-
-	box-shadow: 0 0 20px rgba(122, 59, 192, 0.25);
-}
-
-.game-page__card--exhausted {
-	opacity: 0.4;
 }
 
 .game-page__card-image {
@@ -560,7 +524,6 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 15px;
 	font-weight: 700;
 
@@ -580,7 +543,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 }
 
@@ -612,7 +574,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 }
 
@@ -620,9 +581,10 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 18px;
 	font-weight: 700;
+
+	transition: color 220ms ease;
 }
 
 .game-page__card-ability {
@@ -647,7 +609,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 }
 
@@ -657,7 +618,6 @@
 	color: var(--color-text-secondary);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 11px;
 	font-weight: 500;
 
@@ -697,7 +657,9 @@
 	box-shadow: 0 0 12px rgba(122, 59, 192, 0.5);
 }
 
-/* -------- Selection и действия -------- */
+/* ============================================= */
+/*            Selection и действия               */
+/* ============================================= */
 
 .game-page__selection {
 	display: flex;
@@ -737,7 +699,6 @@
 	font-weight: 700;
 
 	letter-spacing: 0.1em;
-
 	text-transform: uppercase;
 }
 
@@ -745,9 +706,35 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 22px;
 	font-weight: 700;
+
+	transition: color 220ms ease;
+}
+
+.game-page__selection-stat--met strong {
+	color: var(--color-success);
+}
+
+.game-page__selection-stat--unmet strong {
+	color: var(--color-danger);
+}
+
+.game-page__selection-hint {
+	margin: 16px 0 0;
+	padding: 12px 16px;
+
+	border: 1px solid rgba(255, 107, 129, 0.4);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 107, 129, 0.06);
+	color: var(--color-danger);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.6;
+	text-align: center;
 }
 
 .game-page__selection-actions {
@@ -782,14 +769,15 @@
 	color: var(--color-danger);
 
 	font-family: 'Manrope', sans-serif;
-
 	font-size: 12px;
 	font-weight: 600;
 
 	text-align: center;
 }
 
-/* -------- Buttons -------- */
+/* ============================================= */
+/*                    Buttons                    */
+/* ============================================= */
 
 .game-page__button {
 	min-height: 48px;
@@ -808,12 +796,10 @@
 	color: var(--color-text-secondary);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 11px;
 	font-weight: 700;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 
 	transition: filter 140ms ease, box-shadow 140ms ease,
@@ -878,7 +864,9 @@
 	box-shadow: 0 0 18px rgba(255, 107, 129, 0.2);
 }
 
-/* -------- Empty -------- */
+/* ============================================= */
+/*                  Empty                        */
+/* ============================================= */
 
 .game-page__empty {
 	min-height: 420px;
@@ -902,7 +890,9 @@
 	max-width: 560px;
 }
 
-/* -------- Card image (общий компонент) -------- */
+/* ============================================= */
+/*            Card image (shared)                */
+/* ============================================= */
 
 .card-image {
 	display: block;
@@ -945,91 +935,12 @@
 	line-height: 1.3;
 
 	letter-spacing: 0.08em;
-
 	text-transform: uppercase;
 }
 
-@media (max-width: 900px) {
-	.game-page__header {
-		align-items: flex-start;
-
-		flex-direction: column;
-	}
-
-	.game-page__meta {
-		width: 100%;
-
-		align-items: flex-start;
-	}
-
-	.game-page__content {
-		grid-template-columns: 1fr;
-	}
-}
-
-@media (max-width: 600px) {
-	.game-page {
-		padding: 48px 16px 72px;
-	}
-
-	.game-page__event,
-	.game-page__players,
-	.game-page__hand {
-		padding: 20px;
-	}
-
-	.game-page__requirements,
-	.game-page__rewards {
-		grid-template-columns: 1fr;
-	}
-
-	.game-page__section-header {
-		align-items: flex-start;
-
-		flex-direction: column;
-	}
-
-	.game-page__selection {
-		flex-direction: column;
-
-		align-items: stretch;
-	}
-
-	.game-page__selection-actions {
-		flex-direction: column;
-	}
-
-	.game-page__selection-actions .game-page__button {
-		width: 100%;
-	}
-}
-
-.game-page__selection-stat--met strong {
-	color: var(--color-success);
-}
-
-.game-page__selection-stat--unmet strong {
-	color: var(--color-danger);
-}
-
-.game-page__selection-hint {
-	margin: 16px 0 0;
-	padding: 12px 16px;
-
-	border: 1px solid rgba(255, 107, 129, 0.4);
-	border-radius: var(--radius-sm);
-
-	background: rgba(255, 107, 129, 0.06);
-	color: var(--color-danger);
-
-	font-family: 'Manrope', sans-serif;
-	font-size: 12px;
-	font-weight: 500;
-	line-height: 1.6;
-	text-align: center;
-}
-
-/* -------- Your turn indicator -------- */
+/* ============================================= */
+/*              Turn indicator                   */
+/* ============================================= */
 
 .game-page__your-turn-banner {
 	display: flex;
@@ -1059,7 +970,10 @@
 
 	text-shadow: 0 0 12px rgba(154, 102, 223, 0.6);
 
-	animation: your-turn-pulse 1.8s ease-in-out infinite;
+	animation: banner-slide 320ms cubic-bezier(0.2, 0.85, 0.3, 1) both,
+	your-turn-pulse 1.8s ease-in-out infinite;
+
+	animation-delay: 0ms, 320ms;
 }
 
 .game-page__hand--active {
@@ -1099,16 +1013,9 @@
 	}
 }
 
-@media (max-width: 600px) {
-	.game-page__your-turn-banner {
-		padding: 10px 16px;
-
-		font-size: 13px;
-		letter-spacing: 0.14em;
-	}
-}
-
-/* -------- Game result screen -------- */
+/* ============================================= */
+/*              Game result screen               */
+/* ============================================= */
 
 .game-result {
 	width: 100%;
@@ -1464,9 +1371,352 @@
 	box-shadow: 0 0 26px rgba(122, 59, 192, 0.4);
 }
 
-@media (max-width: 600px) {
+/* ============================================= */
+/*                  Animations                   */
+/* ============================================= */
+
+@keyframes card-appear {
+	0% {
+		opacity: 0;
+		transform: translateY(14px) scale(0.96);
+	}
+
+	60% {
+		opacity: 1;
+		transform: translateY(-2px) scale(1.01);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes card-selected-glow {
+	0%,
+	100% {
+		box-shadow: 0 0 20px rgba(122, 59, 192, 0.32),
+		0 0 0 1px rgba(160, 106, 229, 0.5);
+	}
+
+	50% {
+		box-shadow: 0 0 34px rgba(122, 59, 192, 0.55),
+		0 0 0 1px rgba(183, 122, 243, 0.75);
+	}
+}
+
+@keyframes card-exhaust-fade {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	100% {
+		opacity: 0.38;
+		transform: scale(0.97);
+	}
+}
+
+@keyframes overlay-fade {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes selection-slide {
+	0% {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes banner-slide {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.96);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.game-page__cards .game-page__card {
+	animation: card-appear 380ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
+}
+
+.game-page__card:hover:not(:disabled) {
+	transform: translateY(-4px);
+
+	border-color: var(--color-border-purple);
+
+	background: rgba(122, 59, 192, 0.1);
+
+	box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32),
+	0 0 24px rgba(122, 59, 192, 0.24);
+}
+
+.game-page__card:active:not(:disabled) {
+	transform: translateY(-1px) scale(0.99);
+}
+
+.game-page__card--selected {
+	border-color: var(--color-purple-bright);
+
+	background: rgba(122, 59, 192, 0.18);
+
+	animation: card-selected-glow 2s ease-in-out infinite;
+}
+
+.game-page__card--selected:hover:not(:disabled) {
+	transform: translateY(-4px);
+}
+
+.game-page__card--exhausted {
+	animation: card-exhaust-fade 320ms ease-out both;
+
+	filter: grayscale(0.55);
+}
+
+.game-page__card-overlay {
+	animation: overlay-fade 260ms ease-out both;
+}
+
+.game-page__selection {
+	animation: selection-slide 260ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
+}
+
+.game-page__selection-hint {
+	animation: selection-slide 300ms ease-out both;
+
+	animation-delay: 80ms;
+}
+
+.game-page__selection-stats > div {
+	animation: selection-slide 240ms ease-out both;
+}
+
+.game-page__selection-stats > div:nth-child(1) {
+	animation-delay: 0ms;
+}
+
+.game-page__selection-stats > div:nth-child(2) {
+	animation-delay: 60ms;
+}
+
+.game-page__selection-stats > div:nth-child(3) {
+	animation-delay: 120ms;
+}
+
+.game-page__selection-actions .game-page__button:hover:not(:disabled) {
+	transform: translateY(-2px);
+}
+
+.game-page__selection-actions .game-page__button:active:not(:disabled) {
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.game-page__cards .game-page__card,
+	.game-page__card--selected,
+	.game-page__card--exhausted,
+	.game-page__card-overlay,
+	.game-page__selection,
+	.game-page__selection-hint,
+	.game-page__your-turn-banner,
+	.game-page__selection-stats > div {
+		animation: none !important;
+
+		transition: none !important;
+	}
+}
+
+/* ============================================= */
+/*               Media queries                   */
+/* ============================================= */
+
+/* -------- ≤ 900px -------- */
+
+@media (max-width: 900px) {
+	.game-page__header {
+		align-items: flex-start;
+
+		flex-direction: column;
+	}
+
+	.game-page__meta {
+		width: 100%;
+
+		align-items: flex-start;
+	}
+
+	.game-page__content {
+		grid-template-columns: 1fr;
+	}
+
+	.game-result__header {
+		flex-direction: column;
+	}
+}
+
+/* -------- ≤ 720px -------- */
+
+@media (max-width: 720px) {
+	.game-page {
+		padding: 40px 14px 64px;
+	}
+
+	.game-page__header {
+		gap: 20px;
+
+		margin-bottom: 28px;
+	}
+
+	.game-page__meta {
+		padding: 12px 14px;
+	}
+
+	.game-page__title {
+		font-size: 28px;
+	}
+
+	.game-page__content {
+		gap: 14px;
+	}
+
+	.game-page__event,
+	.game-page__players,
+	.game-page__hand {
+		padding: 20px;
+	}
+
+	.game-page__event-image {
+		max-width: 200px;
+
+		margin-bottom: 18px;
+	}
+
+	.game-page__event-title {
+		font-size: 20px;
+	}
+
+	.game-page__requirements {
+		grid-template-columns: 1fr;
+
+		gap: 8px;
+	}
+
+	.game-page__requirement {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+
+		padding: 10px 12px;
+	}
+
+	.game-page__requirement strong {
+		font-size: 18px;
+	}
+
+	.game-page__rewards {
+		grid-template-columns: 1fr;
+
+		gap: 8px;
+	}
+
+	.game-page__reward {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+
+		padding: 10px 12px;
+	}
+
+	.game-page__section-header {
+		flex-direction: column;
+		align-items: flex-start;
+
+		gap: 8px;
+	}
+
+	.game-page__section-title {
+		font-size: 18px;
+	}
+
+	.game-page__cards {
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+
+		gap: 12px;
+	}
+
+	.game-page__card-header strong {
+		font-size: 13px;
+	}
+
+	.game-page__card-stats strong {
+		font-size: 16px;
+	}
+
+	.game-page__selection {
+		flex-direction: column;
+		align-items: stretch;
+
+		gap: 14px;
+
+		padding: 14px;
+	}
+
+	.game-page__selection-stats {
+		justify-content: space-between;
+	}
+
+	.game-page__selection-actions {
+		flex-direction: column;
+
+		gap: 8px;
+	}
+
+	.game-page__selection-actions .game-page__button {
+		width: 100%;
+
+		margin: 0;
+	}
+
+	.game-page__your-turn-banner {
+		padding: 10px 16px;
+
+		font-size: 13px;
+		letter-spacing: 0.14em;
+
+		margin-bottom: 16px;
+	}
+
+	.game-page__player {
+		padding: 12px 14px;
+	}
+
+	.game-page__turn-actions {
+		justify-content: stretch;
+	}
+
+	.game-page__turn-actions .game-page__button {
+		width: 100%;
+	}
+
 	.game-result {
-		padding: 48px 16px 72px;
+		padding: 40px 14px 64px;
 	}
 
 	.game-result__board {
@@ -1502,219 +1752,26 @@
 	}
 }
 
-/* ============================================= */
-/*              Animations (5.2)                 */
-/* ============================================= */
+/* -------- ≤ 600px -------- */
 
-/* -------- Появление карточек -------- */
-
-@keyframes card-appear {
-	0% {
-		opacity: 0;
-		transform: translateY(14px) scale(0.96);
+@media (max-width: 600px) {
+	.game-page {
+		padding: 48px 16px 72px;
 	}
 
-	60% {
-		opacity: 1;
-		transform: translateY(-2px) scale(1.01);
+	.game-page__title {
+		font-size: 24px;
 	}
 
-	100% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
+	.game-page__event-title {
+		font-size: 18px;
 	}
 }
 
-.game-page__cards .game-page__card {
-	animation: card-appear 380ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
-}
+/* -------- ≤ 420px -------- */
 
-/* -------- Улучшенный ховер -------- */
-
-.game-page__card:hover:not(:disabled) {
-	transform: translateY(-4px);
-
-	border-color: var(--color-border-purple);
-
-	background: rgba(122, 59, 192, 0.1);
-
-	box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32),
-	0 0 24px rgba(122, 59, 192, 0.24);
-}
-
-.game-page__card:active:not(:disabled) {
-	transform: translateY(-1px) scale(0.99);
-}
-
-/* -------- Пульсация выбранной карточки -------- */
-
-@keyframes card-selected-glow {
-	0%,
-	100% {
-		box-shadow: 0 0 20px rgba(122, 59, 192, 0.32),
-		0 0 0 1px rgba(160, 106, 229, 0.5);
-	}
-
-	50% {
-		box-shadow: 0 0 34px rgba(122, 59, 192, 0.55),
-		0 0 0 1px rgba(183, 122, 243, 0.75);
-	}
-}
-
-.game-page__card--selected {
-	border-color: var(--color-purple-bright);
-
-	background: rgba(122, 59, 192, 0.18);
-
-	animation: card-selected-glow 2s ease-in-out infinite;
-}
-
-.game-page__card--selected:hover:not(:disabled) {
-	transform: translateY(-4px);
-}
-
-/* -------- Анимация «Устал» -------- */
-
-@keyframes card-exhaust-fade {
-	0% {
-		opacity: 1;
-		transform: scale(1);
-	}
-
-	100% {
-		opacity: 0.38;
-		transform: scale(0.97);
-	}
-}
-
-.game-page__card--exhausted {
-	animation: card-exhaust-fade 320ms ease-out both;
-
-	filter: grayscale(0.55);
-}
-
-/* Оверлей «Устал» — плавное появление */
-
-.game-page__card-overlay {
-	animation: overlay-fade 260ms ease-out both;
-}
-
-@keyframes overlay-fade {
-	from {
-		opacity: 0;
-		transform: translateY(-4px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* -------- Появление секции выбора -------- */
-
-@keyframes selection-slide {
-	0% {
-		opacity: 0;
-		transform: translateY(12px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-.game-page__selection {
-	animation: selection-slide 260ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
-}
-
-/* -------- Появление подсказки -------- */
-
-.game-page__selection-hint {
-	animation: selection-slide 300ms ease-out both;
-
-	animation-delay: 80ms;
-}
-
-/* -------- Баннер «Твой ход» — усиленное появление -------- */
-
-@keyframes banner-slide {
-	0% {
-		opacity: 0;
-		transform: translateY(-10px) scale(0.96);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-}
-
-.game-page__your-turn-banner {
-	animation: banner-slide 320ms cubic-bezier(0.2, 0.85, 0.3, 1) both,
-	your-turn-pulse 1.8s ease-in-out infinite;
-
-	animation-delay: 0ms, 320ms;
-}
-
-/* -------- Плавная активация hand-секции -------- */
-
-.game-page__hand {
-	transition: border-color 240ms ease, box-shadow 240ms ease;
-}
-
-/* -------- Плавное обновление Soul и характеристик -------- */
-
-.game-page__player,
-.game-page__selection-stats strong,
-.game-page__card-stats strong {
-	transition: color 220ms ease, background 220ms ease;
-}
-
-.game-page__selection-stats > div {
-	animation: selection-slide 240ms ease-out both;
-}
-
-.game-page__selection-stats > div:nth-child(1) {
-	animation-delay: 0ms;
-}
-
-.game-page__selection-stats > div:nth-child(2) {
-	animation-delay: 60ms;
-}
-
-.game-page__selection-stats > div:nth-child(3) {
-	animation-delay: 120ms;
-}
-
-/* -------- Кнопки действий — чуть плавнее -------- */
-
-.game-page__selection-actions .game-page__button {
-	transition: filter 140ms ease, box-shadow 140ms ease,
-	transform 140ms ease, border-color 140ms ease,
-	background 140ms ease, color 140ms ease;
-}
-
-.game-page__selection-actions .game-page__button:hover:not(:disabled) {
-	transform: translateY(-2px);
-}
-
-.game-page__selection-actions .game-page__button:active:not(:disabled) {
-	transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.game-page__cards .game-page__card,
-	.game-page__card--selected,
-	.game-page__card--exhausted,
-	.game-page__card-overlay,
-	.game-page__selection,
-	.game-page__selection-hint,
-	.game-page__your-turn-banner,
-	.game-page__selection-stats > div {
-		animation: none !important;
-
-		transition: none !important;
+@media (max-width: 420px) {
+	.game-page__cards {
+		grid-template-columns: 1fr;
 	}
 }

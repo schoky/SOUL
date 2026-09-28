@@ -61,10 +61,11 @@ function AdminRooms() {
             <tbody>
               {rooms.map((room) => (
                 <tr key={room.id}>
-                  <td>
+                  <td data-label="Код">
                     <strong>{room.code}</strong>
                   </td>
-                  <td>
+
+                  <td data-label="Статус">
                     <span
                       className={[
                         "admin-badge",
@@ -76,11 +77,16 @@ function AdminRooms() {
                       {room.status}
                     </span>
                   </td>
-                  <td>{room.host.nickname}</td>
-                  <td>
+
+                  <td data-label="Хост">{room.host.nickname}</td>
+
+                  <td data-label="Игроков">
                     {room.members.length} / {room.maxPlayers}
                   </td>
-                  <td>{new Date(room.createdAt).toLocaleString("ru-RU")}</td>
+
+                  <td data-label="Создана">
+                    {new Date(room.createdAt).toLocaleString("ru-RU")}
+                  </td>
                 </tr>
               ))}
             </tbody>

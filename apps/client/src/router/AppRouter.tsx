@@ -13,6 +13,8 @@ import GamePage from "../pages/Game/GamePage";
 import CollectionPage from "../pages/Collection/CollectionPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import RulesPage from "../pages/Rules/RulesPage";
+import NewsPage from "../pages/News/NewsPage";
+import NewsArticlePage from "../pages/News/NewsArticlePage";
 
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
@@ -30,6 +32,10 @@ function AppRouter() {
         <Route path="/" element={<LandingPage />} />
 
         <Route path="/rules" element={<RulesPage />} />
+
+        <Route path="/news" element={<NewsPage />} />
+
+        <Route path="/news/:slug" element={<NewsArticlePage />} />
 
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />

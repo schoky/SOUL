@@ -147,9 +147,11 @@ function AdminUsers() {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.profile?.nickname ?? "—"}</td>
-                  <td>{user.email}</td>
-                  <td>
+                  <td data-label="Ник">{user.profile?.nickname ?? "—"}</td>
+
+                  <td data-label="Email">{user.email}</td>
+
+                  <td data-label="Роль">
                     <span
                       className={[
                         "admin-badge",
@@ -161,7 +163,8 @@ function AdminUsers() {
                       {user.role}
                     </span>
                   </td>
-                  <td>
+
+                  <td data-label="Статус">
                     <span
                       className={[
                         "admin-badge",
@@ -173,8 +176,13 @@ function AdminUsers() {
                       {user.isBlocked ? "Заблокирован" : "Активен"}
                     </span>
                   </td>
-                  <td>{formatDate(user.createdAt)}</td>
-                  <td>{formatDate(user.lastLoginAt)}</td>
+
+                  <td data-label="Регистрация">{formatDate(user.createdAt)}</td>
+
+                  <td data-label="Последний вход">
+                    {formatDate(user.lastLoginAt)}
+                  </td>
+
                   <td className="admin-table__actions">
                     <button
                       className="admin-button admin-button--small"

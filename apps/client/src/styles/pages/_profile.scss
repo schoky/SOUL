@@ -13,12 +13,10 @@
 	color: var(--color-purple-light);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: 11px;
 	font-weight: 700;
 
 	letter-spacing: 0.14em;
-
 	text-transform: uppercase;
 }
 
@@ -29,7 +27,15 @@
 .profile-page__identity {
 	display: flex;
 	align-items: center;
+
 	gap: 22px;
+}
+
+.profile-page__identity-info {
+	display: flex;
+	flex-direction: column;
+
+	gap: 6px;
 }
 
 .profile-page__avatar {
@@ -77,14 +83,11 @@
 	color: var(--color-text);
 
 	font-family: 'Exo 2', sans-serif;
-
 	font-size: clamp(32px, 5vw, 52px);
 	font-weight: 700;
 
 	line-height: 1.1;
-
 	letter-spacing: 0.03em;
-
 	text-transform: uppercase;
 
 	text-shadow: 0 0 18px rgba(122, 59, 192, 0.22);
@@ -100,6 +103,41 @@
 	font-weight: 500;
 }
 
+/* -------- Edit button -------- */
+
+.profile-page__edit-button {
+	align-self: flex-start;
+
+	margin-top: 10px;
+	padding: 8px 16px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: var(--color-panel);
+	color: var(--color-text-secondary);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+
+	transition: border-color 160ms ease, background 160ms ease,
+	color 160ms ease, box-shadow 160ms ease;
+}
+
+.profile-page__edit-button:hover {
+	border-color: var(--color-purple);
+	background: var(--color-panel-light);
+	color: var(--color-text);
+
+	box-shadow: 0 0 14px rgba(122, 59, 192, 0.14);
+}
+
+/* -------- Stats -------- */
+
 .profile-page__stats {
 	display: grid;
 
@@ -113,6 +151,7 @@
 .profile-page__stat {
 	display: flex;
 	flex-direction: column;
+
 	gap: 8px;
 
 	padding: 18px 20px;
@@ -142,6 +181,8 @@
 
 	line-height: 1;
 }
+
+/* -------- History -------- */
 
 .profile-page__history {
 	padding: 28px;
@@ -174,7 +215,6 @@
 	font-weight: 700;
 
 	line-height: 1.2;
-
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 }
@@ -217,6 +257,7 @@
 .profile-page__game-main {
 	display: flex;
 	flex-direction: column;
+
 	gap: 4px;
 
 	min-width: 0;
@@ -243,12 +284,14 @@
 .profile-page__game-result {
 	display: flex;
 	align-items: center;
+
 	gap: 22px;
 }
 
 .profile-page__game-result > div {
 	display: flex;
 	flex-direction: column;
+
 	gap: 3px;
 
 	text-align: right;
@@ -299,6 +342,8 @@
 	color: var(--color-danger);
 }
 
+/* -------- Empty -------- */
+
 .profile-page__empty {
 	min-height: 320px;
 
@@ -336,65 +381,7 @@
 	text-transform: uppercase;
 }
 
-@media (max-width: 700px) {
-	.profile-page {
-		padding: 48px 16px 72px;
-	}
-
-	.profile-page__identity {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.profile-page__game {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.profile-page__game-result {
-		width: 100%;
-		justify-content: space-between;
-	}
-}
-
-/* -------- Profile editor -------- */
-
-.profile-page__identity-info {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.profile-page__edit-button {
-	align-self: flex-start;
-
-	margin-top: 10px;
-	padding: 8px 16px;
-
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-sm);
-
-	background: var(--color-panel);
-	color: var(--color-text-secondary);
-
-	font-family: 'Exo 2', sans-serif;
-	font-size: 11px;
-	font-weight: 700;
-
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-
-	transition: border-color 160ms ease, background 160ms ease,
-	color 160ms ease, box-shadow 160ms ease;
-}
-
-.profile-page__edit-button:hover {
-	border-color: var(--color-purple);
-	background: var(--color-panel-light);
-	color: var(--color-text);
-
-	box-shadow: 0 0 14px rgba(122, 59, 192, 0.14);
-}
+/* -------- Editor -------- */
 
 .profile-page__editor {
 	margin-bottom: 42px;
@@ -423,6 +410,7 @@
 .profile-page__form {
 	display: flex;
 	flex-direction: column;
+
 	gap: 22px;
 
 	max-width: 520px;
@@ -431,6 +419,7 @@
 .profile-page__field {
 	display: flex;
 	flex-direction: column;
+
 	gap: 8px;
 }
 
@@ -495,6 +484,7 @@
 .profile-page__avatar-preview {
 	display: flex;
 	flex-direction: column;
+
 	gap: 10px;
 
 	padding: 16px;
@@ -533,6 +523,7 @@
 
 .profile-page__form-actions {
 	display: flex;
+
 	gap: 10px;
 
 	padding-top: 6px;
@@ -596,7 +587,30 @@
 	box-shadow: 0 0 22px rgba(122, 59, 192, 0.3);
 }
 
+/* ============================================= */
+/*                Media queries                  */
+/* ============================================= */
+
 @media (max-width: 700px) {
+	.profile-page {
+		padding: 48px 16px 72px;
+	}
+
+	.profile-page__identity {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.profile-page__game {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.profile-page__game-result {
+		width: 100%;
+		justify-content: space-between;
+	}
+
 	.profile-page__editor {
 		padding: 20px;
 	}
@@ -607,5 +621,60 @@
 
 	.profile-page__form-actions .profile-page__button {
 		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.profile-page {
+		padding: 36px 12px 60px;
+	}
+
+	.profile-page__title {
+		font-size: 26px;
+	}
+
+	.profile-page__avatar {
+		width: 72px;
+		height: 72px;
+
+		flex-basis: 72px;
+	}
+
+	.profile-page__avatar span {
+		font-size: 28px;
+	}
+
+	.profile-page__stats {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+
+		gap: 10px;
+	}
+
+	.profile-page__stat {
+		padding: 14px 12px;
+	}
+
+	.profile-page__stat strong {
+		font-size: 20px;
+	}
+
+	.profile-page__history {
+		padding: 18px;
+	}
+
+	.profile-page__section-title {
+		font-size: 20px;
+	}
+
+	.profile-page__game {
+		padding: 12px 14px;
+	}
+
+	.profile-page__game-result {
+		gap: 14px;
+	}
+
+	.profile-page__game-result strong {
+		font-size: 14px;
 	}
 }
