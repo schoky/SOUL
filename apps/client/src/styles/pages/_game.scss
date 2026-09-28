@@ -1028,3 +1028,82 @@
 	line-height: 1.6;
 	text-align: center;
 }
+
+/* -------- Your turn indicator -------- */
+
+.game-page__your-turn-banner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	margin: 0 0 22px;
+	padding: 14px 24px;
+
+	border: 1px solid var(--color-purple-light);
+	border-radius: var(--radius-md);
+
+	background: linear-gradient(
+		90deg,
+		rgba(122, 59, 192, 0.24),
+		rgba(122, 59, 192, 0.08)
+	);
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+
+	text-shadow: 0 0 12px rgba(154, 102, 223, 0.6);
+
+	animation: your-turn-pulse 1.8s ease-in-out infinite;
+}
+
+.game-page__hand--active {
+	border-color: var(--color-border-purple);
+
+	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2),
+	0 0 28px rgba(122, 59, 192, 0.22);
+}
+
+.game-page__cards--inactive {
+	position: relative;
+}
+
+.game-page__cards--inactive::after {
+	content: '';
+
+	position: absolute;
+	inset: -4px;
+
+	background: rgba(0, 0, 0, 0.32);
+
+	border-radius: var(--radius-md);
+
+	pointer-events: none;
+}
+
+@keyframes your-turn-pulse {
+	0%,
+	100% {
+		box-shadow: 0 0 18px rgba(122, 59, 192, 0.28);
+		border-color: var(--color-purple-light);
+	}
+
+	50% {
+		box-shadow: 0 0 34px rgba(122, 59, 192, 0.5);
+		border-color: var(--color-purple-bright);
+	}
+}
+
+@media (max-width: 600px) {
+	.game-page__your-turn-banner {
+		padding: 10px 16px;
+
+		font-size: 13px;
+		letter-spacing: 0.14em;
+	}
+}

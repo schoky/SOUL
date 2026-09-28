@@ -23,6 +23,10 @@ import MainLayout from "../../components/layout/MainLayout";
 
 import { socket } from "../../services/socket";
 
+import { useYourTurnNotification } from "../../hooks/useYourTurnNotification";
+
+import { playYourTurnSound } from "../../utils/sounds";
+
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
 import { useRoomStore } from "../../stores/roomStore";
@@ -230,6 +234,20 @@ function GamePage() {
   const riskChance = canSatisfy ? RISK_CHANCES.SUCCESS : RISK_CHANCES.FAILURE;
 
   const riskPercent = Math.round(riskChance * 100);
+
+  /**
+   * Уведомление о начале своего хода:
+   * короткий звук + тост.
+   */
+  useYourTurnNotification({
+    currentPlayerId: gameState?.currentPlayerId ?? null,
+    userId: user?.id,
+    onYourTurn: () => {
+      playYourTurnSound();
+
+      pushToast("info", "Твой ход");
+    },
+  });
 
   function toggleCard(cardId: string) {
     if (!self) {
@@ -494,7 +512,18 @@ function GamePage() {
         </section>
 
         {self && (
-          <section className="game-page__hand">
+          <section
+            className={[
+              "game-page__hand",
+              isMyTurn ? "game-page__hand--active" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {isMyTurn && (
+              <div className="game-page__your-turn-banner">Твой ход</div>
+            )}
+
             <div className="game-page__section-header">
               <div>
                 <p className="game-page__eyebrow">ТВОИ ПЕРСОНАЖИ</p>
@@ -509,7 +538,14 @@ function GamePage() {
               </span>
             </div>
 
-            <div className="game-page__cards">
+            <div
+              className={[
+                "game-page__cards",
+                !isMyTurn ? "game-page__cards--inactive" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
               {self.characters.map((card) => (
                 <CharacterCard
                   card={card}
