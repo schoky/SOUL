@@ -6,12 +6,11 @@ type CreateRoomData = {
   maxPlayers: number;
 };
 
+type RoomStatusValue = "WAITING" | "PLAYING" | "FINISHED";
+
 class RoomRepository {
   /**
    * Находит комнату по её ID.
-   *
-   * Возвращаем только те данные пользователя,
-   * которые нужны клиенту Lobby/Room.
    */
   async findById(id: string) {
     return database.room.findUnique({
@@ -177,8 +176,8 @@ class RoomRepository {
   }
 
   /**
-   * Создаёт комнату и одновременно добавляет
-   * создателя как её первого участника.
+   * Создаёт комнату и добавляет создателя
+   * как первого участника.
    */
   async createWithHost(data: CreateRoomData) {
     return database.$transaction(async (transaction) => {
@@ -214,8 +213,7 @@ class RoomRepository {
   }
 
   /**
-   * Находит участника по составному ключу:
-   * roomId + userId.
+   * Находит участника по составному ключу.
    */
   async findMember(roomId: string, userId: string) {
     return database.roomMember.findUnique({
@@ -229,7 +227,7 @@ class RoomRepository {
   }
 
   /**
-   * Находит комнату, в которой сейчас находится пользователь.
+   * Находит комнату, в которой находится пользователь.
    */
   async findMemberByUserId(userId: string) {
     return database.roomMember.findUnique({
@@ -244,7 +242,32 @@ class RoomRepository {
   }
 
   /**
-   * Обновляет флаг готовности участника комнаты.
+   * Находит активную комнату пользователя
+   * в любом статусе (WAITING, PLAYING, FINISHED).
+   *
+   * Возвращает полное представление комнаты
+   * (с хостом и участниками).
+   */
+  async findActiveByUserId(userId: string) {
+    const member = await database.roomMember.findUnique({
+      where: {
+        userId,
+      },
+
+      select: {
+        roomId: true,
+      },
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    return this.findById(member.roomId);
+  }
+
+  /**
+   * Обновляет флаг готовности участника.
    */
   async setMemberReady(roomId: string, userId: string, isReady: boolean) {
     return database.roomMember.update({
@@ -276,7 +299,22 @@ class RoomRepository {
   }
 
   /**
-   * Назначает другого пользователя хостом комнаты.
+   * Обновляет статус комнаты.
+   */
+  async updateStatus(roomId: string, status: RoomStatusValue) {
+    return database.room.update({
+      where: {
+        id: roomId,
+      },
+
+      data: {
+        status,
+      },
+    });
+  }
+
+  /**
+   * Назначает нового хоста комнаты.
    */
   async updateHost(roomId: string, userId: string) {
     return database.room.update({

@@ -4,6 +4,7 @@ import { ApiError } from "../services/api/client";
 
 import {
   createRoom as createRoomRequest,
+  getCurrentRoom as getCurrentRoomRequest,
   getRoom as getRoomRequest,
   getRooms,
   joinRoom as joinRoomRequest,
@@ -35,6 +36,10 @@ type RoomStore = {
   setReady: (roomId: string, isReady: boolean) => Promise<RoomDto | null>;
 
   leaveRoom: (roomId: string) => Promise<RoomDto | null>;
+
+  applyRoomUpdate: (room: RoomDto) => void;
+
+  clearCurrentRoom: () => void;
 
   clearError: () => void;
 
@@ -75,7 +80,8 @@ export const useRoomStore = create<RoomStore>((set) => ({
   error: null,
 
   /**
-   * Загружает список открытых комнат.
+   * Загружает список открытых комнат
+   * и активную комнату пользователя.
    */
   async loadRooms(userId) {
     set({
@@ -86,11 +92,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     try {
       const rooms = await getRooms();
 
-      const currentRoom = userId
-        ? (rooms.find((room) =>
-            room.members.some((member) => member.userId === userId),
-          ) ?? null)
-        : null;
+      const currentRoom = userId ? await getCurrentRoomRequest() : null;
 
       set({
         rooms,
@@ -268,6 +270,28 @@ export const useRoomStore = create<RoomStore>((set) => ({
         isMutating: false,
       });
     }
+  },
+
+  /**
+   * Применяет обновление комнаты,
+   * полученное по сокету.
+   */
+  applyRoomUpdate(room) {
+    set((state) => ({
+      currentRoom: state.currentRoom?.id === room.id ? room : state.currentRoom,
+
+      rooms: upsertRoom(state.rooms, room),
+    }));
+  },
+
+  /**
+   * Очищает текущую комнату
+   * (например, если она была удалена).
+   */
+  clearCurrentRoom() {
+    set({
+      currentRoom: null,
+    });
   },
 
   clearError() {

@@ -45,9 +45,6 @@ function LobbyPage() {
   const [roomCode, setRoomCode] = useState("");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 
-  /**
-   * Загружаем комнаты при открытии Lobby.
-   */
   useEffect(() => {
     if (!user) {
       return;
@@ -56,9 +53,6 @@ function LobbyPage() {
     void loadRooms(user.id);
   }, [loadRooms, user]);
 
-  /**
-   * Создание комнаты.
-   */
   async function handleCreateRoom() {
     setActionMessage(null);
 
@@ -71,9 +65,6 @@ function LobbyPage() {
     navigate(`/room/${room.id}`);
   }
 
-  /**
-   * Вход в комнату по её ID.
-   */
   async function handleJoinRoomById(roomId: string) {
     setActionMessage(null);
 
@@ -86,9 +77,6 @@ function LobbyPage() {
     navigate(`/room/${room.id}`);
   }
 
-  /**
-   * Вход по коду комнаты.
-   */
   async function handleJoinRoom(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -115,9 +103,6 @@ function LobbyPage() {
     navigate(`/room/${joinedRoom.id}`);
   }
 
-  /**
-   * Выход из текущей комнаты.
-   */
   async function handleLeaveRoom() {
     if (!currentRoom) {
       return;
@@ -127,11 +112,6 @@ function LobbyPage() {
 
     const leftRoom = await leaveRoom(currentRoom.id);
 
-    /*
-     * После await состояние Zustand уже могло обновиться,
-     * но React ещё не обязан вызвать новый render.
-     * Поэтому читаем актуальное состояние напрямую из store.
-     */
     const currentError = useRoomStore.getState().error;
 
     if (currentError) {
@@ -143,11 +123,20 @@ function LobbyPage() {
       return;
     }
 
-    /*
-     * null без ошибки означает, что это был последний участник
-     * и сервер удалил комнату.
-     */
     setActionMessage("Ты покинул комнату");
+  }
+
+  function handleEnterCurrentRoom() {
+    if (!currentRoom) {
+      return;
+    }
+
+    if (currentRoom.status === "PLAYING") {
+      navigate(`/game/${currentRoom.id}`);
+      return;
+    }
+
+    navigate(`/room/${currentRoom.id}`);
   }
 
   return (
@@ -170,19 +159,57 @@ function LobbyPage() {
             <strong className="lobby-page__player-name">
               {user?.profile.nickname}
             </strong>
+          </div>
+        </section>
 
-            {currentRoom && (
+        {currentRoom && (
+          <section className="lobby-page__active-room">
+            <div className="lobby-page__active-room-info">
+              <p className="lobby-page__eyebrow">ТЫ УЖЕ В КОМНАТЕ</p>
+
+              <h2 className="lobby-page__active-room-code">
+                {currentRoom.code}
+              </h2>
+
+              <p className="lobby-page__active-room-status">
+                {currentRoom.status === "WAITING"
+                  ? "Ожидание игроков"
+                  : currentRoom.status === "PLAYING"
+                    ? "Игра идёт"
+                    : "Игра завершена"}
+                {" · "}
+                {currentRoom.members.length} / {currentRoom.maxPlayers} игроков
+              </p>
+            </div>
+
+            <div className="lobby-page__active-room-actions">
               <button
-                className="lobby-page__leave-button"
+                className="
+                  lobby-page__action-button
+                "
+                type="button"
+                onClick={handleEnterCurrentRoom}
+                disabled={isMutating}
+              >
+                {currentRoom.status === "PLAYING"
+                  ? "Вернуться в игру"
+                  : "Вернуться в комнату"}
+              </button>
+
+              <button
+                className="
+                  lobby-page__action-button
+                  lobby-page__action-button--secondary
+                "
                 type="button"
                 onClick={handleLeaveRoom}
                 disabled={isMutating}
               >
                 {isMutating ? "Выходим..." : "Покинуть комнату"}
               </button>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
         <section className="lobby-page__actions">
           <article

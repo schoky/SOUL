@@ -2,11 +2,19 @@ import { useEffect } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ROOM_RULES } from "@soul/shared";
+import type {
+  GameStartedPayload,
+  RoomDeletedPayload,
+  RoomUpdatedPayload,
+} from "@soul/shared";
+import { ROOM_RULES, SOCKET_EVENTS } from "@soul/shared";
 
 import MainLayout from "../../components/layout/MainLayout";
 
+import { socket } from "../../services/socket";
+
 import { useAuthStore } from "../../stores/authStore";
+import { useGameStore } from "../../stores/gameStore";
 import { useRoomStore } from "../../stores/roomStore";
 
 function RoomPage() {
@@ -32,6 +40,12 @@ function RoomPage() {
 
   const setReady = useRoomStore((state) => state.setReady);
 
+  const applyRoomUpdate = useRoomStore((state) => state.applyRoomUpdate);
+
+  const clearCurrentRoom = useRoomStore((state) => state.clearCurrentRoom);
+
+  const setGameSession = useGameStore((state) => state.setGameSession);
+
   useEffect(() => {
     if (!roomId) {
       navigate("/lobby", {
@@ -44,9 +58,62 @@ function RoomPage() {
     void loadRoom(roomId);
   }, [roomId, loadRoom, navigate]);
 
-  /**
-   * Выход из комнаты.
-   */
+  useEffect(() => {
+    if (!roomId) {
+      return;
+    }
+
+    const handleConnect = () => {
+      socket.emit(SOCKET_EVENTS.ROOM_SUBSCRIBE, {
+        roomId,
+      });
+    };
+
+    const handleRoomUpdated = (payload: RoomUpdatedPayload) => {
+      if (payload.room.id === roomId) {
+        applyRoomUpdate(payload.room);
+      }
+    };
+
+    const handleRoomDeleted = (payload: RoomDeletedPayload) => {
+      if (payload.roomId !== roomId) {
+        return;
+      }
+
+      clearCurrentRoom();
+
+      navigate("/lobby", {
+        replace: true,
+      });
+    };
+
+    const handleGameStarted = (payload: GameStartedPayload) => {
+      setGameSession(payload.gameState, payload.characters);
+
+      navigate(`/game/${payload.gameState.id}`);
+    };
+
+    if (socket.connected) {
+      handleConnect();
+    }
+
+    socket.on("connect", handleConnect);
+    socket.on(SOCKET_EVENTS.ROOM_UPDATED, handleRoomUpdated);
+    socket.on(SOCKET_EVENTS.ROOM_DELETED, handleRoomDeleted);
+    socket.on(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
+
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.off(SOCKET_EVENTS.ROOM_UPDATED, handleRoomUpdated);
+      socket.off(SOCKET_EVENTS.ROOM_DELETED, handleRoomDeleted);
+      socket.off(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
+
+      socket.emit(SOCKET_EVENTS.ROOM_UNSUBSCRIBE, {
+        roomId,
+      });
+    };
+  }, [roomId, navigate, applyRoomUpdate, clearCurrentRoom, setGameSession]);
+
   async function handleLeaveRoom() {
     if (!currentRoom) {
       return;
@@ -67,10 +134,6 @@ function RoomPage() {
     });
   }
 
-  /**
-   * Переключаем готовность
-   * текущего пользователя.
-   */
   async function handleToggleReady() {
     if (!currentRoom || !user) {
       return;
@@ -87,9 +150,16 @@ function RoomPage() {
     await setReady(currentRoom.id, !self.isReady);
   }
 
-  /**
-   * Ошибка загрузки комнаты.
-   */
+  function handleStartGame() {
+    if (!currentRoom) {
+      return;
+    }
+
+    socket.emit(SOCKET_EVENTS.GAME_START, {
+      roomId: currentRoom.id,
+    });
+  }
+
   if (error) {
     return (
       <MainLayout>
@@ -121,9 +191,6 @@ function RoomPage() {
     );
   }
 
-  /**
-   * Состояние загрузки.
-   */
   if (isLoading || !currentRoom) {
     return (
       <MainLayout>
@@ -334,6 +401,7 @@ function RoomPage() {
                   room-page__button--start
                 "
                 type="button"
+                onClick={handleStartGame}
                 disabled={!canStart}
               >
                 Начать игру

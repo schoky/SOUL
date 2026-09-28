@@ -1,0 +1,1005 @@
+.game-page {
+	width: 100%;
+	max-width: 1180px;
+
+	margin: 0 auto;
+
+	padding: 64px 28px 96px;
+}
+
+.game-page__eyebrow {
+	margin: 0 0 10px;
+
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.14em;
+
+	text-transform: uppercase;
+}
+
+.game-page__header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+
+	gap: 40px;
+
+	margin-bottom: 42px;
+}
+
+.game-page__title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: clamp(32px, 5vw, 52px);
+
+	font-weight: 700;
+
+	line-height: 1.1;
+
+	letter-spacing: 0.03em;
+
+	text-transform: uppercase;
+}
+
+.game-page__description {
+	max-width: 640px;
+
+	margin: 18px 0 0;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+
+	font-size: 15px;
+	font-weight: 500;
+
+	line-height: 1.6;
+}
+
+.game-page__description strong {
+	color: var(--color-text);
+}
+
+.game-page__meta {
+	min-width: 150px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+
+	gap: 6px;
+
+	padding: 16px 18px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(17, 20, 28, 0.72);
+
+	color: var(--color-text-muted);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__meta strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 18px;
+
+	letter-spacing: 0.03em;
+}
+
+.game-page__content {
+	display: grid;
+
+	grid-template-columns: minmax(0, 1fr) 320px;
+
+	gap: 20px;
+}
+
+.game-page__event,
+.game-page__players {
+	padding: 28px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+
+	background: linear-gradient(
+		180deg,
+		rgba(19, 22, 31, 0.96),
+		rgba(11, 13, 19, 0.98)
+	);
+
+	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+}
+
+/* -------- Event image -------- */
+
+.game-page__event-image {
+	width: 100%;
+	max-width: 260px;
+
+	margin: 0 0 22px;
+}
+
+.game-page__event-title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 26px;
+	font-weight: 700;
+
+	line-height: 1.2;
+
+	letter-spacing: 0.03em;
+
+	text-transform: uppercase;
+}
+
+.game-page__event-description {
+	margin: 14px 0 0;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+
+	font-size: 14px;
+	font-weight: 500;
+
+	line-height: 1.6;
+}
+
+.game-page__requirements {
+	display: grid;
+
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+
+	gap: 10px;
+
+	margin-top: 22px;
+}
+
+.game-page__requirement {
+	display: flex;
+	flex-direction: column;
+
+	gap: 6px;
+
+	padding: 12px 14px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+}
+
+.game-page__requirement span {
+	color: var(--color-text-muted);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__requirement strong {
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.game-page__event-main {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 20px;
+
+	margin-top: 22px;
+	padding: 14px 16px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-md);
+
+	background: rgba(122, 59, 192, 0.08);
+}
+
+.game-page__event-main span {
+	color: var(--color-text-muted);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__event-main strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 15px;
+	font-weight: 700;
+
+	text-transform: uppercase;
+}
+
+.game-page__rewards {
+	display: grid;
+
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+
+	gap: 10px;
+
+	margin-top: 14px;
+}
+
+.game-page__reward {
+	display: flex;
+	flex-direction: column;
+
+	gap: 4px;
+
+	padding: 12px 14px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+}
+
+.game-page__reward span {
+	color: var(--color-text-muted);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__reward strong {
+	color: var(--color-success);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.game-page__players {
+	display: flex;
+	flex-direction: column;
+}
+
+.game-page__players-list {
+	display: flex;
+	flex-direction: column;
+
+	gap: 10px;
+
+	margin-top: 18px;
+}
+
+.game-page__player {
+	display: flex;
+	flex-direction: column;
+
+	gap: 12px;
+
+	padding: 14px 16px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+
+	transition: border-color 160ms ease, background 160ms ease;
+}
+
+.game-page__player--active {
+	border-color: var(--color-border-purple);
+
+	background: rgba(122, 59, 192, 0.08);
+}
+
+.game-page__player-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 12px;
+}
+
+.game-page__player-header strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 14px;
+	font-weight: 700;
+
+	overflow: hidden;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.game-page__player-tag {
+	padding: 3px 8px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-sm);
+
+	background: rgba(122, 59, 192, 0.15);
+	color: var(--color-purple-light);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+}
+
+.game-page__player-stats {
+	display: flex;
+
+	gap: 16px;
+}
+
+.game-page__player-stats > div {
+	display: flex;
+	flex-direction: column;
+
+	gap: 3px;
+}
+
+.game-page__player-stats span {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__player-stats strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 16px;
+	font-weight: 700;
+}
+
+/* -------- HAND (карточки персонажей) -------- */
+
+.game-page__hand {
+	margin-top: 28px;
+	padding: 28px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+
+	background: linear-gradient(
+		180deg,
+		rgba(19, 22, 31, 0.96),
+		rgba(11, 13, 19, 0.98)
+	);
+
+	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+}
+
+.game-page__section-header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+
+	gap: 20px;
+
+	padding-bottom: 20px;
+
+	border-bottom: 1px solid var(--color-border);
+}
+
+.game-page__section-title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 24px;
+	font-weight: 700;
+
+	line-height: 1.2;
+
+	letter-spacing: 0.03em;
+
+	text-transform: uppercase;
+}
+
+.game-page__counter {
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+
+	font-size: 12px;
+	font-weight: 600;
+
+	letter-spacing: 0.04em;
+}
+
+.game-page__cards {
+	display: grid;
+
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+
+	gap: 14px;
+
+	margin-top: 22px;
+}
+
+/* -------- Character card -------- */
+
+.game-page__card {
+	display: flex;
+	flex-direction: column;
+
+	gap: 14px;
+
+	padding: 0;
+
+	overflow: hidden;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+
+	color: var(--color-text);
+
+	text-align: left;
+
+	transition: border-color 160ms ease,
+	background 160ms ease,
+	transform 160ms ease,
+	box-shadow 160ms ease;
+}
+
+.game-page__card:hover:not(:disabled) {
+	transform: translateY(-2px);
+
+	border-color: var(--color-border-purple);
+
+	background: rgba(122, 59, 192, 0.08);
+
+	box-shadow: 0 0 18px rgba(122, 59, 192, 0.18);
+}
+
+.game-page__card:disabled {
+	opacity: 0.55;
+
+	cursor: not-allowed;
+}
+
+.game-page__card--selected {
+	border-color: var(--color-purple-light);
+
+	background: rgba(122, 59, 192, 0.16);
+
+	box-shadow: 0 0 20px rgba(122, 59, 192, 0.25);
+}
+
+.game-page__card--exhausted {
+	opacity: 0.4;
+}
+
+.game-page__card-image {
+	position: relative;
+
+	width: 100%;
+}
+
+.game-page__card-image .card-image {
+	border-radius: 0;
+
+	aspect-ratio: 4 / 5;
+}
+
+.game-page__card-header,
+.game-page__card-stats,
+.game-page__card-ability {
+	margin-right: 18px;
+	margin-left: 18px;
+}
+
+.game-page__card-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+
+	gap: 10px;
+
+	flex-wrap: wrap;
+
+	margin-top: 4px;
+}
+
+.game-page__card-header strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 15px;
+	font-weight: 700;
+
+	text-transform: uppercase;
+}
+
+.game-page__card-tag {
+	padding: 3px 6px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--color-text-secondary);
+
+	font-size: 8px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+}
+
+.game-page__card-tag--warning {
+	border-color: rgba(255, 107, 129, 0.4);
+
+	color: var(--color-danger);
+}
+
+.game-page__card-stats {
+	display: grid;
+
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+
+	gap: 8px;
+}
+
+.game-page__card-stats > div {
+	display: flex;
+	flex-direction: column;
+
+	gap: 3px;
+}
+
+.game-page__card-stats span {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+}
+
+.game-page__card-stats strong {
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.game-page__card-ability {
+	padding: 10px 12px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-sm);
+
+	background: rgba(122, 59, 192, 0.06);
+
+	margin-bottom: 18px;
+}
+
+.game-page__card-ability span {
+	display: block;
+
+	margin-bottom: 4px;
+
+	color: var(--color-purple-light);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+}
+
+.game-page__card-ability p {
+	margin: 0;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+
+	font-size: 11px;
+	font-weight: 500;
+
+	line-height: 1.5;
+}
+
+.game-page__card-overlay {
+	position: absolute;
+
+	padding: 5px 9px;
+
+	border-radius: var(--radius-sm);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.game-page__card-overlay--exhausted {
+	top: 10px;
+	left: 10px;
+
+	background: rgba(255, 107, 129, 0.85);
+	color: #fff;
+}
+
+.game-page__card-overlay--selected {
+	top: 10px;
+	right: 10px;
+
+	background: rgba(122, 59, 192, 0.9);
+	color: #fff;
+
+	box-shadow: 0 0 12px rgba(122, 59, 192, 0.5);
+}
+
+/* -------- Selection и действия -------- */
+
+.game-page__selection {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 20px;
+
+	flex-wrap: wrap;
+
+	margin-top: 20px;
+	padding: 16px 18px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-md);
+
+	background: rgba(122, 59, 192, 0.08);
+}
+
+.game-page__selection-stats {
+	display: flex;
+
+	gap: 22px;
+}
+
+.game-page__selection-stats > div {
+	display: flex;
+	flex-direction: column;
+
+	gap: 4px;
+}
+
+.game-page__selection-stats span {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+
+	text-transform: uppercase;
+}
+
+.game-page__selection-stats strong {
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.game-page__selection-actions {
+	display: flex;
+
+	gap: 10px;
+}
+
+.game-page__selection-actions .game-page__button {
+	margin-top: 0;
+}
+
+.game-page__turn-actions {
+	display: flex;
+	justify-content: flex-end;
+
+	margin-top: 20px;
+}
+
+.game-page__turn-actions .game-page__button {
+	margin-top: 0;
+}
+
+.game-page__action-error {
+	margin: 16px 0 0;
+	padding: 10px 14px;
+
+	border: 1px solid rgba(255, 107, 129, 0.4);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 107, 129, 0.08);
+	color: var(--color-danger);
+
+	font-family: 'Manrope', sans-serif;
+
+	font-size: 12px;
+	font-weight: 600;
+
+	text-align: center;
+}
+
+/* -------- Buttons -------- */
+
+.game-page__button {
+	min-height: 48px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	margin-top: 24px;
+	padding: 10px 20px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: var(--color-panel);
+	color: var(--color-text-secondary);
+
+	font-family: 'Exo 2', sans-serif;
+
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+
+	transition: filter 140ms ease, box-shadow 140ms ease,
+	transform 140ms ease, border-color 140ms ease,
+	background 140ms ease, color 140ms ease;
+}
+
+.game-page__button:hover:not(:disabled) {
+	transform: translateY(-1px);
+}
+
+.game-page__button:disabled {
+	opacity: 0.45;
+
+	cursor: not-allowed;
+}
+
+.game-page__button--primary {
+	border-color: var(--color-purple-light);
+
+	background: linear-gradient(
+		180deg,
+		var(--color-purple),
+		var(--color-purple-dark)
+	);
+
+	color: var(--color-text);
+
+	box-shadow: 0 0 14px rgba(122, 59, 192, 0.2);
+}
+
+.game-page__button--primary:hover:not(:disabled) {
+	filter: brightness(1.08);
+
+	box-shadow: 0 0 22px rgba(122, 59, 192, 0.3);
+}
+
+.game-page__button--secondary {
+	border-color: var(--color-border);
+
+	background: var(--color-panel);
+	color: var(--color-text-secondary);
+}
+
+.game-page__button--secondary:hover:not(:disabled) {
+	border-color: var(--color-purple);
+
+	background: var(--color-panel-light);
+	color: var(--color-text);
+}
+
+.game-page__button--risk {
+	border-color: rgba(255, 107, 129, 0.5);
+
+	background: rgba(255, 107, 129, 0.08);
+	color: var(--color-danger);
+}
+
+.game-page__button--risk:hover:not(:disabled) {
+	background: rgba(255, 107, 129, 0.16);
+
+	box-shadow: 0 0 18px rgba(255, 107, 129, 0.2);
+}
+
+/* -------- Empty -------- */
+
+.game-page__empty {
+	min-height: 420px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	padding: 40px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+
+	background: rgba(13, 16, 23, 0.74);
+
+	text-align: center;
+}
+
+.game-page__empty .game-page__description {
+	max-width: 560px;
+}
+
+/* -------- Card image (общий компонент) -------- */
+
+.card-image {
+	display: block;
+
+	width: 100%;
+	aspect-ratio: 3 / 4;
+
+	object-fit: cover;
+
+	border-radius: var(--radius-sm);
+
+	background: rgba(10, 13, 19, 0.9);
+}
+
+.card-image--placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 12px;
+
+	border: 1px dashed var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: linear-gradient(
+		135deg,
+		rgba(122, 59, 192, 0.12),
+		rgba(10, 13, 19, 0.9)
+	);
+
+	text-align: center;
+}
+
+.card-image__placeholder-label {
+	color: var(--color-text-secondary);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1.3;
+
+	letter-spacing: 0.08em;
+
+	text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+	.game-page__header {
+		align-items: flex-start;
+
+		flex-direction: column;
+	}
+
+	.game-page__meta {
+		width: 100%;
+
+		align-items: flex-start;
+	}
+
+	.game-page__content {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 600px) {
+	.game-page {
+		padding: 48px 16px 72px;
+	}
+
+	.game-page__event,
+	.game-page__players,
+	.game-page__hand {
+		padding: 20px;
+	}
+
+	.game-page__requirements,
+	.game-page__rewards {
+		grid-template-columns: 1fr;
+	}
+
+	.game-page__section-header {
+		align-items: flex-start;
+
+		flex-direction: column;
+	}
+
+	.game-page__selection {
+		flex-direction: column;
+
+		align-items: stretch;
+	}
+
+	.game-page__selection-actions {
+		flex-direction: column;
+	}
+
+	.game-page__selection-actions .game-page__button {
+		width: 100%;
+	}
+}

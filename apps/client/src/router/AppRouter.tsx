@@ -14,6 +14,8 @@ import LobbyPage from "../pages/Lobby/LobbyPage";
 
 import RoomPage from "../pages/Room/RoomPage";
 
+import GamePage from "../pages/Game/GamePage";
+
 import RulesPage from "../pages/Rules/RulesPage";
 
 function AppRouter() {
@@ -34,6 +36,8 @@ function AppRouter() {
           <Route path="/lobby" element={<LobbyPage />} />
 
           <Route path="/room/:roomId" element={<RoomPage />} />
+
+          <Route path="/game/:roomId" element={<GamePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

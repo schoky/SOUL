@@ -4,6 +4,8 @@ import { authenticateRequest } from "../authMiddleware.js";
 
 import { roomService, RoomServiceError } from "../../rooms/roomService.js";
 
+import { emitRoomDeleted, emitRoomUpdated } from "../../socket/roomEvents.js";
+
 type CreateRoomBody = {
   maxPlayers?: number;
 };
@@ -31,6 +33,34 @@ export async function roomRoutes(app: FastifyInstance) {
 
       return reply.send({
         rooms,
+      });
+    },
+  );
+
+  /**
+   * Получить активную комнату текущего пользователя.
+   *
+   * Возвращает комнату в любом статусе:
+   * WAITING, PLAYING или FINISHED.
+   */
+  app.get(
+    "/current",
+    {
+      preHandler: authenticateRequest,
+    },
+    async (request, reply) => {
+      const user = request.user;
+
+      if (!user) {
+        return reply.code(401).send({
+          error: "Not authenticated",
+        });
+      }
+
+      const room = await roomService.getCurrentRoom(user.id);
+
+      return reply.send({
+        room,
       });
     },
   );
@@ -152,6 +182,8 @@ export async function roomRoutes(app: FastifyInstance) {
       try {
         const room = await roomService.joinRoom(request.params.id, user.id);
 
+        emitRoomUpdated(room);
+
         return reply.send({
           room,
         });
@@ -218,6 +250,8 @@ export async function roomRoutes(app: FastifyInstance) {
           request.body.isReady,
         );
 
+        emitRoomUpdated(room);
+
         return reply.send({
           room,
         });
@@ -263,6 +297,12 @@ export async function roomRoutes(app: FastifyInstance) {
 
       try {
         const room = await roomService.leaveRoom(request.params.id, user.id);
+
+        if (room) {
+          emitRoomUpdated(room);
+        } else {
+          emitRoomDeleted(request.params.id);
+        }
 
         return reply.send({
           room,

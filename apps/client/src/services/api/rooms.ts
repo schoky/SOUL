@@ -18,6 +18,18 @@ export async function getRooms() {
 }
 
 /**
+ * Получает активную комнату текущего пользователя.
+ *
+ * Возвращает комнату в любом статусе
+ * (WAITING, PLAYING, FINISHED) либо null.
+ */
+export async function getCurrentRoom() {
+  const response = await apiRequest<RoomResponse>("/api/rooms/current");
+
+  return response.room;
+}
+
+/**
  * Получает конкретную комнату.
  */
 export async function getRoom(roomId: string) {

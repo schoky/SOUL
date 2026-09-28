@@ -22,11 +22,15 @@ export type {
   RoomCreatePayload,
   RoomJoinPayload,
   RoomReadyPayload,
+  RoomSubscribePayload,
+  RoomUpdatedPayload,
+  RoomDeletedPayload,
+  GameStartPayload,
+  GameSessionPayload,
+  GameStartedPayload,
+  GameStateUpdatedPayload,
   GamePlayEventPayload,
-  GameSelectCharacterPayload,
-  GameRollPayload,
   GameEndTurnPayload,
-  GameStatePayload,
   SocketErrorPayload,
 } from "./events/socket-events.js";
 

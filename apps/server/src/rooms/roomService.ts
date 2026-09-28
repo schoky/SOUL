@@ -22,6 +22,9 @@ export type RoomServiceErrorCode =
   | "ROOM_FULL"
   | "NOT_ROOM_MEMBER"
   | "INVALID_READY_STATE"
+  | "NOT_ROOM_HOST"
+  | "NOT_ENOUGH_PLAYERS"
+  | "PLAYERS_NOT_READY"
   | "ROOM_CODE_GENERATION_FAILED";
 
 export class RoomServiceError extends Error {
@@ -202,6 +205,65 @@ class RoomService {
     }
 
     return updatedRoom;
+  }
+
+  /**
+   * Запускает игру в комнате.
+   */
+  async startGame(roomId: string, hostId: string) {
+    const room = await roomRepository.findById(roomId);
+
+    if (!room) {
+      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+    }
+
+    if (room.status !== "WAITING") {
+      throw new RoomServiceError(
+        "ROOM_NOT_WAITING",
+        "Комната уже запущена или завершена",
+      );
+    }
+
+    if (room.hostUserId !== hostId) {
+      throw new RoomServiceError(
+        "NOT_ROOM_HOST",
+        "Только хост может запустить игру",
+      );
+    }
+
+    if (room.members.length < MIN_PLAYERS) {
+      throw new RoomServiceError(
+        "NOT_ENOUGH_PLAYERS",
+        `Для старта необходимо минимум ${MIN_PLAYERS} игрока`,
+      );
+    }
+
+    const everyoneReady = room.members.every((member) => member.isReady);
+
+    if (!everyoneReady) {
+      throw new RoomServiceError("PLAYERS_NOT_READY", "Не все игроки готовы");
+    }
+
+    await roomRepository.updateStatus(roomId, "PLAYING");
+
+    const updatedRoom = await roomRepository.findById(roomId);
+
+    if (!updatedRoom) {
+      throw new RoomServiceError(
+        "ROOM_NOT_FOUND",
+        "Комната не найдена после обновления",
+      );
+    }
+
+    return updatedRoom;
+  }
+
+  /**
+   * Возвращает активную комнату пользователя
+   * в любом статусе.
+   */
+  async getCurrentRoom(userId: string) {
+    return roomRepository.findActiveByUserId(userId);
   }
 
   /**
