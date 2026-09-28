@@ -7,6 +7,7 @@ import type {
 } from 'react';
 
 import {
+	Link,
 	useNavigate
 } from 'react-router-dom';
 
@@ -134,8 +135,8 @@ function LoginPage() {
 							/>
 							
 							<span>
-								Запомнить меня
-							</span>
+                Запомнить меня
+              </span>
 						</label>
 						
 						<button
@@ -164,9 +165,9 @@ function LoginPage() {
 				</form>
 				
 				<div className="auth-panel__divider">
-					<span>
-						Или войдите через
-					</span>
+          <span>
+            Или войдите через
+          </span>
 				</div>
 				
 				<div className="auth-panel__socials">
@@ -175,17 +176,17 @@ function LoginPage() {
 						type="button"
 						aria-label="Войти через Discord"
 					>
-						<span
-							className="
-								auth-panel__social-icon
-								auth-panel__social-icon--discord
-							"
-							aria-hidden="true"
-						/>
+            <span
+	            className="
+                auth-panel__social-icon
+                auth-panel__social-icon--discord
+              "
+	            aria-hidden="true"
+            />
 						
 						<span>
-							Discord
-						</span>
+              Discord
+            </span>
 					</button>
 					
 					<button
@@ -193,17 +194,17 @@ function LoginPage() {
 						type="button"
 						aria-label="Войти через Google"
 					>
-						<span
-							className="
-								auth-panel__social-icon
-								auth-panel__social-icon--google
-							"
-							aria-hidden="true"
-						/>
+            <span
+	            className="
+                auth-panel__social-icon
+                auth-panel__social-icon--google
+              "
+	            aria-hidden="true"
+            />
 						
 						<span>
-							Google
-						</span>
+              Google
+            </span>
 					</button>
 					
 					<button
@@ -211,17 +212,17 @@ function LoginPage() {
 						type="button"
 						aria-label="Войти через Twitch"
 					>
-						<span
-							className="
-								auth-panel__social-icon
-								auth-panel__social-icon--twitch
-							"
-							aria-hidden="true"
-						/>
+            <span
+	            className="
+                auth-panel__social-icon
+                auth-panel__social-icon--twitch
+              "
+	            aria-hidden="true"
+            />
 						
 						<span>
-							Twitch
-						</span>
+              Twitch
+            </span>
 					</button>
 				</div>
 				
@@ -238,6 +239,13 @@ function LoginPage() {
 						Зарегистрироваться
 					</button>
 				</p>
+				
+				<Link
+					className="auth-panel__home-link"
+					to="/"
+				>
+					← На главную
+				</Link>
 			</section>
 		</AuthLayout>
 	);

@@ -1,18 +1,13 @@
-import prettier from '@schoky/prettier'
+const prettier = require("@schoky/prettier");
 
-export default {
-	...prettier,
-	plugins: [
-		...(prettier.plugins || []),
-		'prettier-plugin-prisma'
-	],
-	overrides: [
-		...(prettier.overrides || []),
-		{
-			files: '*.prisma',
-			options: {
-				parser: 'prisma-language-server'
-			}
-		}
-	]
+module.exports = {
+  ...prettier,
+  plugins: [...(prettier.plugins || []), "prettier-plugin-prisma"],
+  overrides: [
+    ...(prettier.overrides || []),
+    {
+      files: "*.prisma",
+      options: { parser: "prisma-language-server" },
+    },
+  ],
 };

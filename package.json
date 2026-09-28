@@ -9,10 +9,13 @@
 		"dev:server": "pnpm --filter @soul/server dev",
 		"db:studio": "pnpm --filter @soul/database exec prisma studio --port 5555",
 		"build": "pnpm -r build",
-		"typecheck": "pnpm -r typecheck"
+		"typecheck": "pnpm -r typecheck",
+		"format": "prettier --write .",
+		"format:check": "prettier --check ."
 	},
 	"devDependencies": {
 		"@schoky/prettier": "^1.1.7",
+		"prettier": "^3.9.9",
 		"prettier-plugin-prisma": "^5.0.0"
 	}
 }

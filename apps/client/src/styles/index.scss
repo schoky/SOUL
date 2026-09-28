@@ -1,4 +1,15 @@
 @use './variables';
 @use './fonts';
 @use './globals';
+
+@use './components/branding';
+@use './components/main-header';
+
+@use './layouts/main';
+
 @use './pages/auth';
+@use './pages/landing';
+@use './pages/rules';
+@use './pages/placeholder';
+@use './pages/lobby';
+@use './pages/room';

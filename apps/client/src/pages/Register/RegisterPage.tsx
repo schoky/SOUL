@@ -7,6 +7,7 @@ import type {
 } from 'react';
 
 import {
+	Link,
 	useNavigate
 } from 'react-router-dom';
 
@@ -222,6 +223,13 @@ function RegisterPage() {
 						Войти
 					</button>
 				</p>
+				
+				<Link
+					className="auth-panel__home-link"
+					to="/"
+				>
+					← На главную
+				</Link>
 			</section>
 		</AuthLayout>
 	);

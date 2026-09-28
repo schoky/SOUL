@@ -80,18 +80,21 @@ model Room {
   status      RoomStatus @default(WAITING)
   maxPlayers  Int        @default(6)
   createdAt   DateTime   @default(now())
-  startedAt   DateTime?
-  finishedAt  DateTime?
+  startedAt  DateTime?
+  finishedAt DateTime?
 
   host User @relation("RoomHost", fields: [hostUserId], references: [id])
 
   members RoomMember[]
   games   Game[]
+
+  @@index([status, createdAt])
+  @@index([hostUserId])
 }
 
 model RoomMember {
   roomId   String
-  userId   String
+  userId   String   @unique
   isReady  Boolean  @default(false)
   joinedAt DateTime @default(now())
 

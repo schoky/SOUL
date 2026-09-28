@@ -14,7 +14,9 @@ function AuthLayout({
                     }: AuthLayoutProps) {
 	return (
 		<main className="auth-layout">
-			<SoulLogo />
+			<SoulLogo
+				className="auth-layout__logo"
+			/>
 			
 			<div className="auth-layout__content">
 				{children}

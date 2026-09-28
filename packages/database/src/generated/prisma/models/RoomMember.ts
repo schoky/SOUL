@@ -188,17 +188,17 @@ export type RoomMemberOrderByWithRelationInput = {
 }
 
 export type RoomMemberWhereUniqueInput = Prisma.AtLeast<{
+  userId?: string
   roomId_userId?: Prisma.RoomMemberRoomIdUserIdCompoundUniqueInput
   AND?: Prisma.RoomMemberWhereInput | Prisma.RoomMemberWhereInput[]
   OR?: Prisma.RoomMemberWhereInput[]
   NOT?: Prisma.RoomMemberWhereInput | Prisma.RoomMemberWhereInput[]
   roomId?: Prisma.StringFilter<"RoomMember"> | string
-  userId?: Prisma.StringFilter<"RoomMember"> | string
   isReady?: Prisma.BoolFilter<"RoomMember"> | boolean
   joinedAt?: Prisma.DateTimeFilter<"RoomMember"> | Date | string
   room?: Prisma.XOR<Prisma.RoomScalarRelationFilter, Prisma.RoomWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "roomId_userId">
+}, "roomId_userId" | "userId">
 
 export type RoomMemberOrderByWithAggregationInput = {
   roomId?: Prisma.SortOrder
