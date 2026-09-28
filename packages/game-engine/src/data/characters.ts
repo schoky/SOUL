@@ -22,7 +22,7 @@ export const characters: Character[] = [
 
   {
     id: "market-shark",
-    name: "Рыночный акула",
+    name: "Рыночный перекуп",
 
     image: "/cards/characters/market-shark.webp",
 

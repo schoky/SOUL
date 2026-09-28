@@ -33,6 +33,12 @@ export function resolveEvent(
 
   const baseSuccess = checkRequirements(resolvedCharacters.stats, event);
 
+  const cardCount = characterCardIds.length;
+
+  // ==========================================
+  // Игра без риска
+  // ==========================================
+
   if (!risk) {
     if (!baseSuccess) {
       const failure = resolveFailure(player, event, random);
@@ -44,14 +50,20 @@ export function resolveEvent(
         event,
         success: false,
         currentSoul: failure.soul,
+        risk: false,
+        riskWon: null,
+        baseSuccess,
+        cardCount,
       });
+
+      const cancelled = abilityResult.cancelFailure;
 
       return {
         success: false,
-        soul: abilityResult.soul,
-        status: failure.status,
-        skipNextTurn: failure.skipNextTurn,
-        gambleWon: failure.gambleWon,
+        soul: cancelled ? player.soul : abilityResult.soul,
+        status: cancelled ? null : failure.status,
+        skipNextTurn: cancelled ? false : failure.skipNextTurn,
+        gambleWon: cancelled ? null : failure.gambleWon,
         riskWon: null,
         abilityUsedCardIds: abilityResult.abilityUsedCardIds,
       };
@@ -66,6 +78,10 @@ export function resolveEvent(
       event,
       success: true,
       currentSoul: baseSoul,
+      risk: false,
+      riskWon: null,
+      baseSuccess,
+      cardCount,
     });
 
     return {
@@ -79,6 +95,10 @@ export function resolveEvent(
     };
   }
 
+  // ==========================================
+  // Риск
+  // ==========================================
+
   const riskWon = resolveRisk(baseSuccess, random);
 
   if (riskWon) {
@@ -91,6 +111,10 @@ export function resolveEvent(
       event,
       success: true,
       currentSoul: baseSoul,
+      risk: true,
+      riskWon: true,
+      baseSuccess,
+      cardCount,
     });
 
     return {
@@ -113,14 +137,20 @@ export function resolveEvent(
     event,
     success: false,
     currentSoul: failure.soul,
+    risk: true,
+    riskWon: false,
+    baseSuccess,
+    cardCount,
   });
+
+  const cancelled = abilityResult.cancelFailure;
 
   return {
     success: false,
-    soul: abilityResult.soul,
-    status: failure.status,
-    skipNextTurn: failure.skipNextTurn,
-    gambleWon: failure.gambleWon,
+    soul: cancelled ? player.soul : abilityResult.soul,
+    status: cancelled ? null : failure.status,
+    skipNextTurn: cancelled ? false : failure.skipNextTurn,
+    gambleWon: cancelled ? null : failure.gambleWon,
     riskWon: false,
     abilityUsedCardIds: abilityResult.abilityUsedCardIds,
   };

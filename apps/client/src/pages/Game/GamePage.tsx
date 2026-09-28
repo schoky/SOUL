@@ -333,9 +333,55 @@ function GamePage() {
       }
     : null;
 
+  const finalRoundInitiator = gameState.finalRoundStartedBy
+    ? gameState.players.find(
+        (player) => player.id === gameState.finalRoundStartedBy,
+      )
+    : null;
+
+  const isFinalRound = finalRoundInitiator !== null;
+
+  const isSelfFinalRoundInitiator =
+    !!user && gameState.finalRoundStartedBy === user.id;
+
   return (
     <MainLayout>
       <main className="game-page">
+        {isFinalRound && (
+          <section
+            className={[
+              "game-page__final-banner",
+              isSelfFinalRoundInitiator
+                ? "game-page__final-banner--initiator"
+                : "",
+              isMyTurn ? "game-page__final-banner--active" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <p className="game-page__final-banner-eyebrow">ФИНАЛЬНЫЙ РАУНД</p>
+
+            {isSelfFinalRoundInitiator ? (
+              <h2 className="game-page__final-banner-title">
+                Ты запустил финальный раунд
+              </h2>
+            ) : (
+              <h2 className="game-page__final-banner-title">
+                {finalRoundInitiator.name} достиг {finalRoundInitiator.soul}{" "}
+                Soul
+              </h2>
+            )}
+
+            <p className="game-page__final-banner-description">
+              {isSelfFinalRoundInitiator
+                ? "Остальные игроки делают по одному последнему ходу. Кто наберёт больше Soul — победит."
+                : isMyTurn
+                  ? "У тебя последний ход. Постарайся набрать больше Soul, чем лидер."
+                  : "Все игроки доигрывают свои последние ходы. Победит тот, у кого больше Soul."}
+            </p>
+          </section>
+        )}
+
         <section className="game-page__header">
           <div>
             <p className="game-page__eyebrow">ИГРА</p>
@@ -427,11 +473,15 @@ function GamePage() {
               {gameState.players.map((player) => {
                 const isCurrent = player.id === gameState.currentPlayerId;
 
+                const isFinalInitiator =
+                  player.id === gameState.finalRoundStartedBy;
+
                 return (
                   <article
                     className={[
                       "game-page__player",
                       isCurrent ? "game-page__player--active" : "",
+                      isFinalInitiator ? "game-page__player--final" : "",
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -440,9 +490,17 @@ function GamePage() {
                     <div className="game-page__player-header">
                       <strong>{player.name}</strong>
 
-                      {isCurrent && (
-                        <span className="game-page__player-tag">Ходит</span>
-                      )}
+                      <div className="game-page__player-tags">
+                        {isFinalInitiator && (
+                          <span className="game-page__player-tag game-page__player-tag--final">
+                            Финал
+                          </span>
+                        )}
+
+                        {isCurrent && (
+                          <span className="game-page__player-tag">Ходит</span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="game-page__player-stats">

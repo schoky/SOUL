@@ -2,8 +2,6 @@ import type { Server as HttpServer } from "node:http";
 
 import { Server } from "socket.io";
 
-import { characters } from "@soul/game-engine";
-
 import { SOCKET_EVENTS } from "@soul/shared";
 
 import { getCurrentUserByToken } from "../auth/authService.js";
@@ -115,7 +113,7 @@ export function createSocketServer(httpServer: HttpServer): Server {
           if (game) {
             socket.emit(SOCKET_EVENTS.GAME_STATE, {
               gameState: game,
-              characters,
+              characters: game.characters,
             });
           }
         } catch (error) {

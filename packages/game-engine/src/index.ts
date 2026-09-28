@@ -1,5 +1,3 @@
-// packages/game-engine/src/index.ts
-
 // Игровое состояние
 export { createGame } from "./game/createGame.js";
 export { startGame } from "./game/startGame.js";
@@ -32,10 +30,6 @@ export { createEventDeck } from "./deck/createEventDeck.js";
 export { drawEvent } from "./deck/drawEvent.js";
 export { refillEventDeck } from "./deck/refillEventDeck.js";
 export { shuffle } from "./deck/shuffle.js";
-
-// Данные
-export { characters } from "./data/characters.js";
-export { events } from "./data/events.js";
 
 // Типы
 export type { EventResult } from "./events/resolveEvent.js";

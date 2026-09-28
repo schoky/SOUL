@@ -65,10 +65,42 @@ export function playEvent(
     }),
   };
 
-  const updatedPlayer = exhaustCharacters(
-    abilityUpdatedPlayer,
-    characterCardIds,
-  );
+  let updatedPlayer = exhaustCharacters(abilityUpdatedPlayer, characterCardIds);
+
+  // -------- Способность «Запас прочности» --------
+  // Персонаж не истощается, если играется в связке.
+  const resilientCardIds: string[] = [];
+
+  if (characterCardIds.length === 2) {
+    for (const cardId of characterCardIds) {
+      const card = updatedPlayer.characters.find(
+        (character) => character.cardId === cardId,
+      );
+
+      if (!card) {
+        continue;
+      }
+
+      const character = game.characters.find(
+        (item) => item.id === card.characterId,
+      );
+
+      if (character?.ability?.id === "resilience") {
+        resilientCardIds.push(cardId);
+      }
+    }
+  }
+
+  if (resilientCardIds.length > 0) {
+    const resilientSet = new Set(resilientCardIds);
+
+    updatedPlayer = {
+      ...updatedPlayer,
+      characters: updatedPlayer.characters.map((card) =>
+        resilientSet.has(card.cardId) ? { ...card, exhausted: false } : card,
+      ),
+    };
+  }
 
   const updatedPlayers = [...game.players];
 

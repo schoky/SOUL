@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { EventCard, Player, PlayerCharacter } from "@soul/shared";
 
+import { characters } from "../../src/data/characters";
 import { events } from "../../src/data/events";
 import { resolveEvent } from "../../src/events/resolveEvent";
 
@@ -37,7 +38,12 @@ describe("resolveEvent", () => {
       throw new Error("Событие не найдено");
     }
 
-    const result = resolveEvent(player, ["player-1-character-1"], event);
+    const result = resolveEvent(
+      player,
+      ["player-1-character-1"],
+      event,
+      characters,
+    );
 
     expect(result.success).toBe(true);
     expect(result.soul).toBe(7);
@@ -51,11 +57,7 @@ describe("resolveEvent", () => {
     const event: EventCard = {
       id: "combo-event",
       name: "Тестовая связка",
-      requirements: {
-        farmila: 8,
-        perekup: 4,
-        tuller: 6,
-      },
+      requirements: { farmila: 8, perekup: 4, tuller: 6 },
       mainStat: "farmila",
       reward: 2,
       riskReward: 4,
@@ -66,6 +68,7 @@ describe("resolveEvent", () => {
       player,
       ["player-1-character-1", "player-1-character-2"],
       event,
+      characters,
     );
 
     expect(result.success).toBe(true);
@@ -80,7 +83,12 @@ describe("resolveEvent", () => {
       throw new Error("Событие не найдено");
     }
 
-    const result = resolveEvent(player, ["player-1-character-1"], event);
+    const result = resolveEvent(
+      player,
+      ["player-1-character-1"],
+      event,
+      characters,
+    );
 
     expect(result.success).toBe(false);
     expect(result.riskWon).toBeNull();
@@ -94,20 +102,14 @@ describe("resolveEvent", () => {
     }
 
     expect(() => {
-      resolveEvent(player, ["unknown-character-card"], event);
+      resolveEvent(player, ["unknown-character-card"], event, characters);
     }).toThrow('Character card "unknown-character-card" not found');
   });
 
   it("не позволяет использовать уставшую карту персонажа", () => {
     const exhaustedPlayer: Player = {
       ...player,
-      characters: [
-        {
-          ...killerCard,
-          exhausted: true,
-        },
-        workaholicCard,
-      ],
+      characters: [{ ...killerCard, exhausted: true }, workaholicCard],
     };
 
     const event = events.find((item) => item.id === "raid-on-warehouse");
@@ -117,7 +119,12 @@ describe("resolveEvent", () => {
     }
 
     expect(() => {
-      resolveEvent(exhaustedPlayer, ["player-1-character-1"], event);
+      resolveEvent(
+        exhaustedPlayer,
+        ["player-1-character-1"],
+        event,
+        characters,
+      );
     }).toThrow('Character card "player-1-character-1" is exhausted');
   });
 
@@ -132,6 +139,7 @@ describe("resolveEvent", () => {
       player,
       ["player-1-character-1"],
       event,
+      characters,
       true,
       () => 0,
     );
@@ -152,6 +160,7 @@ describe("resolveEvent", () => {
       player,
       ["player-1-character-1"],
       event,
+      characters,
       true,
       () => 0.99,
     );
@@ -168,12 +177,11 @@ describe("resolveEvent", () => {
       throw new Error("Событие не найдено");
     }
 
-    // Killer: farmila 4 < 5 → baseSuccess = false
-    // Шанс риска 25%.
     const won = resolveEvent(
       player,
       ["player-1-character-1"],
       event,
+      characters,
       true,
       () => 0.2,
     );
@@ -185,6 +193,7 @@ describe("resolveEvent", () => {
       player,
       ["player-1-character-1"],
       event,
+      characters,
       true,
       () => 0.3,
     );
@@ -192,8 +201,6 @@ describe("resolveEvent", () => {
     expect(lost.riskWon).toBe(false);
     expect(lost.success).toBe(false);
 
-    // Тот же бросок 0.3 при выполненной базе
-    // дал бы выигрыш риска (0.3 < 0.5).
     const satisfiedEvent = events.find(
       (item) => item.id === "raid-on-warehouse",
     );
@@ -206,6 +213,7 @@ describe("resolveEvent", () => {
       player,
       ["player-1-character-1"],
       satisfiedEvent,
+      characters,
       true,
       () => 0.3,
     );

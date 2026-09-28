@@ -460,3 +460,161 @@
 		grid-row: auto;
 	}
 }
+
+/* ============================================= */
+/*              Abilities section                */
+/* ============================================= */
+
+.rules-page__abilities {
+	max-width: 1180px;
+
+	margin: 64px auto 0;
+}
+
+.rules-page__abilities-title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: clamp(28px, 4vw, 42px);
+	font-weight: 700;
+
+	line-height: 1.15;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+
+	text-shadow: 0 0 18px rgba(122, 59, 192, 0.22);
+}
+
+.rules-page__abilities-description {
+	max-width: 720px;
+
+	margin: 18px 0 32px;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1.7;
+}
+
+.rules-page__abilities-list {
+	display: grid;
+
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+
+	gap: 14px;
+}
+
+.rules-page__ability {
+	display: flex;
+	flex-direction: column;
+
+	gap: 10px;
+
+	padding: 18px 20px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: linear-gradient(
+		180deg,
+		rgba(19, 22, 31, 0.96),
+		rgba(11, 13, 19, 0.98)
+	);
+
+	transition: border-color 160ms ease, transform 160ms ease,
+	box-shadow 160ms ease;
+}
+
+.rules-page__ability:hover {
+	transform: translateY(-2px);
+
+	border-color: var(--color-border-purple);
+
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24),
+	0 0 18px rgba(122, 59, 192, 0.12);
+}
+
+.rules-page__ability-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 12px;
+
+	flex-wrap: wrap;
+}
+
+.rules-page__ability-character {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 15px;
+	font-weight: 700;
+
+	letter-spacing: 0.03em;
+}
+
+.rules-page__ability-name {
+	padding: 3px 10px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-sm);
+
+	background: rgba(122, 59, 192, 0.1);
+	color: var(--color-purple-light);
+
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.rules-page__ability-description {
+	margin: 0;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.6;
+}
+
+/* -------- Abilities — media -------- */
+
+@media (max-width: 820px) {
+	.rules-page__abilities {
+		margin-top: 48px;
+	}
+
+	.rules-page__abilities-list {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 520px) {
+	.rules-page__abilities-title {
+		font-size: 24px;
+	}
+
+	.rules-page__abilities-description {
+		font-size: 14px;
+	}
+
+	.rules-page__ability {
+		padding: 14px 16px;
+	}
+
+	.rules-page__ability-character {
+		font-size: 14px;
+	}
+
+	.rules-page__ability-description {
+		font-size: 12px;
+	}
+}
