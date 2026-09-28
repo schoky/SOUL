@@ -2,7 +2,11 @@ import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { SOCKET_EVENTS } from "@soul/shared";
+
 import MainLayout from "../../components/layout/MainLayout";
+
+import { socket } from "../../services/socket";
 
 import { useAuthStore } from "../../stores/authStore";
 import { useRoomStore } from "../../stores/roomStore";
@@ -45,6 +49,9 @@ function LobbyPage() {
   const [roomCode, setRoomCode] = useState("");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 
+  /**
+   * Первичная загрузка списка комнат.
+   */
   useEffect(() => {
     if (!user) {
       return;
@@ -52,6 +59,42 @@ function LobbyPage() {
 
     void loadRooms(user.id);
   }, [loadRooms, user]);
+
+  /**
+   * Realtime-обновление списка комнат.
+   *
+   * Подписываемся на канал лобби,
+   * чтобы любой другой игрок, создавший
+   * или покинувший комнату, вызывал
+   * у нас refetch списка без F5.
+   */
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const handleConnect = () => {
+      socket.emit(SOCKET_EVENTS.LOBBY_SUBSCRIBE);
+    };
+
+    const handleLobbyUpdated = () => {
+      void loadRooms(user.id);
+    };
+
+    if (socket.connected) {
+      handleConnect();
+    }
+
+    socket.on("connect", handleConnect);
+    socket.on(SOCKET_EVENTS.LOBBY_UPDATED, handleLobbyUpdated);
+
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.off(SOCKET_EVENTS.LOBBY_UPDATED, handleLobbyUpdated);
+
+      socket.emit(SOCKET_EVENTS.LOBBY_UNSUBSCRIBE);
+    };
+  }, [user, loadRooms]);
 
   async function handleCreateRoom() {
     setActionMessage(null);

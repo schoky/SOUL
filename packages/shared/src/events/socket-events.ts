@@ -10,6 +10,10 @@ export const SOCKET_EVENTS = {
   ROOM_UPDATED: "room:updated",
   ROOM_DELETED: "room:deleted",
 
+  LOBBY_SUBSCRIBE: "lobby:subscribe",
+  LOBBY_UNSUBSCRIBE: "lobby:unsubscribe",
+  LOBBY_UPDATED: "lobby:updated",
+
   ROOM_CREATE: "room:create",
   ROOM_JOIN: "room:join",
   ROOM_LEAVE: "room:leave",

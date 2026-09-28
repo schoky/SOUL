@@ -4,7 +4,11 @@ import { authenticateRequest } from "../authMiddleware.js";
 
 import { roomService, RoomServiceError } from "../../rooms/roomService.js";
 
-import { emitRoomDeleted, emitRoomUpdated } from "../../socket/roomEvents.js";
+import {
+  emitLobbyUpdated,
+  emitRoomDeleted,
+  emitRoomUpdated,
+} from "../../socket/roomEvents.js";
 
 type CreateRoomBody = {
   maxPlayers?: number;
@@ -12,8 +16,7 @@ type CreateRoomBody = {
 
 export async function roomRoutes(app: FastifyInstance) {
   /**
-   * Получить список комнат,
-   * которые ждут игроков.
+   * Получить список комнат.
    */
   app.get(
     "/",
@@ -39,9 +42,6 @@ export async function roomRoutes(app: FastifyInstance) {
 
   /**
    * Получить активную комнату текущего пользователя.
-   *
-   * Возвращает комнату в любом статусе:
-   * WAITING, PLAYING или FINISHED.
    */
   app.get(
     "/current",
@@ -136,6 +136,8 @@ export async function roomRoutes(app: FastifyInstance) {
           request.body?.maxPlayers,
         );
 
+        emitLobbyUpdated();
+
         return reply.code(201).send({
           room,
         });
@@ -183,6 +185,7 @@ export async function roomRoutes(app: FastifyInstance) {
         const room = await roomService.joinRoom(request.params.id, user.id);
 
         emitRoomUpdated(room);
+        emitLobbyUpdated();
 
         return reply.send({
           room,
@@ -303,6 +306,8 @@ export async function roomRoutes(app: FastifyInstance) {
         } else {
           emitRoomDeleted(request.params.id);
         }
+
+        emitLobbyUpdated();
 
         return reply.send({
           room,

@@ -17,6 +17,8 @@ const SESSION_COOKIE = "soul_session";
 
 const CLIENT_ORIGIN = "http://localhost:5173";
 
+const LOBBY_CHANNEL = "lobby";
+
 function parseCookies(header: string | undefined): Record<string, string> {
   if (!header) {
     return {};
@@ -87,6 +89,14 @@ export function createSocketServer(httpServer: HttpServer): Server {
     const userId = socket.data.userId as string;
 
     console.log(`Socket подключён: ${socket.id} (user: ${userId})`);
+
+    socket.on(SOCKET_EVENTS.LOBBY_SUBSCRIBE, () => {
+      void socket.join(LOBBY_CHANNEL);
+    });
+
+    socket.on(SOCKET_EVENTS.LOBBY_UNSUBSCRIBE, () => {
+      void socket.leave(LOBBY_CHANNEL);
+    });
 
     socket.on(
       SOCKET_EVENTS.ROOM_SUBSCRIBE,
