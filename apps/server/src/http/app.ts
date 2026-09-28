@@ -4,7 +4,10 @@ import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 
 import authRoutes from "./routes/auth.js";
+import adminRoutes from "./routes/admin.js";
 import cardsRoutes from "./routes/cards.js";
+import gamesRoutes from "./routes/games.js";
+import newsRoutes from "./routes/news.js";
 import profileRoutes from "./routes/profile.js";
 import { roomRoutes } from "./routes/rooms.js";
 
@@ -36,12 +39,24 @@ export async function createHttpApp() {
     prefix: "/api/cards",
   });
 
+  await app.register(gamesRoutes, {
+    prefix: "/api/games",
+  });
+
+  await app.register(newsRoutes, {
+    prefix: "/api/news",
+  });
+
   await app.register(profileRoutes, {
     prefix: "/api/profile",
   });
 
   await app.register(roomRoutes, {
     prefix: "/api/rooms",
+  });
+
+  await app.register(adminRoutes, {
+    prefix: "/api/admin",
   });
 
   return app;

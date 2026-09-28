@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { SOCKET_EVENTS } from "@soul/shared";
 
 import MainLayout from "../../components/layout/MainLayout";
+import Skeleton from "../../components/ui/Skeleton";
 
 import { socket } from "../../services/socket";
 
@@ -62,11 +63,6 @@ function LobbyPage() {
 
   /**
    * Realtime-обновление списка комнат.
-   *
-   * Подписываемся на канал лобби,
-   * чтобы любой другой игрок, создавший
-   * или покинувший комнату, вызывал
-   * у нас refetch списка без F5.
    */
   useEffect(() => {
     if (!user) {
@@ -180,6 +176,76 @@ function LobbyPage() {
     }
 
     navigate(`/room/${currentRoom.id}`);
+  }
+
+  if (isLoading) {
+    return (
+      <MainLayout>
+        <main className="lobby-page">
+          <section className="skeleton-lobby__hero">
+            <div>
+              <Skeleton width={140} height={12} />
+
+              <div style={{ marginTop: 12 }}>
+                <Skeleton width={420} height={48} />
+              </div>
+
+              <div style={{ marginTop: 18 }}>
+                <Skeleton width={280} height={14} />
+              </div>
+            </div>
+
+            <Skeleton width={190} height={68} radius="6px" />
+          </section>
+
+          <section className="skeleton-lobby__actions">
+            <div className="skeleton-lobby__action">
+              <Skeleton width={36} height={16} />
+
+              <Skeleton width={200} height={26} />
+
+              <Skeleton width={260} height={12} />
+
+              <div style={{ marginTop: "auto" }}>
+                <Skeleton width={180} height={44} radius="4px" />
+              </div>
+            </div>
+
+            <div className="skeleton-lobby__action">
+              <Skeleton width={36} height={16} />
+
+              <Skeleton width={180} height={26} />
+
+              <Skeleton width={240} height={12} />
+
+              <div style={{ marginTop: "auto" }}>
+                <Skeleton width="100%" height={44} radius="4px" />
+              </div>
+            </div>
+          </section>
+
+          <section className="skeleton-lobby__rooms">
+            <Skeleton width={220} height={22} />
+
+            <div className="skeleton-lobby__rooms-list">
+              {[1, 2, 3].map((i) => (
+                <div className="skeleton-lobby__room-row" key={i}>
+                  <div>
+                    <Skeleton width={100} height={18} />
+
+                    <div style={{ marginTop: 8 }}>
+                      <Skeleton width={140} height={12} />
+                    </div>
+                  </div>
+
+                  <Skeleton width={90} height={36} radius="4px" />
+                </div>
+              ))}
+            </div>
+          </section>
+        </main>
+      </MainLayout>
+    );
   }
 
   return (
@@ -346,19 +412,7 @@ function LobbyPage() {
             </span>
           </div>
 
-          {isLoading ? (
-            <div className="lobby-page__rooms-empty">
-              <div className="lobby-page__rooms-empty-icon">...</div>
-
-              <h3 className="lobby-page__rooms-empty-title">
-                Загружаем комнаты
-              </h3>
-
-              <p className="lobby-page__rooms-empty-description">
-                Получаем актуальный список игр.
-              </p>
-            </div>
-          ) : rooms.length === 0 ? (
+          {rooms.length === 0 ? (
             <div className="lobby-page__rooms-empty">
               <div className="lobby-page__rooms-empty-icon">+</div>
 

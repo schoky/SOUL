@@ -1,7 +1,6 @@
 import type { Socket } from "socket.io";
 
 import {
-  characters as allCharacters,
   createGame,
   createPlayer,
   endTurn,
@@ -19,6 +18,9 @@ import {
 
 import type { GameState } from "@soul/shared";
 
+import { characterRepository } from "../cards/characterRepository.js";
+import { eventRepository } from "../cards/eventRepository.js";
+
 import { gameManager } from "../game/gameManager.js";
 
 import { roomRepository } from "../rooms/roomRepository.js";
@@ -32,7 +34,7 @@ const MAX_TURN_ITERATIONS_FACTOR = 3;
 function buildSession(game: GameState) {
   return {
     gameState: game,
-    characters: allCharacters,
+    characters: game.characters,
   };
 }
 
@@ -96,6 +98,15 @@ export function registerGameHandlers(socket: Socket): void {
     try {
       const updatedRoom = await roomService.startGame(roomId, userId);
 
+      const [characters, events] = await Promise.all([
+        characterRepository.findAll(),
+        eventRepository.findAll(),
+      ]);
+
+      if (characters.length === 0 || events.length === 0) {
+        throw new Error("Карточки не загружены в БД");
+      }
+
       const players = updatedRoom.members.map((member) => {
         const nickname =
           member.user.profile?.nickname ?? `Игрок ${member.userId.slice(0, 4)}`;
@@ -103,9 +114,9 @@ export function registerGameHandlers(socket: Socket): void {
         return createPlayer(member.userId, nickname);
       });
 
-      let game = createGame(roomId, players);
+      let game = createGame(roomId, players, events);
 
-      game = startGame(game, updatedRoom.hostUserId);
+      game = startGame(game, updatedRoom.hostUserId, characters);
 
       await gameManager.set(roomId, game);
 

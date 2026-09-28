@@ -5,6 +5,8 @@
 @use './components/branding';
 @use './components/main-header';
 @use './components/toast';
+@use './components/modal';
+@use './components/skeleton';
 
 @use './layouts/main';
 
@@ -17,3 +19,4 @@
 @use './pages/game';
 @use './pages/collection';
 @use './pages/profile';
+@use './pages/admin';

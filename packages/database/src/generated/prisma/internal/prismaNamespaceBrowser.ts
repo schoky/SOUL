@@ -59,7 +59,10 @@ export const ModelName = {
   RoomMember: 'RoomMember',
   Game: 'Game',
   GamePlayer: 'GamePlayer',
-  GameResult: 'GameResult'
+  GameResult: 'GameResult',
+  Character: 'Character',
+  EventCard: 'EventCard',
+  News: 'News'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -185,6 +188,58 @@ export const GameResultScalarFieldEnum = {
 } as const
 
 export type GameResultScalarFieldEnum = (typeof GameResultScalarFieldEnum)[keyof typeof GameResultScalarFieldEnum]
+
+
+export const CharacterScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  image: 'image',
+  farmila: 'farmila',
+  perekup: 'perekup',
+  tuller: 'tuller',
+  abilityId: 'abilityId',
+  abilityName: 'abilityName',
+  abilityDescription: 'abilityDescription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterScalarFieldEnum = (typeof CharacterScalarFieldEnum)[keyof typeof CharacterScalarFieldEnum]
+
+
+export const EventCardScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  image: 'image',
+  farmila: 'farmila',
+  perekup: 'perekup',
+  tuller: 'tuller',
+  mainStat: 'mainStat',
+  reward: 'reward',
+  riskReward: 'riskReward',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventCardScalarFieldEnum = (typeof EventCardScalarFieldEnum)[keyof typeof EventCardScalarFieldEnum]
+
+
+export const NewsScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  title: 'title',
+  body: 'body',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
 
 
 export const SortOrder = {

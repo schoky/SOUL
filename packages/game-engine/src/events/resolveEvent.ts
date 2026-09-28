@@ -1,4 +1,4 @@
-import type { EventCard, Player } from "@soul/shared";
+import type { Character, EventCard, Player } from "@soul/shared";
 
 import { resolveCharacterAbilities } from "../players/resolveCharacterAbilities.js";
 import { resolveCharacters } from "../players/resolveCharacters.js";
@@ -21,16 +21,18 @@ export function resolveEvent(
   player: Player,
   characterCardIds: string[],
   event: EventCard,
+  characters: Character[],
   risk = false,
   random: () => number = Math.random,
 ): EventResult {
-  const resolvedCharacters = resolveCharacters(player, characterCardIds);
+  const resolvedCharacters = resolveCharacters(
+    player,
+    characterCardIds,
+    characters,
+  );
 
   const baseSuccess = checkRequirements(resolvedCharacters.stats, event);
 
-  // ==========================================
-  // Игра без риска
-  // ==========================================
   if (!risk) {
     if (!baseSuccess) {
       const failure = resolveFailure(player, event, random);
@@ -77,12 +79,6 @@ export function resolveEvent(
     };
   }
 
-  // ==========================================
-  // Риск
-  //
-  // Играется независимо от baseSuccess,
-  // но шанс ниже, если требования не выполнены.
-  // ==========================================
   const riskWon = resolveRisk(baseSuccess, random);
 
   if (riskWon) {

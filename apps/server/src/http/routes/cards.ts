@@ -1,22 +1,22 @@
 import type { FastifyPluginAsync } from "fastify";
 
-import { characters, events } from "@soul/game-engine";
-
 import { authenticateRequest } from "../authMiddleware.js";
 
+import { characterRepository } from "../../cards/characterRepository.js";
+import { eventRepository } from "../../cards/eventRepository.js";
+
 const cardsRoutes: FastifyPluginAsync = async (app) => {
-  app.get(
-    "/",
-    {
-      preHandler: authenticateRequest,
-    },
-    async (_request, reply) => {
-      return reply.send({
-        characters,
-        events,
-      });
-    },
-  );
+  app.get("/", { preHandler: authenticateRequest }, async (_request, reply) => {
+    const [characters, events] = await Promise.all([
+      characterRepository.findAll(),
+      eventRepository.findAll(),
+    ]);
+
+    return reply.send({
+      characters,
+      events,
+    });
+  });
 };
 
 export default cardsRoutes;

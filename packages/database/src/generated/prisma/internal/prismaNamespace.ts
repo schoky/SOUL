@@ -405,7 +405,10 @@ export const ModelName = {
   RoomMember: 'RoomMember',
   Game: 'Game',
   GamePlayer: 'GamePlayer',
-  GameResult: 'GameResult'
+  GameResult: 'GameResult',
+  Character: 'Character',
+  EventCard: 'EventCard',
+  News: 'News'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "session" | "oAuthAccount" | "room" | "roomMember" | "game" | "gamePlayer" | "gameResult"
+    modelProps: "user" | "profile" | "session" | "oAuthAccount" | "room" | "roomMember" | "game" | "gamePlayer" | "gameResult" | "character" | "eventCard" | "news"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1094,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Character: {
+      payload: Prisma.$CharacterPayload<ExtArgs>
+      fields: Prisma.CharacterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        update: {
+          args: Prisma.CharacterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacter>
+        }
+        groupBy: {
+          args: Prisma.CharacterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterCountAggregateOutputType> | number
+        }
+      }
+    }
+    EventCard: {
+      payload: Prisma.$EventCardPayload<ExtArgs>
+      fields: Prisma.EventCardFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventCardFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventCardFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        findFirst: {
+          args: Prisma.EventCardFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventCardFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        findMany: {
+          args: Prisma.EventCardFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>[]
+        }
+        create: {
+          args: Prisma.EventCardCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        createMany: {
+          args: Prisma.EventCardCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventCardCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>[]
+        }
+        delete: {
+          args: Prisma.EventCardDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        update: {
+          args: Prisma.EventCardUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventCardDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventCardUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventCardUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventCardUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventCardPayload>
+        }
+        aggregate: {
+          args: Prisma.EventCardAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEventCard>
+        }
+        groupBy: {
+          args: Prisma.EventCardGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCardGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventCardCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCardCountAggregateOutputType> | number
+        }
+      }
+    }
+    News: {
+      payload: Prisma.$NewsPayload<ExtArgs>
+      fields: Prisma.NewsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        findMany: {
+          args: Prisma.NewsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        create: {
+          args: Prisma.NewsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        createMany: {
+          args: Prisma.NewsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        update: {
+          args: Prisma.NewsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNews>
+        }
+        groupBy: {
+          args: Prisma.NewsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1237,6 +1462,58 @@ export const GameResultScalarFieldEnum = {
 } as const
 
 export type GameResultScalarFieldEnum = (typeof GameResultScalarFieldEnum)[keyof typeof GameResultScalarFieldEnum]
+
+
+export const CharacterScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  image: 'image',
+  farmila: 'farmila',
+  perekup: 'perekup',
+  tuller: 'tuller',
+  abilityId: 'abilityId',
+  abilityName: 'abilityName',
+  abilityDescription: 'abilityDescription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterScalarFieldEnum = (typeof CharacterScalarFieldEnum)[keyof typeof CharacterScalarFieldEnum]
+
+
+export const EventCardScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  image: 'image',
+  farmila: 'farmila',
+  perekup: 'perekup',
+  tuller: 'tuller',
+  mainStat: 'mainStat',
+  reward: 'reward',
+  riskReward: 'riskReward',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventCardScalarFieldEnum = (typeof EventCardScalarFieldEnum)[keyof typeof EventCardScalarFieldEnum]
+
+
+export const NewsScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  title: 'title',
+  body: 'body',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1578,6 +1855,9 @@ export type GlobalOmitConfig = {
   game?: Prisma.GameOmit
   gamePlayer?: Prisma.GamePlayerOmit
   gameResult?: Prisma.GameResultOmit
+  character?: Prisma.CharacterOmit
+  eventCard?: Prisma.EventCardOmit
+  news?: Prisma.NewsOmit
 }
 
 /* Types for Logging */

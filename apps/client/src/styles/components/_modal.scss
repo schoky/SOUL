@@ -1,0 +1,171 @@
+.modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+
+	padding: 60px 20px 40px;
+
+	background: rgba(0, 0, 0, 0.72);
+
+	backdrop-filter: blur(4px);
+
+	overflow-y: auto;
+}
+
+.modal {
+	width: 100%;
+	max-width: 620px;
+
+	display: flex;
+	flex-direction: column;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-lg);
+
+	background: linear-gradient(
+		180deg,
+		rgba(19, 22, 31, 0.98),
+		rgba(11, 13, 19, 0.99)
+	);
+
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5),
+	0 0 28px rgba(122, 59, 192, 0.18);
+}
+
+.modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 20px;
+
+	padding: 20px 24px;
+
+	border-bottom: 1px solid var(--color-border);
+}
+
+.modal__title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.modal__close {
+	width: 32px;
+	height: 32px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 0;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: transparent;
+	color: var(--color-text-secondary);
+
+	font-size: 20px;
+	line-height: 1;
+
+	transition: border-color 140ms ease, color 140ms ease;
+}
+
+.modal__close:hover {
+	border-color: var(--color-purple);
+	color: var(--color-text);
+}
+
+.modal__body {
+	padding: 24px;
+}
+
+.modal__footer {
+	display: flex;
+	justify-content: flex-end;
+
+	gap: 10px;
+
+	padding: 18px 24px;
+
+	border-top: 1px solid var(--color-border);
+}
+
+.modal__form {
+	display: flex;
+	flex-direction: column;
+
+	gap: 16px;
+}
+
+.modal__row {
+	display: grid;
+
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+
+	gap: 12px;
+}
+
+.modal__row--2 {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.modal__field {
+	display: flex;
+	flex-direction: column;
+
+	gap: 6px;
+}
+
+.modal__label {
+	color: var(--color-text-secondary);
+
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.modal__error {
+	margin: 0;
+	padding: 10px 14px;
+
+	border: 1px solid rgba(255, 107, 129, 0.4);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 107, 129, 0.06);
+	color: var(--color-danger);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+
+	text-align: center;
+}
+
+@media (max-width: 600px) {
+	.modal-backdrop {
+		padding: 20px 12px;
+	}
+
+	.modal__row {
+		grid-template-columns: 1fr;
+	}
+
+	.modal__row--2 {
+		grid-template-columns: 1fr;
+	}
+}

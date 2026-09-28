@@ -12,6 +12,7 @@ import type {
 } from "@soul/shared";
 
 import MainLayout from "../../components/layout/MainLayout";
+import Skeleton from "../../components/ui/Skeleton";
 
 import { socket } from "../../services/socket";
 
@@ -20,6 +21,76 @@ import { getRoomPreview } from "../../services/api/rooms";
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
 import { useRoomStore } from "../../stores/roomStore";
+
+function RoomSkeleton() {
+  return (
+    <MainLayout>
+      <main className="room-page">
+        <section className="skeleton-room__header">
+          <div>
+            <Skeleton width={120} height={12} />
+
+            <div style={{ marginTop: 12 }}>
+              <Skeleton width={220} height={44} />
+            </div>
+
+            <div style={{ marginTop: 18 }}>
+              <Skeleton width={320} height={14} />
+            </div>
+
+            <div style={{ marginTop: 16 }}>
+              <Skeleton width={200} height={36} radius="4px" />
+            </div>
+          </div>
+
+          <Skeleton width={150} height={68} radius="6px" />
+        </section>
+
+        <section className="skeleton-room__content">
+          <div className="skeleton-room__players">
+            <Skeleton width={180} height={22} />
+
+            <div className="skeleton-room__players-list">
+              {[1, 2].map((i) => (
+                <div className="skeleton-room__player-row" key={i}>
+                  <div>
+                    <Skeleton width={140} height={18} />
+
+                    <div style={{ marginTop: 8 }}>
+                      <Skeleton width={80} height={12} />
+                    </div>
+                  </div>
+
+                  <Skeleton width={70} height={28} radius="4px" />
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 22 }}>
+              <Skeleton width="100%" height={48} radius="4px" />
+            </div>
+          </div>
+
+          <div className="skeleton-room__sidebar">
+            <Skeleton width={140} height={14} />
+
+            <div style={{ marginTop: 20 }}>
+              <Skeleton width="100%" height={48} />
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              <Skeleton width="100%" height={48} />
+            </div>
+
+            <div style={{ marginTop: "auto" }}>
+              <Skeleton width="100%" height={48} radius="4px" />
+            </div>
+          </div>
+        </section>
+      </main>
+    </MainLayout>
+  );
+}
 
 function RoomPage() {
   const navigate = useNavigate();
@@ -62,11 +133,6 @@ function RoomPage() {
 
   const [joinError, setJoinError] = useState<string | null>(null);
 
-  /**
-   * Первая загрузка:
-   * 1) пробуем загрузить комнату как участник;
-   * 2) если пользователь не участник — тянем публичное превью.
-   */
   useEffect(() => {
     if (!roomId) {
       navigate("/lobby", { replace: true });
@@ -118,12 +184,6 @@ function RoomPage() {
     };
   }, [roomId, errorCode]);
 
-  /**
-   * Realtime-подписка на комнату.
-   *
-   * Работает только если мы уже участник —
-   * иначе подписка не нужна.
-   */
   useEffect(() => {
     if (!roomId || !currentRoom) {
       return;
@@ -276,17 +336,7 @@ function RoomPage() {
   /* ---------- Загрузка ---------- */
 
   if (isLoading && !preview) {
-    return (
-      <MainLayout>
-        <main className="room-page">
-          <section className="room-page__loading">
-            <p className="room-page__eyebrow">КОМНАТА</p>
-
-            <h1 className="room-page__title">Загружаем комнату...</h1>
-          </section>
-        </main>
-      </MainLayout>
-    );
+    return <RoomSkeleton />;
   }
 
   /* ---------- Превью (не участник) ---------- */
@@ -320,17 +370,7 @@ function RoomPage() {
     }
 
     if (!preview) {
-      return (
-        <MainLayout>
-          <main className="room-page">
-            <section className="room-page__loading">
-              <p className="room-page__eyebrow">КОМНАТА</p>
-
-              <h1 className="room-page__title">Загружаем приглашение...</h1>
-            </section>
-          </main>
-        </MainLayout>
-      );
+      return <RoomSkeleton />;
     }
 
     const canJoin = preview.status === "WAITING";
@@ -450,17 +490,7 @@ function RoomPage() {
   /* ---------- Заглушка загрузки ---------- */
 
   if (!currentRoom) {
-    return (
-      <MainLayout>
-        <main className="room-page">
-          <section className="room-page__loading">
-            <p className="room-page__eyebrow">КОМНАТА</p>
-
-            <h1 className="room-page__title">Загружаем комнату...</h1>
-          </section>
-        </main>
-      </MainLayout>
-    );
+    return <RoomSkeleton />;
   }
 
   /* ---------- Основной экран комнаты ---------- */

@@ -48,3 +48,8 @@ export type {
   RoomErrorResponse,
   CreateRoomRequest,
 } from "./types/room.js";
+
+export type {
+  GameResultPlayerDto,
+  GameResultDto,
+} from "./types/game-result.js";

@@ -86,3 +86,18 @@ export type GamePlayer = Prisma.GamePlayerModel
  * 
  */
 export type GameResult = Prisma.GameResultModel
+/**
+ * Model Character
+ * 
+ */
+export type Character = Prisma.CharacterModel
+/**
+ * Model EventCard
+ * 
+ */
+export type EventCard = Prisma.EventCardModel
+/**
+ * Model News
+ * 
+ */
+export type News = Prisma.NewsModel

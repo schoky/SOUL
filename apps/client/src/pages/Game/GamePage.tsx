@@ -18,6 +18,7 @@ import {
 } from "@soul/shared";
 
 import CardImage from "../../components/game/CardImage";
+import GameResult from "../../components/game/GameResult";
 
 import MainLayout from "../../components/layout/MainLayout";
 
@@ -29,7 +30,6 @@ import { playYourTurnSound } from "../../utils/sounds";
 
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
-import { useRoomStore } from "../../stores/roomStore";
 import { useToastStore } from "../../stores/toastStore";
 
 const MAX_CARDS_PER_ACTION = 2;
@@ -70,8 +70,6 @@ function GamePage() {
   const characters = useGameStore((state) => state.characters);
 
   const setGameSession = useGameStore((state) => state.setGameSession);
-
-  const leaveRoom = useRoomStore((state) => state.leaveRoom);
 
   const pushToast = useToastStore((state) => state.push);
 
@@ -235,10 +233,6 @@ function GamePage() {
 
   const riskPercent = Math.round(riskChance * 100);
 
-  /**
-   * Уведомление о начале своего хода:
-   * короткий звук + тост.
-   */
   useYourTurnNotification({
     currentPlayerId: gameState?.currentPlayerId ?? null,
     userId: user?.id,
@@ -305,19 +299,6 @@ function GamePage() {
     socket.emit(SOCKET_EVENTS.GAME_END_TURN, payload);
   }
 
-  async function handleReturnToLobby() {
-    if (gameState) {
-      try {
-        await leaveRoom(gameState.id);
-      } catch {
-        // даже если ошибка — уходим в лобби,
-        // чтобы пользователь не залипал
-      }
-    }
-
-    navigate("/lobby");
-  }
-
   if (!gameState) {
     return (
       <MainLayout>
@@ -335,36 +316,9 @@ function GamePage() {
   }
 
   if (gameState.status === "finished") {
-    const winner = gameState.players.find(
-      (player) => player.id === gameState.winnerId,
-    );
-
     return (
       <MainLayout>
-        <main className="game-page">
-          <section className="game-page__empty">
-            <p className="game-page__eyebrow">ИГРА ЗАВЕРШЕНА</p>
-
-            <h1 className="game-page__title">
-              {winner ? `Победил ${winner.name}` : "Ничья"}
-            </h1>
-
-            <p className="game-page__description">Финальный раунд завершён.</p>
-
-            <button
-              className="
-                game-page__button
-                game-page__button--primary
-              "
-              type="button"
-              onClick={() => {
-                void handleReturnToLobby();
-              }}
-            >
-              Вернуться в лобби
-            </button>
-          </section>
-        </main>
+        <GameResult gameState={gameState} />
       </MainLayout>
     );
   }
@@ -545,14 +499,16 @@ function GamePage() {
               ]
                 .filter(Boolean)
                 .join(" ")}
+              key={gameState.turnNumber}
             >
-              {self.characters.map((card) => (
+              {self.characters.map((card, index) => (
                 <CharacterCard
                   card={card}
                   character={findCharacter(characters, card.characterId)}
                   isSelected={selectedCardIds.includes(card.cardId)}
                   isSelectable={isMyTurn}
                   onToggle={() => toggleCard(card.cardId)}
+                  index={index}
                   key={card.cardId}
                 />
               ))}
@@ -667,6 +623,7 @@ type CharacterCardProps = {
   isSelected: boolean;
   isSelectable: boolean;
   onToggle: () => void;
+  index: number;
 };
 
 function CharacterCard({
@@ -675,6 +632,7 @@ function CharacterCard({
   isSelected,
   isSelectable,
   onToggle,
+  index,
 }: CharacterCardProps) {
   const disabled = !isSelectable || card.exhausted;
 
@@ -687,6 +645,7 @@ function CharacterCard({
       ]
         .filter(Boolean)
         .join(" ")}
+      style={{ animationDelay: `${index * 60}ms` }}
       type="button"
       disabled={disabled}
       onClick={onToggle}

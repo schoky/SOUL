@@ -1107,3 +1107,614 @@
 		letter-spacing: 0.14em;
 	}
 }
+
+/* -------- Game result screen -------- */
+
+.game-result {
+	width: 100%;
+	max-width: 900px;
+
+	margin: 0 auto;
+
+	padding: 64px 28px 96px;
+}
+
+.game-result__eyebrow {
+	margin: 0 0 10px;
+
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.game-result__hero {
+	margin-bottom: 42px;
+
+	text-align: center;
+}
+
+.game-result__title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: clamp(32px, 5vw, 52px);
+	font-weight: 700;
+
+	line-height: 1.1;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+
+	text-shadow: 0 0 18px rgba(122, 59, 192, 0.22);
+}
+
+.game-result__winner {
+	color: var(--color-purple-bright);
+
+	text-shadow: 0 0 22px rgba(183, 122, 243, 0.55);
+}
+
+.game-result__subtitle {
+	margin: 16px 0 0;
+
+	color: var(--color-text-secondary);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+
+	letter-spacing: 0.02em;
+}
+
+.game-result__board {
+	padding: 28px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+
+	background: linear-gradient(
+		180deg,
+		rgba(19, 22, 31, 0.96),
+		rgba(11, 13, 19, 0.98)
+	);
+
+	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+}
+
+.game-result__board-header {
+	padding-bottom: 22px;
+
+	border-bottom: 1px solid var(--color-border);
+}
+
+.game-result__board-title {
+	margin: 0;
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+.game-result__loading {
+	margin: 24px 0 0;
+
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+
+	text-align: center;
+}
+
+.game-result__rows {
+	display: flex;
+	flex-direction: column;
+
+	gap: 10px;
+
+	margin-top: 22px;
+}
+
+.game-result__row {
+	display: grid;
+
+	grid-template-columns: 80px 1fr auto;
+
+	align-items: center;
+
+	gap: 20px;
+
+	padding: 16px 20px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+
+	transition: border-color 160ms ease, background 160ms ease;
+}
+
+.game-result__row--winner {
+	border-color: var(--color-border-purple);
+
+	background: rgba(122, 59, 192, 0.1);
+
+	box-shadow: 0 0 20px rgba(122, 59, 192, 0.15);
+}
+
+.game-result__row-place {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	gap: 2px;
+}
+
+.game-result__place-number {
+	color: var(--color-purple-light);
+
+	font-family: 'Unbounded', sans-serif;
+	font-size: 30px;
+	font-weight: 700;
+
+	line-height: 1;
+}
+
+.game-result__place-label {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.game-result__row-name {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+
+	gap: 10px;
+
+	min-width: 0;
+}
+
+.game-result__row-name strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.game-result__row-tag {
+	padding: 3px 8px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--color-text-secondary);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.game-result__row-tag--winner {
+	border-color: var(--color-purple-light);
+
+	background: rgba(122, 59, 192, 0.15);
+	color: var(--color-purple-bright);
+}
+
+.game-result__row-soul {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+
+	gap: 2px;
+}
+
+.game-result__row-soul span {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.game-result__row-soul strong {
+	color: var(--color-success);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.game-result__meta {
+	display: grid;
+
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+
+	gap: 12px;
+
+	margin-top: 22px;
+	padding-top: 22px;
+
+	border-top: 1px solid var(--color-border);
+}
+
+.game-result__meta-item {
+	display: flex;
+	flex-direction: column;
+
+	gap: 4px;
+
+	text-align: center;
+}
+
+.game-result__meta-item span {
+	color: var(--color-text-muted);
+
+	font-size: 9px;
+	font-weight: 700;
+
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.game-result__meta-item strong {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+
+	letter-spacing: 0.03em;
+}
+
+.game-result__actions {
+	display: flex;
+	justify-content: center;
+
+	gap: 14px;
+
+	margin-top: 32px;
+}
+
+.game-result__button {
+	min-height: 48px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 10px 26px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: var(--color-panel);
+	color: var(--color-text-secondary);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 12px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+
+	transition: border-color 160ms ease, background 160ms ease,
+	color 160ms ease, box-shadow 160ms ease,
+	transform 160ms ease, filter 160ms ease;
+}
+
+.game-result__button:hover:not(:disabled) {
+	transform: translateY(-1px);
+
+	border-color: var(--color-purple);
+	background: var(--color-panel-light);
+	color: var(--color-text);
+}
+
+.game-result__button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.game-result__button--primary {
+	border-color: var(--color-purple-light);
+
+	background: linear-gradient(
+		180deg,
+		var(--color-purple),
+		var(--color-purple-dark)
+	);
+
+	color: var(--color-text);
+
+	box-shadow: 0 0 18px rgba(122, 59, 192, 0.24);
+}
+
+.game-result__button--primary:hover:not(:disabled) {
+	filter: brightness(1.08);
+
+	box-shadow: 0 0 26px rgba(122, 59, 192, 0.4);
+}
+
+@media (max-width: 600px) {
+	.game-result {
+		padding: 48px 16px 72px;
+	}
+
+	.game-result__board {
+		padding: 20px;
+	}
+
+	.game-result__row {
+		grid-template-columns: 60px 1fr auto;
+
+		gap: 12px;
+
+		padding: 14px 16px;
+	}
+
+	.game-result__place-number {
+		font-size: 24px;
+	}
+
+	.game-result__row-name strong {
+		font-size: 14px;
+	}
+
+	.game-result__meta {
+		grid-template-columns: 1fr;
+	}
+
+	.game-result__actions {
+		flex-direction: column;
+	}
+
+	.game-result__actions .game-result__button {
+		width: 100%;
+	}
+}
+
+/* ============================================= */
+/*              Animations (5.2)                 */
+/* ============================================= */
+
+/* -------- Появление карточек -------- */
+
+@keyframes card-appear {
+	0% {
+		opacity: 0;
+		transform: translateY(14px) scale(0.96);
+	}
+
+	60% {
+		opacity: 1;
+		transform: translateY(-2px) scale(1.01);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.game-page__cards .game-page__card {
+	animation: card-appear 380ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
+}
+
+/* -------- Улучшенный ховер -------- */
+
+.game-page__card:hover:not(:disabled) {
+	transform: translateY(-4px);
+
+	border-color: var(--color-border-purple);
+
+	background: rgba(122, 59, 192, 0.1);
+
+	box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32),
+	0 0 24px rgba(122, 59, 192, 0.24);
+}
+
+.game-page__card:active:not(:disabled) {
+	transform: translateY(-1px) scale(0.99);
+}
+
+/* -------- Пульсация выбранной карточки -------- */
+
+@keyframes card-selected-glow {
+	0%,
+	100% {
+		box-shadow: 0 0 20px rgba(122, 59, 192, 0.32),
+		0 0 0 1px rgba(160, 106, 229, 0.5);
+	}
+
+	50% {
+		box-shadow: 0 0 34px rgba(122, 59, 192, 0.55),
+		0 0 0 1px rgba(183, 122, 243, 0.75);
+	}
+}
+
+.game-page__card--selected {
+	border-color: var(--color-purple-bright);
+
+	background: rgba(122, 59, 192, 0.18);
+
+	animation: card-selected-glow 2s ease-in-out infinite;
+}
+
+.game-page__card--selected:hover:not(:disabled) {
+	transform: translateY(-4px);
+}
+
+/* -------- Анимация «Устал» -------- */
+
+@keyframes card-exhaust-fade {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	100% {
+		opacity: 0.38;
+		transform: scale(0.97);
+	}
+}
+
+.game-page__card--exhausted {
+	animation: card-exhaust-fade 320ms ease-out both;
+
+	filter: grayscale(0.55);
+}
+
+/* Оверлей «Устал» — плавное появление */
+
+.game-page__card-overlay {
+	animation: overlay-fade 260ms ease-out both;
+}
+
+@keyframes overlay-fade {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* -------- Появление секции выбора -------- */
+
+@keyframes selection-slide {
+	0% {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.game-page__selection {
+	animation: selection-slide 260ms cubic-bezier(0.2, 0.85, 0.3, 1) both;
+}
+
+/* -------- Появление подсказки -------- */
+
+.game-page__selection-hint {
+	animation: selection-slide 300ms ease-out both;
+
+	animation-delay: 80ms;
+}
+
+/* -------- Баннер «Твой ход» — усиленное появление -------- */
+
+@keyframes banner-slide {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.96);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.game-page__your-turn-banner {
+	animation: banner-slide 320ms cubic-bezier(0.2, 0.85, 0.3, 1) both,
+	your-turn-pulse 1.8s ease-in-out infinite;
+
+	animation-delay: 0ms, 320ms;
+}
+
+/* -------- Плавная активация hand-секции -------- */
+
+.game-page__hand {
+	transition: border-color 240ms ease, box-shadow 240ms ease;
+}
+
+/* -------- Плавное обновление Soul и характеристик -------- */
+
+.game-page__player,
+.game-page__selection-stats strong,
+.game-page__card-stats strong {
+	transition: color 220ms ease, background 220ms ease;
+}
+
+.game-page__selection-stats > div {
+	animation: selection-slide 240ms ease-out both;
+}
+
+.game-page__selection-stats > div:nth-child(1) {
+	animation-delay: 0ms;
+}
+
+.game-page__selection-stats > div:nth-child(2) {
+	animation-delay: 60ms;
+}
+
+.game-page__selection-stats > div:nth-child(3) {
+	animation-delay: 120ms;
+}
+
+/* -------- Кнопки действий — чуть плавнее -------- */
+
+.game-page__selection-actions .game-page__button {
+	transition: filter 140ms ease, box-shadow 140ms ease,
+	transform 140ms ease, border-color 140ms ease,
+	background 140ms ease, color 140ms ease;
+}
+
+.game-page__selection-actions .game-page__button:hover:not(:disabled) {
+	transform: translateY(-2px);
+}
+
+.game-page__selection-actions .game-page__button:active:not(:disabled) {
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.game-page__cards .game-page__card,
+	.game-page__card--selected,
+	.game-page__card--exhausted,
+	.game-page__card-overlay,
+	.game-page__selection,
+	.game-page__selection-hint,
+	.game-page__your-turn-banner,
+	.game-page__selection-stats > div {
+		animation: none !important;
+
+		transition: none !important;
+	}
+}

@@ -7,6 +7,7 @@ import { ApiError } from "../../services/api/client";
 import { useAuthStore } from "../../stores/authStore";
 
 import MainLayout from "../../components/layout/MainLayout";
+import Skeleton from "../../components/ui/Skeleton";
 
 import {
   getProfileStats,
@@ -307,9 +308,51 @@ function ProfilePage() {
         )}
 
         {isLoading && (
-          <section className="profile-page__empty">
-            <p className="profile-page__empty-title">Загружаем профиль...</p>
-          </section>
+          <>
+            <section className="skeleton-profile__identity">
+              <Skeleton width={96} height={96} radius="50%" />
+
+              <div style={{ flex: 1 }}>
+                <Skeleton width={120} height={12} />
+
+                <div style={{ marginTop: 12 }}>
+                  <Skeleton width={220} height={36} />
+                </div>
+
+                <div style={{ marginTop: 12 }}>
+                  <Skeleton width={200} height={14} />
+                </div>
+              </div>
+            </section>
+
+            <section className="skeleton-profile__stats">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div className="skeleton-profile__stat" key={i}>
+                  <Skeleton width={90} height={11} />
+
+                  <Skeleton width={60} height={26} />
+                </div>
+              ))}
+            </section>
+
+            <section className="skeleton-profile__history">
+              <Skeleton width={180} height={22} />
+
+              {[1, 2, 3].map((i) => (
+                <div className="skeleton-profile__game-row" key={i}>
+                  <div>
+                    <Skeleton width={140} height={14} />
+
+                    <div style={{ marginTop: 8 }}>
+                      <Skeleton width={80} height={11} />
+                    </div>
+                  </div>
+
+                  <Skeleton width={160} height={28} />
+                </div>
+              ))}
+            </section>
+          </>
         )}
 
         {error && (

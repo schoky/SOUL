@@ -51,6 +51,8 @@ model User {
   gamePlayers GamePlayer[]
   wonGames    Game[] @relation("UserWonGames")
   wonResults  GameResult[] @relation("UserWonResults")
+
+  newsArticles News[] @relation("NewsAuthor")
 }
 
 model Profile {
@@ -165,4 +167,68 @@ model GameResult {
 
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
   winner User? @relation("UserWonResults", fields: [winnerId], references: [id])
+}
+
+model Character {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  name               String
+
+  image              String?
+
+  farmila            Int
+  perekup            Int
+  tuller             Int
+
+  abilityId          String?
+  abilityName        String?
+  abilityDescription String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model EventCard {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+
+  image       String?
+
+  farmila     Int
+  perekup     Int
+  tuller      Int
+
+  mainStat    String
+
+  reward      Int
+  riskReward  Int
+
+  description String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model News {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  body        String
+
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+
+  authorId    String
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  author User @relation("NewsAuthor", fields: [authorId], references: [id])
+
+  @@index([isPublished, publishedAt])
 }
