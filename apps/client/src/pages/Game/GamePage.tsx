@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
+  RISK_CHANCES,
   SOCKET_EVENTS,
   type Character,
   type GameEndTurnPayload,
@@ -23,6 +24,7 @@ import { socket } from "../../services/socket";
 
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
+import { useRoomStore } from "../../stores/roomStore";
 
 const MAX_CARDS_PER_ACTION = 2;
 
@@ -31,6 +33,21 @@ function findCharacter(
   characterId: string,
 ): Character | undefined {
   return characters.find((item) => item.id === characterId);
+}
+
+function checkRequirements(
+  stats: Record<StatType, number>,
+  requirements: {
+    farmila: number;
+    perekup: number;
+    tuller: number;
+  },
+): boolean {
+  return (
+    stats.farmila >= requirements.farmila &&
+    stats.perekup >= requirements.perekup &&
+    stats.tuller >= requirements.tuller
+  );
 }
 
 function GamePage() {
@@ -48,14 +65,12 @@ function GamePage() {
 
   const setGameSession = useGameStore((state) => state.setGameSession);
 
+  const leaveRoom = useRoomStore((state) => state.leaveRoom);
+
   const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
 
   const [actionError, setActionError] = useState<string | null>(null);
 
-  /**
-   * Подписываемся на комнату, чтобы получать
-   * актуальное состояние игры, включая после F5.
-   */
   useEffect(() => {
     if (!roomId) {
       navigate("/lobby", {
@@ -108,9 +123,6 @@ function GamePage() {
     };
   }, [roomId, navigate, setGameSession]);
 
-  /**
-   * Сбрасываем выбор при смене хода.
-   */
   useEffect(() => {
     setSelectedCardIds([]);
   }, [gameState?.currentPlayerId, gameState?.turnNumber]);
@@ -162,6 +174,22 @@ function GamePage() {
 
     return result;
   }, [selectedCharacters]);
+
+  const canSatisfy = useMemo(() => {
+    if (!gameState?.currentEvent) {
+      return false;
+    }
+
+    if (selectedCardIds.length === 0) {
+      return false;
+    }
+
+    return checkRequirements(stats, gameState.currentEvent.requirements);
+  }, [gameState?.currentEvent, selectedCardIds.length, stats]);
+
+  const riskChance = canSatisfy ? RISK_CHANCES.SUCCESS : RISK_CHANCES.FAILURE;
+
+  const riskPercent = Math.round(riskChance * 100);
 
   function toggleCard(cardId: string) {
     if (!self) {
@@ -219,6 +247,19 @@ function GamePage() {
     socket.emit(SOCKET_EVENTS.GAME_END_TURN, payload);
   }
 
+  async function handleReturnToLobby() {
+    if (gameState) {
+      try {
+        await leaveRoom(gameState.id);
+      } catch {
+        // даже если ошибка — уходим в лобби,
+        // чтобы пользователь не залипал
+      }
+    }
+
+    navigate("/lobby");
+  }
+
   if (!gameState) {
     return (
       <MainLayout>
@@ -258,7 +299,9 @@ function GamePage() {
                 game-page__button--primary
               "
               type="button"
-              onClick={() => navigate("/lobby")}
+              onClick={() => {
+                void handleReturnToLobby();
+              }}
             >
               Вернуться в лобби
             </button>
@@ -269,6 +312,14 @@ function GamePage() {
   }
 
   const event = gameState.currentEvent;
+
+  const requirementByStat: Record<StatType, number> | null = event
+    ? {
+        farmila: event.requirements.farmila,
+        perekup: event.requirements.perekup,
+        tuller: event.requirements.tuller,
+      }
+    : null;
 
   return (
     <MainLayout>
@@ -434,19 +485,40 @@ function GamePage() {
             {selectedCardIds.length > 0 && (
               <div className="game-page__selection">
                 <div className="game-page__selection-stats">
-                  <div>
+                  <div
+                    className={
+                      requirementByStat &&
+                      stats.farmila >= requirementByStat.farmila
+                        ? "game-page__selection-stat--met"
+                        : "game-page__selection-stat--unmet"
+                    }
+                  >
                     <span>Фармила</span>
 
                     <strong>{stats.farmila}</strong>
                   </div>
 
-                  <div>
+                  <div
+                    className={
+                      requirementByStat &&
+                      stats.perekup >= requirementByStat.perekup
+                        ? "game-page__selection-stat--met"
+                        : "game-page__selection-stat--unmet"
+                    }
+                  >
                     <span>Перекуп</span>
 
                     <strong>{stats.perekup}</strong>
                   </div>
 
-                  <div>
+                  <div
+                    className={
+                      requirementByStat &&
+                      stats.tuller >= requirementByStat.tuller
+                        ? "game-page__selection-stat--met"
+                        : "game-page__selection-stat--unmet"
+                    }
+                  >
                     <span>Туллер</span>
 
                     <strong>{stats.tuller}</strong>
@@ -473,10 +545,19 @@ function GamePage() {
                     type="button"
                     onClick={() => handlePlayEvent(true)}
                   >
-                    Рискнуть (50/50)
+                    Рискнуть ({riskPercent}%)
                   </button>
                 </div>
               </div>
+            )}
+
+            {selectedCardIds.length > 0 && !canSatisfy && (
+              <p className="game-page__selection-hint">
+                Требования события не выполнены. Шанс риска <strong>25%</strong>
+                . Если риск не сыграет — сработает провал по основной
+                характеристике. Ты можешь выбрать «Выполнить», чтобы принять
+                обычный провал, или завершить ход, чтобы сохранить персонажей.
+              </p>
             )}
 
             {actionError && (

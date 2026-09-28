@@ -32,3 +32,12 @@ export const GameStatus = {
 } as const
 
 export type GameStatus = (typeof GameStatus)[keyof typeof GameStatus]
+
+
+export const OAuthProvider = {
+  GOOGLE: 'GOOGLE',
+  DISCORD: 'DISCORD',
+  TWITCH: 'TWITCH'
+} as const
+
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider]

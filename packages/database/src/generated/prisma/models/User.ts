@@ -208,6 +208,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
+  oauthAccounts?: Prisma.OAuthAccountListRelationFilter
   roomMembers?: Prisma.RoomMemberListRelationFilter
   hostedRooms?: Prisma.RoomListRelationFilter
   gamePlayers?: Prisma.GamePlayerListRelationFilter
@@ -226,6 +227,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   profile?: Prisma.ProfileOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
+  oauthAccounts?: Prisma.OAuthAccountOrderByRelationAggregateInput
   roomMembers?: Prisma.RoomMemberOrderByRelationAggregateInput
   hostedRooms?: Prisma.RoomOrderByRelationAggregateInput
   gamePlayers?: Prisma.GamePlayerOrderByRelationAggregateInput
@@ -247,6 +249,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profile?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
+  oauthAccounts?: Prisma.OAuthAccountListRelationFilter
   roomMembers?: Prisma.RoomMemberListRelationFilter
   hostedRooms?: Prisma.RoomListRelationFilter
   gamePlayers?: Prisma.GamePlayerListRelationFilter
@@ -293,6 +296,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
@@ -311,6 +315,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
@@ -329,6 +334,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
@@ -347,6 +353,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
@@ -478,6 +485,20 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutOauthAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOauthAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthAccountsInput
+  upsert?: Prisma.UserUpsertWithoutOauthAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOauthAccountsInput, Prisma.UserUpdateWithoutOauthAccountsInput>, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
+}
+
 export type UserCreateNestedOneWithoutHostedRoomsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutHostedRoomsInput, Prisma.UserUncheckedCreateWithoutHostedRoomsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutHostedRoomsInput
@@ -562,6 +583,7 @@ export type UserCreateWithoutProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
@@ -579,6 +601,7 @@ export type UserUncheckedCreateWithoutProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
@@ -612,6 +635,7 @@ export type UserUpdateWithoutProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
@@ -629,6 +653,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
@@ -646,6 +671,7 @@ export type UserCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
@@ -663,6 +689,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
@@ -696,6 +723,7 @@ export type UserUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
@@ -713,6 +741,95 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+  roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
+  wonGames?: Prisma.GameUncheckedUpdateManyWithoutWinnerNestedInput
+  wonResults?: Prisma.GameResultUncheckedUpdateManyWithoutWinnerNestedInput
+}
+
+export type UserCreateWithoutOauthAccountsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isBlocked?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
+  hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
+  wonGames?: Prisma.GameCreateNestedManyWithoutWinnerInput
+  wonResults?: Prisma.GameResultCreateNestedManyWithoutWinnerInput
+}
+
+export type UserUncheckedCreateWithoutOauthAccountsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isBlocked?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
+  hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
+  wonGames?: Prisma.GameUncheckedCreateNestedManyWithoutWinnerInput
+  wonResults?: Prisma.GameResultUncheckedCreateNestedManyWithoutWinnerInput
+}
+
+export type UserCreateOrConnectWithoutOauthAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+}
+
+export type UserUpsertWithoutOauthAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOauthAccountsInput, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOauthAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOauthAccountsInput, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
+}
+
+export type UserUpdateWithoutOauthAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
+  hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
+  wonGames?: Prisma.GameUpdateManyWithoutWinnerNestedInput
+  wonResults?: Prisma.GameResultUpdateManyWithoutWinnerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOauthAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
@@ -731,6 +848,7 @@ export type UserCreateWithoutHostedRoomsInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
   wonGames?: Prisma.GameCreateNestedManyWithoutWinnerInput
@@ -748,6 +866,7 @@ export type UserUncheckedCreateWithoutHostedRoomsInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
   wonGames?: Prisma.GameUncheckedCreateNestedManyWithoutWinnerInput
@@ -781,6 +900,7 @@ export type UserUpdateWithoutHostedRoomsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
   wonGames?: Prisma.GameUpdateManyWithoutWinnerNestedInput
@@ -798,6 +918,7 @@ export type UserUncheckedUpdateWithoutHostedRoomsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
   wonGames?: Prisma.GameUncheckedUpdateManyWithoutWinnerNestedInput
@@ -815,6 +936,7 @@ export type UserCreateWithoutRoomMembersInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
   wonGames?: Prisma.GameCreateNestedManyWithoutWinnerInput
@@ -832,6 +954,7 @@ export type UserUncheckedCreateWithoutRoomMembersInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
   wonGames?: Prisma.GameUncheckedCreateNestedManyWithoutWinnerInput
@@ -865,6 +988,7 @@ export type UserUpdateWithoutRoomMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
   wonGames?: Prisma.GameUpdateManyWithoutWinnerNestedInput
@@ -882,6 +1006,7 @@ export type UserUncheckedUpdateWithoutRoomMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
   wonGames?: Prisma.GameUncheckedUpdateManyWithoutWinnerNestedInput
@@ -899,6 +1024,7 @@ export type UserCreateWithoutWonGamesInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
@@ -916,6 +1042,7 @@ export type UserUncheckedCreateWithoutWonGamesInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
@@ -949,6 +1076,7 @@ export type UserUpdateWithoutWonGamesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
@@ -966,6 +1094,7 @@ export type UserUncheckedUpdateWithoutWonGamesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
@@ -983,6 +1112,7 @@ export type UserCreateWithoutGamePlayersInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   wonGames?: Prisma.GameCreateNestedManyWithoutWinnerInput
@@ -1000,6 +1130,7 @@ export type UserUncheckedCreateWithoutGamePlayersInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   wonGames?: Prisma.GameUncheckedCreateNestedManyWithoutWinnerInput
@@ -1033,6 +1164,7 @@ export type UserUpdateWithoutGamePlayersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   wonGames?: Prisma.GameUpdateManyWithoutWinnerNestedInput
@@ -1050,6 +1182,7 @@ export type UserUncheckedUpdateWithoutGamePlayersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   wonGames?: Prisma.GameUncheckedUpdateManyWithoutWinnerNestedInput
@@ -1067,6 +1200,7 @@ export type UserCreateWithoutWonResultsInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutUserInput
@@ -1084,6 +1218,7 @@ export type UserUncheckedCreateWithoutWonResultsInput = {
   updatedAt?: Date | string
   profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   roomMembers?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutUserInput
   hostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutUserInput
@@ -1117,6 +1252,7 @@ export type UserUpdateWithoutWonResultsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutUserNestedInput
@@ -1134,6 +1270,7 @@ export type UserUncheckedUpdateWithoutWonResultsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oauthAccounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   roomMembers?: Prisma.RoomMemberUncheckedUpdateManyWithoutUserNestedInput
   hostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutUserNestedInput
@@ -1147,6 +1284,7 @@ export type UserUncheckedUpdateWithoutWonResultsInput = {
 
 export type UserCountOutputType = {
   sessions: number
+  oauthAccounts: number
   roomMembers: number
   hostedRooms: number
   gamePlayers: number
@@ -1156,6 +1294,7 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  oauthAccounts?: boolean | UserCountOutputTypeCountOauthAccountsArgs
   roomMembers?: boolean | UserCountOutputTypeCountRoomMembersArgs
   hostedRooms?: boolean | UserCountOutputTypeCountHostedRoomsArgs
   gamePlayers?: boolean | UserCountOutputTypeCountGamePlayersArgs
@@ -1178,6 +1317,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOauthAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OAuthAccountWhereInput
 }
 
 /**
@@ -1227,6 +1373,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   profile?: boolean | Prisma.User$profileArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
   roomMembers?: boolean | Prisma.User$roomMembersArgs<ExtArgs>
   hostedRooms?: boolean | Prisma.User$hostedRoomsArgs<ExtArgs>
   gamePlayers?: boolean | Prisma.User$gamePlayersArgs<ExtArgs>
@@ -1272,6 +1419,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profile?: boolean | Prisma.User$profileArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
   roomMembers?: boolean | Prisma.User$roomMembersArgs<ExtArgs>
   hostedRooms?: boolean | Prisma.User$hostedRoomsArgs<ExtArgs>
   gamePlayers?: boolean | Prisma.User$gamePlayersArgs<ExtArgs>
@@ -1287,6 +1435,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     profile: Prisma.$ProfilePayload<ExtArgs> | null
     sessions: Prisma.$SessionPayload<ExtArgs>[]
+    oauthAccounts: Prisma.$OAuthAccountPayload<ExtArgs>[]
     roomMembers: Prisma.$RoomMemberPayload<ExtArgs>[]
     hostedRooms: Prisma.$RoomPayload<ExtArgs>[]
     gamePlayers: Prisma.$GamePlayerPayload<ExtArgs>[]
@@ -1698,6 +1847,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   profile<T extends Prisma.User$profileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profileArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  oauthAccounts<T extends Prisma.User$oauthAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$oauthAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roomMembers<T extends Prisma.User$roomMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roomMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hostedRooms<T extends Prisma.User$hostedRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$hostedRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   gamePlayers<T extends Prisma.User$gamePlayersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$gamePlayersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GamePlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2173,6 +2323,30 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.oauthAccounts
+ */
+export type User$oauthAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OAuthAccount
+   */
+  select?: Prisma.OAuthAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OAuthAccount
+   */
+  omit?: Prisma.OAuthAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OAuthAccountInclude<ExtArgs> | null
+  where?: Prisma.OAuthAccountWhereInput
+  orderBy?: Prisma.OAuthAccountOrderByWithRelationInput | Prisma.OAuthAccountOrderByWithRelationInput[]
+  cursor?: Prisma.OAuthAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OAuthAccountScalarFieldEnum | Prisma.OAuthAccountScalarFieldEnum[]
 }
 
 /**

@@ -9,3 +9,14 @@ export const ROOM_RULES = {
   MAX_PLAYERS: 6,
   ROOM_CODE_LENGTH: 6,
 } as const;
+
+/**
+ * Шансы риска.
+ *
+ * SUCCESS — требования события выполнены.
+ * FAILURE — требования не выполнены, но игрок всё равно рискует.
+ */
+export const RISK_CHANCES = {
+  SUCCESS: 0.5,
+  FAILURE: 0.25,
+} as const;

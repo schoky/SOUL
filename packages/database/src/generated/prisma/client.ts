@@ -57,6 +57,11 @@ export type Profile = Prisma.ProfileModel
  */
 export type Session = Prisma.SessionModel
 /**
+ * Model OAuthAccount
+ * 
+ */
+export type OAuthAccount = Prisma.OAuthAccountModel
+/**
  * Model Room
  * 
  */

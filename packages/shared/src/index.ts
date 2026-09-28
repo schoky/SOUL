@@ -16,7 +16,7 @@ export type { CharacterStats, StatType } from "./types/stats.js";
 
 export { SOCKET_EVENTS } from "./events/socket-events.js";
 
-export { GAME_RULES, ROOM_RULES } from "./constants/game.js";
+export { GAME_RULES, ROOM_RULES, RISK_CHANCES } from "./constants/game.js";
 
 export type {
   RoomCreatePayload,

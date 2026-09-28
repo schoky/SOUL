@@ -3,9 +3,9 @@ import type { Player } from "@soul/shared";
 export function determineWinner(
   players: Player[],
   finalRoundStartedBy: string | null,
-): string | null {
+): string {
   if (players.length === 0) {
-    return null;
+    throw new Error("Cannot determine winner: no players");
   }
 
   const maxSoul = Math.max(...players.map((p) => p.soul));
@@ -25,6 +25,5 @@ export function determineWinner(
     return finalRoundStartedBy;
   }
 
-  // Иначе — первый по порядку в списке.
   return leaders[0].id;
 }

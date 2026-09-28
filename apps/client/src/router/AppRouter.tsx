@@ -1,21 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "./ProtectedRoute";
-
 import PublicRoute from "./PublicRoute";
 
 import LandingPage from "../pages/Landing/LandingPage";
-
 import LoginPage from "../pages/Login/LoginPage";
-
 import RegisterPage from "../pages/Register/RegisterPage";
-
 import LobbyPage from "../pages/Lobby/LobbyPage";
-
 import RoomPage from "../pages/Room/RoomPage";
-
 import GamePage from "../pages/Game/GamePage";
-
+import CollectionPage from "../pages/Collection/CollectionPage";
+import ProfilePage from "../pages/Profile/ProfilePage";
 import RulesPage from "../pages/Rules/RulesPage";
 
 function AppRouter() {
@@ -38,6 +33,10 @@ function AppRouter() {
           <Route path="/room/:roomId" element={<RoomPage />} />
 
           <Route path="/game/:roomId" element={<GamePage />} />
+
+          <Route path="/collection" element={<CollectionPage />} />
+
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

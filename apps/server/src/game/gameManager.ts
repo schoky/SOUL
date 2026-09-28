@@ -48,6 +48,14 @@ class GameManager {
     return this.games.has(roomId);
   }
 
+  /**
+   * Сохраняет итоги завершённой игры
+   * в GamePlayer и GameResult.
+   */
+  async saveFinish(roomId: string, state: GameState): Promise<void> {
+    await gameRepository.saveFinish(roomId, state);
+  }
+
   async delete(roomId: string): Promise<void> {
     this.games.delete(roomId);
 

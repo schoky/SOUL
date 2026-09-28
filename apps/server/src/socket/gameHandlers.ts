@@ -21,6 +21,7 @@ import type { GameState } from "@soul/shared";
 
 import { gameManager } from "../game/gameManager.js";
 
+import { roomRepository } from "../rooms/roomRepository.js";
 import { roomService } from "../rooms/roomService.js";
 
 import { getIO } from "./io.js";
@@ -55,6 +56,31 @@ function advanceTurnLoop(game: GameState): GameState {
   }
 
   return current;
+}
+
+async function handleGameFinished(
+  roomId: string,
+  game: GameState,
+): Promise<void> {
+  if (game.status !== "finished") {
+    return;
+  }
+
+  await gameManager.saveFinish(roomId, game);
+
+  try {
+    await roomRepository.updateStatus(roomId, "FINISHED");
+
+    await roomRepository.setFinishedAt(roomId, new Date());
+
+    const updatedRoom = await roomRepository.findById(roomId);
+
+    if (updatedRoom) {
+      emitRoomUpdated(updatedRoom);
+    }
+  } catch (error) {
+    console.error("Не удалось обновить комнату после финиша:", error);
+  }
 }
 
 export function registerGameHandlers(socket: Socket): void {
@@ -205,6 +231,10 @@ export function registerGameHandlers(socket: Socket): void {
           SOCKET_EVENTS.GAME_STATE_UPDATED,
           buildSession(nextGame),
         );
+
+        if (nextGame.status === "finished") {
+          await handleGameFinished(payload.roomId, nextGame);
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Не удалось завершить ход";

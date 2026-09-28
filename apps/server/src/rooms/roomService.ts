@@ -122,6 +122,16 @@ class RoomService {
 
   /**
    * Выводит пользователя из комнаты.
+   *
+   * Логика:
+   * - Если после выхода остаются другие игроки —
+   *   просто убираем участника, при необходимости
+   *   передаём хостинг следующему.
+   * - Если выходит последний игрок:
+   *   - при статусе FINISHED — оставляем комнату
+   *     как архив, чтобы сохранить Game, GamePlayer
+   *     и GameResult;
+   *   - иначе удаляем комнату целиком.
    */
   async leaveRoom(roomId: string, userId: string) {
     const room = await roomRepository.findById(roomId);
@@ -139,25 +149,34 @@ class RoomService {
       );
     }
 
-    if (room.hostUserId !== userId) {
+    const otherMembers = room.members.filter((item) => item.userId !== userId);
+
+    // Если остаются другие игроки —
+    // передаём хостинг при необходимости
+    // и убираем текущего участника.
+    if (otherMembers.length > 0) {
+      if (room.hostUserId === userId) {
+        await roomRepository.updateHost(roomId, otherMembers[0].userId);
+      }
+
       await roomRepository.removeMember(roomId, userId);
 
       return roomRepository.findById(roomId);
     }
 
-    const nextHost = room.members.find((item) => item.userId !== userId);
-
-    if (!nextHost) {
-      await roomRepository.delete(roomId);
+    // Игрок последний. Если комната завершена —
+    // оставляем её как архив, чтобы не потерять
+    // Game, GamePlayer и GameResult.
+    if (room.status === "FINISHED") {
+      await roomRepository.removeMember(roomId, userId);
 
       return null;
     }
 
-    await roomRepository.updateHost(roomId, nextHost.userId);
+    // Иначе удаляем комнату целиком.
+    await roomRepository.delete(roomId);
 
-    await roomRepository.removeMember(roomId, userId);
-
-    return roomRepository.findById(roomId);
+    return null;
   }
 
   /**

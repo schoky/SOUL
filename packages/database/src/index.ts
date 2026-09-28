@@ -5,6 +5,8 @@ export type {
   Profile,
   Session,
   UserRole,
+  OAuthProvider,
+  OAuthAccount,
   Room,
   RoomMember,
   RoomStatus,

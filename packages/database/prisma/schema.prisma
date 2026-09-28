@@ -23,6 +23,12 @@ enum GameStatus {
   FINISHED
 }
 
+enum OAuthProvider {
+  GOOGLE
+  DISCORD
+  TWITCH
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -37,6 +43,8 @@ model User {
 
   profile Profile?
   sessions Session[]
+
+  oauthAccounts OAuthAccount[]
 
   roomMembers RoomMember[]
   hostedRooms Room[] @relation("RoomHost")
@@ -71,6 +79,20 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model OAuthAccount {
+  id             String        @id @default(cuid())
+  userId         String
+  provider       OAuthProvider
+  providerUserId String
+  email          String?
+  createdAt      DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
 }
 
 model Room {
@@ -114,7 +136,7 @@ model Game {
 
   state Json?
 
-  room Room @relation(fields: [roomId], references: [id])
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
   winner User? @relation("UserWonGames", fields: [winnerId], references: [id])
 
   players    GamePlayer[]

@@ -314,6 +314,21 @@ class RoomRepository {
   }
 
   /**
+   * Фиксирует момент завершения игры в комнате.
+   */
+  async setFinishedAt(roomId: string, finishedAt: Date) {
+    return database.room.update({
+      where: {
+        id: roomId,
+      },
+
+      data: {
+        finishedAt,
+      },
+    });
+  }
+
+  /**
    * Назначает нового хоста комнаты.
    */
   async updateHost(roomId: string, userId: string) {

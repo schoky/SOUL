@@ -4,8 +4,11 @@ import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 
 import authRoutes from "./routes/auth.js";
+import cardsRoutes from "./routes/cards.js";
 import profileRoutes from "./routes/profile.js";
 import { roomRoutes } from "./routes/rooms.js";
+
+import oauthRoutes from "../auth/oauth/oauthRoutes.js";
 
 export async function createHttpApp() {
   const app = Fastify({
@@ -23,6 +26,14 @@ export async function createHttpApp() {
 
   await app.register(authRoutes, {
     prefix: "/api/auth",
+  });
+
+  await app.register(oauthRoutes, {
+    prefix: "/api/auth/oauth",
+  });
+
+  await app.register(cardsRoutes, {
+    prefix: "/api/cards",
   });
 
   await app.register(profileRoutes, {

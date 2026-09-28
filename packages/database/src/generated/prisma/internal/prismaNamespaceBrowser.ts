@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Profile: 'Profile',
   Session: 'Session',
+  OAuthAccount: 'OAuthAccount',
   Room: 'Room',
   RoomMember: 'RoomMember',
   Game: 'Game',
@@ -115,6 +116,18 @@ export const SessionScalarFieldEnum = {
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const OAuthAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  email: 'email',
+  createdAt: 'createdAt'
+} as const
+
+export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[keyof typeof OAuthAccountScalarFieldEnum]
 
 
 export const RoomScalarFieldEnum = {
