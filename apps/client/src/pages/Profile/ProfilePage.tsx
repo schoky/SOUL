@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+
+import { ApiError } from "../../services/api/client";
 
 import { useAuthStore } from "../../stores/authStore";
 
@@ -7,6 +9,7 @@ import MainLayout from "../../components/layout/MainLayout";
 import {
   getProfileStats,
   getRecentGames,
+  updateProfile,
   type ProfileGameEntry,
   type ProfileOverview,
 } from "../../services/api/profile";
@@ -34,6 +37,8 @@ function formatDate(value: string | null): string {
 function ProfilePage() {
   const user = useAuthStore((state) => state.user);
 
+  const setUser = useAuthStore((state) => state.setUser);
+
   const [stats, setStats] = useState<ProfileOverview | null>(null);
 
   const [games, setGames] = useState<ProfileGameEntry[]>([]);
@@ -41,6 +46,16 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [formNickname, setFormNickname] = useState("");
+
+  const [formAvatar, setFormAvatar] = useState("");
+
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,7 +100,86 @@ function ProfilePage() {
     };
   }, []);
 
+  function startEditing() {
+    setFormError(null);
+
+    setFormNickname(user?.profile.nickname ?? "");
+
+    setFormAvatar(user?.profile.avatar ?? "");
+
+    setIsEditing(true);
+  }
+
+  function cancelEditing() {
+    setFormError(null);
+    setIsEditing(false);
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!user) {
+      return;
+    }
+
+    setFormError(null);
+
+    const trimmedNickname = formNickname.trim();
+
+    const trimmedAvatar = formAvatar.trim();
+
+    if (trimmedNickname.length < 3 || trimmedNickname.length > 20) {
+      setFormError("Ник должен содержать от 3 до 20 символов");
+      return;
+    }
+
+    const payload: {
+      nickname?: string;
+      avatar?: string | null;
+    } = {};
+
+    if (trimmedNickname !== user.profile.nickname) {
+      payload.nickname = trimmedNickname;
+    }
+
+    const currentAvatar = user.profile.avatar ?? "";
+
+    if (trimmedAvatar !== currentAvatar) {
+      payload.avatar = trimmedAvatar.length > 0 ? trimmedAvatar : null;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      setIsEditing(false);
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const updatedProfile = await updateProfile(payload);
+
+      setUser({
+        ...user,
+        profile: updatedProfile,
+      });
+
+      setIsEditing(false);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setFormError(error.message);
+      } else if (error instanceof Error) {
+        setFormError(error.message);
+      } else {
+        setFormError("Не удалось сохранить профиль");
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   const winRatePercent = stats ? Math.round(stats.winRate * 100) : 0;
+
+  const avatarPreview = formAvatar.trim() || user?.profile.avatar;
 
   return (
     <MainLayout>
@@ -100,7 +194,7 @@ function ProfilePage() {
               )}
             </div>
 
-            <div>
+            <div className="profile-page__identity-info">
               <p className="profile-page__eyebrow">ПРОФИЛЬ</p>
 
               <h1 className="profile-page__title">
@@ -108,9 +202,107 @@ function ProfilePage() {
               </h1>
 
               <p className="profile-page__description">{user?.email ?? ""}</p>
+
+              {!isEditing && (
+                <button
+                  className="profile-page__edit-button"
+                  type="button"
+                  onClick={startEditing}
+                >
+                  Редактировать профиль
+                </button>
+              )}
             </div>
           </div>
         </section>
+
+        {isEditing && (
+          <section className="profile-page__editor">
+            <div className="profile-page__editor-header">
+              <p className="profile-page__eyebrow">РЕДАКТИРОВАНИЕ</p>
+
+              <h2 className="profile-page__section-title">Настройки профиля</h2>
+            </div>
+
+            <form className="profile-page__form" onSubmit={handleSubmit}>
+              <div className="profile-page__field">
+                <label className="profile-page__label" htmlFor="nickname">
+                  Никнейм
+                </label>
+
+                <input
+                  className="profile-page__input"
+                  id="nickname"
+                  type="text"
+                  value={formNickname}
+                  onChange={(event) => setFormNickname(event.target.value)}
+                  minLength={3}
+                  maxLength={20}
+                  autoComplete="nickname"
+                  required
+                />
+
+                <span className="profile-page__hint">
+                  От 3 до 20 символов. Никнейм должен быть уникальным.
+                </span>
+              </div>
+
+              <div className="profile-page__field">
+                <label className="profile-page__label" htmlFor="avatar">
+                  Ссылка на аватар
+                </label>
+
+                <input
+                  className="profile-page__input"
+                  id="avatar"
+                  type="url"
+                  value={formAvatar}
+                  onChange={(event) => setFormAvatar(event.target.value)}
+                  placeholder="https://..."
+                  maxLength={500}
+                />
+
+                <span className="profile-page__hint">
+                  Оставь пустым, чтобы убрать аватар. Пока поддерживаются только
+                  прямые ссылки на изображения.
+                </span>
+              </div>
+
+              {avatarPreview && (
+                <div className="profile-page__avatar-preview">
+                  <span className="profile-page__label">Превью</span>
+
+                  <div className="profile-page__avatar">
+                    <img src={avatarPreview} alt="Превью аватара" />
+                  </div>
+                </div>
+              )}
+
+              {formError && (
+                <p className="profile-page__form-error">{formError}</p>
+              )}
+
+              <div className="profile-page__form-actions">
+                <button
+                  className="profile-page__button profile-page__button--primary"
+                  type="submit"
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Сохраняем..." : "Сохранить"}
+                </button>
+
+                <button
+                  className="profile-page__button"
+                  type="button"
+                  onClick={cancelEditing}
+                  disabled={isSaving}
+                >
+                  Отмена
+                </button>
+              </div>
+            </form>
+          </section>
+        )}
 
         {isLoading && (
           <section className="profile-page__empty">
