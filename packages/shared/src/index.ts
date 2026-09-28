@@ -14,6 +14,11 @@ export type { Status } from "./types/status.js";
 
 export type { CharacterStats, StatType } from "./types/stats.js";
 
+export type {
+  GameResultDto,
+  GameResultPlayerDto,
+} from "./types/game-result.js";
+
 export { SOCKET_EVENTS } from "./events/socket-events.js";
 
 export { GAME_RULES, ROOM_RULES, RISK_CHANCES } from "./constants/game.js";
@@ -32,6 +37,8 @@ export type {
   GamePlayEventPayload,
   GameEndTurnPayload,
   GameEventResolvedPayload,
+  PlayerConnectionPayload,
+  PlayersConnectionPayload,
   SocketErrorPayload,
 } from "./events/socket-events.js";
 
@@ -48,8 +55,3 @@ export type {
   RoomErrorResponse,
   CreateRoomRequest,
 } from "./types/room.js";
-
-export type {
-  GameResultPlayerDto,
-  GameResultDto,
-} from "./types/game-result.js";

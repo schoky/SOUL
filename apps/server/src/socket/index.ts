@@ -8,6 +8,8 @@ import { getCurrentUserByToken } from "../auth/authService.js";
 
 import { gameManager } from "../game/gameManager.js";
 
+import { connectionTracker } from "./connectionTracker.js";
+import { handlePlayerDisconnect } from "./disconnectHandler.js";
 import { registerGameHandlers } from "./gameHandlers.js";
 import { setIO } from "./io.js";
 
@@ -86,7 +88,23 @@ export function createSocketServer(httpServer: HttpServer): Server {
   io.on("connection", (socket) => {
     const userId = socket.data.userId as string;
 
+    connectionTracker.addSocket(userId, socket.id);
+
+    // Если игрок был отключён и вернулся —
+    // отменяем автопас.
+    connectionTracker.cancelAutoPass(userId);
+
     console.log(`Socket подключён: ${socket.id} (user: ${userId})`);
+
+    // Сообщаем всем в его комнате, что он вернулся.
+    const currentRoomId = connectionTracker.getRoom(userId);
+
+    if (currentRoomId) {
+      io.to(`room:${currentRoomId}`).emit(SOCKET_EVENTS.PLAYER_CONNECTION, {
+        playerId: userId,
+        connected: true,
+      });
+    }
 
     socket.on(SOCKET_EVENTS.LOBBY_SUBSCRIBE, () => {
       void socket.join(LOBBY_CHANNEL);
@@ -107,6 +125,8 @@ export function createSocketServer(httpServer: HttpServer): Server {
 
         void socket.join(`room:${roomId}`);
 
+        connectionTracker.setRoom(userId, roomId);
+
         try {
           const game = await gameManager.resolve(roomId);
 
@@ -116,6 +136,10 @@ export function createSocketServer(httpServer: HttpServer): Server {
               characters: game.characters,
             });
           }
+
+          socket.emit(SOCKET_EVENTS.PLAYERS_CONNECTION, {
+            connections: connectionTracker.getConnectionMap(roomId),
+          });
         } catch (error) {
           console.error("Не удалось загрузить состояние игры:", error);
         }
@@ -136,7 +160,27 @@ export function createSocketServer(httpServer: HttpServer): Server {
     registerGameHandlers(socket);
 
     socket.on("disconnect", () => {
-      console.log(`Socket отключён: ${socket.id}`);
+      console.log(`Socket отключён: ${socket.id} (user: ${userId})`);
+
+      const wasLast = connectionTracker.removeSocket(userId, socket.id);
+
+      if (!wasLast) {
+        // У игрока остались другие вкладки.
+        return;
+      }
+
+      const roomId = connectionTracker.getRoom(userId);
+
+      if (!roomId) {
+        return;
+      }
+
+      io.to(`room:${roomId}`).emit(SOCKET_EVENTS.PLAYER_CONNECTION, {
+        playerId: userId,
+        connected: false,
+      });
+
+      void handlePlayerDisconnect(roomId, userId);
     });
   });
 

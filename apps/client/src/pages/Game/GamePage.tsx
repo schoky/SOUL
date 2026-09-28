@@ -3,16 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
-  RISK_CHANCES,
-  SOCKET_EVENTS,
   type Character,
-  type GameEndTurnPayload,
   type GameEventResolvedPayload,
   type GamePlayEventPayload,
   type GameSessionPayload,
-  type GameStateUpdatedPayload,
   type GameStartedPayload,
+  type GameStateUpdatedPayload,
   type PlayerCharacter,
+  type PlayerConnectionPayload,
+  type PlayersConnectionPayload,
+  RISK_CHANCES,
+  SOCKET_EVENTS,
   type SocketErrorPayload,
   type StatType,
 } from "@soul/shared";
@@ -73,11 +74,21 @@ function GamePage() {
 
   const history = useGameStore((state) => state.history);
 
+  const playersConnection = useGameStore((state) => state.playersConnection);
+
   const setGameSession = useGameStore((state) => state.setGameSession);
 
   const pushHistory = useGameStore((state) => state.pushHistory);
 
   const clearHistory = useGameStore((state) => state.clearHistory);
+
+  const setPlayerConnection = useGameStore(
+    (state) => state.setPlayerConnection,
+  );
+
+  const setPlayersConnection = useGameStore(
+    (state) => state.setPlayersConnection,
+  );
 
   const pushToast = useToastStore((state) => state.push);
 
@@ -167,11 +178,18 @@ function GamePage() {
 
       if (payload.riskWon) {
         pushToast("success", `${prefix}: риск сработал! ${soulText}`);
-
         return;
       }
 
       pushToast("error", `${prefix}: риск не сработал. ${soulText}`);
+    };
+
+    const handlePlayerConnection = (payload: PlayerConnectionPayload) => {
+      setPlayerConnection(payload.playerId, payload.connected);
+    };
+
+    const handlePlayersConnection = (payload: PlayersConnectionPayload) => {
+      setPlayersConnection(payload.connections);
     };
 
     if (socket.connected) {
@@ -183,6 +201,8 @@ function GamePage() {
     socket.on(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
     socket.on(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
     socket.on(SOCKET_EVENTS.GAME_EVENT_RESOLVED, handleEventResolved);
+    socket.on(SOCKET_EVENTS.PLAYER_CONNECTION, handlePlayerConnection);
+    socket.on(SOCKET_EVENTS.PLAYERS_CONNECTION, handlePlayersConnection);
     socket.on(SOCKET_EVENTS.ERROR, handleSocketError);
 
     return () => {
@@ -191,6 +211,8 @@ function GamePage() {
       socket.off(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
       socket.off(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
       socket.off(SOCKET_EVENTS.GAME_EVENT_RESOLVED, handleEventResolved);
+      socket.off(SOCKET_EVENTS.PLAYER_CONNECTION, handlePlayerConnection);
+      socket.off(SOCKET_EVENTS.PLAYERS_CONNECTION, handlePlayersConnection);
       socket.off(SOCKET_EVENTS.ERROR, handleSocketError);
     };
   }, [
@@ -200,6 +222,8 @@ function GamePage() {
     pushToast,
     pushHistory,
     clearHistory,
+    setPlayerConnection,
+    setPlayersConnection,
     user?.id,
   ]);
 
@@ -337,20 +361,6 @@ function GamePage() {
     socket.emit(SOCKET_EVENTS.GAME_PLAY_EVENT, payload);
   }
 
-  function handleEndTurn() {
-    if (!gameState) {
-      return;
-    }
-
-    setActionError(null);
-
-    const payload: GameEndTurnPayload = {
-      roomId: gameState.id,
-    };
-
-    socket.emit(SOCKET_EVENTS.GAME_END_TURN, payload);
-  }
-
   if (!gameState) {
     return (
       <MainLayout>
@@ -443,7 +453,7 @@ function GamePage() {
           </section>
         )}
 
-        {isFinalRound && (
+        {finalRoundInitiator && (
           <section
             className={[
               "game-page__final-banner",
@@ -578,12 +588,15 @@ function GamePage() {
                 const isFinalInitiator =
                   player.id === gameState.finalRoundStartedBy;
 
+                const isDisconnected = playersConnection[player.id] === false;
+
                 return (
                   <article
                     className={[
                       "game-page__player",
                       isCurrent ? "game-page__player--active" : "",
                       isFinalInitiator ? "game-page__player--final" : "",
+                      isDisconnected ? "game-page__player--disconnected" : "",
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -599,7 +612,13 @@ function GamePage() {
                           </span>
                         )}
 
-                        {isCurrent && (
+                        {isDisconnected && (
+                          <span className="game-page__player-tag game-page__player-tag--offline">
+                            Отключён
+                          </span>
+                        )}
+
+                        {isCurrent && !isDisconnected && (
                           <span className="game-page__player-tag">Ходит</span>
                         )}
                       </div>
@@ -618,6 +637,12 @@ function GamePage() {
                         <strong>{player.characters.length}</strong>
                       </div>
                     </div>
+
+                    {isDisconnected && isCurrent && (
+                      <p className="game-page__player-offline-hint">
+                        Ход будет передан через 30 секунд.
+                      </p>
+                    )}
                   </article>
                 );
               })}
@@ -795,28 +820,12 @@ function GamePage() {
               <p className="game-page__selection-hint">
                 Требования события не выполнены. Шанс риска <strong>25%</strong>
                 . Если риск не сыграет — сработает провал по основной
-                характеристике. Ты можешь выбрать «Выполнить», чтобы принять
-                обычный провал, или завершить ход, чтобы сохранить персонажей.
+                характеристике.
               </p>
             )}
 
             {actionError && (
               <p className="game-page__action-error">{actionError}</p>
-            )}
-
-            {isMyTurn && selectedCardIds.length === 0 && (
-              <div className="game-page__turn-actions">
-                <button
-                  className="
-                    game-page__button
-                    game-page__button--secondary
-                  "
-                  type="button"
-                  onClick={handleEndTurn}
-                >
-                  Завершить ход
-                </button>
-              </div>
             )}
           </section>
         )}

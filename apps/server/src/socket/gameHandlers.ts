@@ -3,86 +3,33 @@ import type { Socket } from "socket.io";
 import {
   createGame,
   createPlayer,
-  endTurn,
   playEvent,
   startGame,
-  startTurn,
 } from "@soul/game-engine";
 
 import {
-  SOCKET_EVENTS,
   type GameEndTurnPayload,
   type GamePlayEventPayload,
   type GameStartPayload,
+  SOCKET_EVENTS,
 } from "@soul/shared";
-
-import type { GameState } from "@soul/shared";
 
 import { characterRepository } from "../cards/characterRepository.js";
 import { eventRepository } from "../cards/eventRepository.js";
 
 import { gameManager } from "../game/gameManager.js";
-
-import { roomRepository } from "../rooms/roomRepository.js";
+import { advanceTurnLoop } from "../game/turnLoop.js";
 import { roomService } from "../rooms/roomService.js";
 
 import { getIO } from "./io.js";
 import { emitRoomUpdated } from "./roomEvents.js";
+import { emitStateUpdate } from "./stateEmitter.js";
 
-const MAX_TURN_ITERATIONS_FACTOR = 3;
-
-function buildSession(game: GameState) {
+function buildSession(game: import("@soul/shared").GameState) {
   return {
     gameState: game,
     characters: game.characters,
   };
-}
-
-function advanceTurnLoop(game: GameState): GameState {
-  let current = endTurn(game);
-
-  const maxIterations = game.players.length * MAX_TURN_ITERATIONS_FACTOR;
-
-  let iterations = 0;
-
-  while (current.status === "playing" && iterations < maxIterations) {
-    iterations += 1;
-
-    const turn = startTurn(current);
-
-    if (!turn.skipped) {
-      return turn.game;
-    }
-
-    current = endTurn(turn.game);
-  }
-
-  return current;
-}
-
-async function handleGameFinished(
-  roomId: string,
-  game: GameState,
-): Promise<void> {
-  if (game.status !== "finished") {
-    return;
-  }
-
-  await gameManager.saveFinish(roomId, game);
-
-  try {
-    await roomRepository.updateStatus(roomId, "FINISHED");
-
-    await roomRepository.setFinishedAt(roomId, new Date());
-
-    const updatedRoom = await roomRepository.findById(roomId);
-
-    if (updatedRoom) {
-      emitRoomUpdated(updatedRoom);
-    }
-  } catch (error) {
-    console.error("Не удалось обновить комнату после финиша:", error);
-  }
 }
 
 export function registerGameHandlers(socket: Socket): void {
@@ -185,12 +132,12 @@ export function registerGameHandlers(socket: Socket): void {
           Boolean(payload.risk),
         );
 
+        await gameManager.set(payload.roomId, result.game);
+
         const updatedPlayer = result.game.players.find((p) => p.id === userId);
 
         const io = getIO();
 
-        // Уведомление о результате — отдельным событием, до смены хода,
-        // чтобы клиент успел показать тост с дельтой Soul.
         if (updatedPlayer) {
           io.to(`room:${payload.roomId}`).emit(
             SOCKET_EVENTS.GAME_EVENT_RESOLVED,
@@ -209,28 +156,13 @@ export function registerGameHandlers(socket: Socket): void {
           );
         }
 
-        // Автоматически передаём ход следующему игроку.
-        // Правило: за ход играется не более 2 карт (MAX_CARDS_PER_ACTION),
-        // а у игрока всего 2 карты — значит, после события ход всегда
-        // переходит дальше.
-        let nextGame: GameState;
-
-        if (result.game.status === "playing") {
-          nextGame = advanceTurnLoop(result.game);
-        } else {
-          nextGame = result.game;
-        }
+        // Событие выполнено — сразу передаём
+        // ход следующему.
+        const nextGame = advanceTurnLoop(result.game);
 
         await gameManager.set(payload.roomId, nextGame);
 
-        io.to(`room:${payload.roomId}`).emit(
-          SOCKET_EVENTS.GAME_STATE_UPDATED,
-          buildSession(nextGame),
-        );
-
-        if (nextGame.status === "finished") {
-          await handleGameFinished(payload.roomId, nextGame);
-        }
+        await emitStateUpdate(payload.roomId, nextGame);
       } catch (error) {
         const message =
           error instanceof Error
@@ -276,16 +208,7 @@ export function registerGameHandlers(socket: Socket): void {
 
         await gameManager.set(payload.roomId, nextGame);
 
-        const io = getIO();
-
-        io.to(`room:${payload.roomId}`).emit(
-          SOCKET_EVENTS.GAME_STATE_UPDATED,
-          buildSession(nextGame),
-        );
-
-        if (nextGame.status === "finished") {
-          await handleGameFinished(payload.roomId, nextGame);
-        }
+        await emitStateUpdate(payload.roomId, nextGame);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Не удалось завершить ход";

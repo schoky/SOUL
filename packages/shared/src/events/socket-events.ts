@@ -28,6 +28,9 @@ export const SOCKET_EVENTS = {
   GAME_END_TURN: "game:end-turn",
   GAME_EVENT_RESOLVED: "game:event-resolved",
 
+  PLAYER_CONNECTION: "game:player-connection",
+  PLAYERS_CONNECTION: "game:players-connection",
+
   ERROR: "error",
 } as const;
 
@@ -91,6 +94,15 @@ export type GameEventResolvedPayload = {
   soulAfter: number;
   status: Status | null;
   skipNextTurn: boolean;
+};
+
+export type PlayerConnectionPayload = {
+  playerId: string;
+  connected: boolean;
+};
+
+export type PlayersConnectionPayload = {
+  connections: Record<string, boolean>;
 };
 
 export type SocketErrorPayload = {

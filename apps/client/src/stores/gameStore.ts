@@ -20,11 +20,17 @@ type GameStore = {
 
   history: HistoryEntry[];
 
+  playersConnection: Record<string, boolean>;
+
   setGameSession: (gameState: GameState, characters: Character[]) => void;
 
   pushHistory: (entry: HistoryEntry) => void;
 
   clearHistory: () => void;
+
+  setPlayerConnection: (playerId: string, connected: boolean) => void;
+
+  setPlayersConnection: (connections: Record<string, boolean>) => void;
 
   clearGameState: () => void;
 };
@@ -35,6 +41,8 @@ export const useGameStore = create<GameStore>((set) => ({
   characters: [],
 
   history: [],
+
+  playersConnection: {},
 
   setGameSession(gameState, characters) {
     set({
@@ -53,11 +61,25 @@ export const useGameStore = create<GameStore>((set) => ({
     set({ history: [] });
   },
 
+  setPlayerConnection(playerId, connected) {
+    set((state) => ({
+      playersConnection: {
+        ...state.playersConnection,
+        [playerId]: connected,
+      },
+    }));
+  },
+
+  setPlayersConnection(connections) {
+    set({ playersConnection: connections });
+  },
+
   clearGameState() {
     set({
       gameState: null,
       characters: [],
       history: [],
+      playersConnection: {},
     });
   },
 }));
