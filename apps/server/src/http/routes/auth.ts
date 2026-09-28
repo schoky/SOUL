@@ -24,29 +24,25 @@ type LoginBody = {
 };
 
 const authRoutes: FastifyPluginAsync = async (app) => {
-  app.post<{
-    Body: RegisterBody;
-  }>(
+  app.post<{ Body: RegisterBody }>(
     "/register",
     {
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: "15 minutes",
+        },
+      },
       schema: {
         body: {
           type: "object",
           required: ["email", "password", "nickname"],
           additionalProperties: false,
           properties: {
-            email: {
-              type: "string",
-            },
-            password: {
-              type: "string",
-            },
-            nickname: {
-              type: "string",
-            },
-            avatar: {
-              type: "string",
-            },
+            email: { type: "string" },
+            password: { type: "string" },
+            nickname: { type: "string" },
+            avatar: { type: "string" },
           },
         },
       },
@@ -78,23 +74,23 @@ const authRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  app.post<{
-    Body: LoginBody;
-  }>(
+  app.post<{ Body: LoginBody }>(
     "/login",
     {
+      config: {
+        rateLimit: {
+          max: 10,
+          timeWindow: "15 minutes",
+        },
+      },
       schema: {
         body: {
           type: "object",
           required: ["email", "password"],
           additionalProperties: false,
           properties: {
-            email: {
-              type: "string",
-            },
-            password: {
-              type: "string",
-            },
+            email: { type: "string" },
+            password: { type: "string" },
           },
         },
       },
@@ -137,39 +133,27 @@ const authRoutes: FastifyPluginAsync = async (app) => {
       await logoutUser(token);
     }
 
-    reply.clearCookie(SESSION_COOKIE, {
-      path: "/",
-    });
+    reply.clearCookie(SESSION_COOKIE, { path: "/" });
 
-    return reply.send({
-      success: true,
-    });
+    return reply.send({ success: true });
   });
 
   app.get("/me", async (request, reply) => {
     const token = request.cookies[SESSION_COOKIE];
 
     if (!token) {
-      return reply.code(401).send({
-        error: "Not authenticated",
-      });
+      return reply.code(401).send({ error: "Not authenticated" });
     }
 
     const user = await getCurrentUserByToken(token);
 
     if (!user) {
-      reply.clearCookie(SESSION_COOKIE, {
-        path: "/",
-      });
+      reply.clearCookie(SESSION_COOKIE, { path: "/" });
 
-      return reply.code(401).send({
-        error: "Not authenticated",
-      });
+      return reply.code(401).send({ error: "Not authenticated" });
     }
 
-    return reply.send({
-      user,
-    });
+    return reply.send({ user });
   });
 };
 

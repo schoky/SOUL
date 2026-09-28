@@ -16,6 +16,9 @@ import RulesPage from "../pages/Rules/RulesPage";
 import NewsPage from "../pages/News/NewsPage";
 import NewsArticlePage from "../pages/News/NewsArticlePage";
 
+import PrivacyPage from "../pages/Legal/PrivacyPage";
+import TermsPage from "../pages/Legal/TermsPage";
+
 import AdminLayout from "../pages/Admin/AdminLayout";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import AdminUsers from "../pages/Admin/AdminUsers";
@@ -36,6 +39,10 @@ function AppRouter() {
         <Route path="/news" element={<NewsPage />} />
 
         <Route path="/news/:slug" element={<NewsArticlePage />} />
+
+        <Route path="/privacy" element={<PrivacyPage />} />
+
+        <Route path="/terms" element={<TermsPage />} />
 
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />

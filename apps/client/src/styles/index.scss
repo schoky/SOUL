@@ -4,6 +4,7 @@
 
 @use './components/branding';
 @use './components/main-header';
+@use './components/main-footer';
 @use './components/toast';
 @use './components/modal';
 @use './components/skeleton';
@@ -20,4 +21,5 @@
 @use './pages/collection';
 @use './pages/profile';
 @use './pages/news';
+@use './pages/legal';
 @use './pages/admin';

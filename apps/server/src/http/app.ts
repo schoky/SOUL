@@ -2,6 +2,7 @@ import Fastify from "fastify";
 
 import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
+import rateLimit from "@fastify/rate-limit";
 
 import authRoutes from "./routes/auth.js";
 import adminRoutes from "./routes/admin.js";
@@ -16,6 +17,7 @@ import oauthRoutes from "../auth/oauth/oauthRoutes.js";
 export async function createHttpApp() {
   const app = Fastify({
     logger: true,
+    trustProxy: true,
   });
 
   await app.register(cors, {
@@ -26,6 +28,20 @@ export async function createHttpApp() {
   });
 
   await app.register(cookie);
+
+  await app.register(rateLimit, {
+    global: false,
+    max: 100,
+    timeWindow: "1 minute",
+    errorResponseBuilder: (_request, context) => ({
+      error: {
+        code: "RATE_LIMIT",
+        message: `Слишком много запросов. Подожди ${Math.ceil(
+          context.ttl / 1000,
+        )} сек.`,
+      },
+    }),
+  });
 
   await app.register(authRoutes, {
     prefix: "/api/auth",

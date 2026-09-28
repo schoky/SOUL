@@ -156,6 +156,12 @@ export async function roomRoutes(app: FastifyInstance) {
     "/",
     {
       preHandler: authenticateRequest,
+      config: {
+        rateLimit: {
+          max: 10,
+          timeWindow: "1 minute",
+        },
+      },
     },
     async (request, reply) => {
       const user = request.user;

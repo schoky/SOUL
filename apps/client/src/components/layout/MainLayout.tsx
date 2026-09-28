@@ -1,26 +1,22 @@
-import type {
-	ReactNode
-} from 'react';
+import type { ReactNode } from "react";
 
-import MainHeader
-	from '../navigation/MainHeader';
+import MainFooter from "./MainFooter";
+import MainHeader from "../navigation/MainHeader";
 
 type MainLayoutProps = {
-	children: ReactNode;
+  children: ReactNode;
 };
 
-function MainLayout({
-	                    children
-                    }: MainLayoutProps) {
-	return (
-		<div className="main-layout">
-			<MainHeader />
-			
-			<main className="main-layout__content">
-				{children}
-			</main>
-		</div>
-	);
+function MainLayout({ children }: MainLayoutProps) {
+  return (
+    <div className="main-layout">
+      <MainHeader />
+
+      <main className="main-layout__content">{children}</main>
+
+      <MainFooter />
+    </div>
+  );
 }
 
 export default MainLayout;
