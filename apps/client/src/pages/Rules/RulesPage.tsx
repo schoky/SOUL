@@ -182,7 +182,7 @@ function RulesPage() {
           <RuleCard number="04" title="Риск">
             <p>
               Риск — это возможность получить
-              <strong> увеличенную награду</strong>
+              <strong> увеличенную награду </strong>
               вместо обычной.
             </p>
 
