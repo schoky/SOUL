@@ -1,0 +1,106 @@
+.history-page {
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 64px 28px 96px;
+}
+
+.history-page__eyebrow {
+	margin: 0 0 10px;
+	color: var(--color-purple-light);
+	font-family: 'Exo 2', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.history-page__title {
+	margin: 0;
+	color: var(--color-text);
+	font-family: 'Exo 2', sans-serif;
+	font-size: clamp(32px, 5vw, 52px);
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+.history-page__list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-top: 32px;
+}
+
+.history-page__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 16px 20px;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: rgba(10, 13, 19, 0.72);
+	transition: border-color 160ms ease, background 160ms ease;
+}
+
+.history-page__item:hover {
+	border-color: var(--color-border-purple);
+	background: var(--color-panel);
+}
+
+.history-page__item-main {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.history-page__date {
+	color: var(--color-text);
+	font-family: 'Exo 2', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.history-page__place {
+	color: var(--color-text-muted);
+	font-size: 12px;
+}
+
+.history-page__item-soul {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 2px;
+}
+
+.history-page__item-soul span {
+	color: var(--color-text-muted);
+	font-size: 9px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.history-page__item-soul strong {
+	color: var(--color-success);
+	font-family: 'Exo 2', sans-serif;
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.history-page__loading,
+.history-page__empty {
+	margin-top: 32px;
+	color: var(--color-text-muted);
+	font-family: 'Manrope', sans-serif;
+	font-size: 14px;
+	text-align: center;
+}
+
+@media (max-width: 600px) {
+	.history-page {
+		padding: 48px 16px 72px;
+	}
+}

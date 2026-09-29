@@ -64,6 +64,10 @@ function MainHeader() {
               Карты
             </NavLink>
 
+            <NavLink className="main-header__nav-link" to="/leaderboard">
+              Лидеры
+            </NavLink>
+
             <NavLink className="main-header__nav-link" to="/rules">
               Правила
             </NavLink>
@@ -145,6 +149,14 @@ function MainHeader() {
               onClick={closeMenu}
             >
               Карты
+            </NavLink>
+
+            <NavLink
+              className="main-header__mobile-link"
+              to="/leaderboard"
+              onClick={closeMenu}
+            >
+              Лидеры
             </NavLink>
 
             <NavLink

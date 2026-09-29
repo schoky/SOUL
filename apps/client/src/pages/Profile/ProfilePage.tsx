@@ -1,8 +1,11 @@
+import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
-import type { FormEvent } from "react";
+import { Link } from "react-router-dom";
 
 import { ApiError } from "../../services/api/client";
+
+import { getMyGames } from "../../services/api/history";
 
 import { useAuthStore } from "../../stores/authStore";
 
@@ -11,11 +14,11 @@ import Skeleton from "../../components/ui/Skeleton";
 
 import {
   getProfileStats,
-  getRecentGames,
-  updateProfile,
-  type ProfileGameEntry,
   type ProfileOverview,
+  updateProfile,
 } from "../../services/api/profile";
+
+import type { GameHistoryItemDto } from "@soul/shared";
 
 function formatDate(value: string | null): string {
   if (!value) {
@@ -44,7 +47,7 @@ function ProfilePage() {
 
   const [stats, setStats] = useState<ProfileOverview | null>(null);
 
-  const [games, setGames] = useState<ProfileGameEntry[]>([]);
+  const [games, setGames] = useState<GameHistoryItemDto[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -70,7 +73,7 @@ function ProfilePage() {
       try {
         const [overview, recent] = await Promise.all([
           getProfileStats(),
-          getRecentGames(10),
+          getMyGames(20),
         ]);
 
         if (cancelled) {
@@ -395,9 +398,7 @@ function ProfilePage() {
                 <div>
                   <p className="profile-page__eyebrow">ИСТОРИЯ</p>
 
-                  <h2 className="profile-page__section-title">
-                    Последние игры
-                  </h2>
+                  <h2 className="profile-page__section-title">Мои матчи</h2>
                 </div>
               </div>
 
@@ -409,50 +410,55 @@ function ProfilePage() {
                 </div>
               ) : (
                 <div className="profile-page__games">
-                  {games.map((game) => (
-                    <article
-                      className={[
-                        "profile-page__game",
-                        game.won ? "profile-page__game--won" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                      key={game.gameId}
-                    >
-                      <div className="profile-page__game-main">
-                        <span className="profile-page__game-date">
-                          {formatDate(game.finishedAt)}
-                        </span>
+                  {games.map((game) => {
+                    const won = game.place === 1;
 
-                        <span className="profile-page__game-players">
-                          {game.playersCount} игрока
-                        </span>
-                      </div>
+                    return (
+                      <Link
+                        to={`/game/${game.roomId}`}
+                        className={[
+                          "profile-page__game",
+                          won ? "profile-page__game--won" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                        key={game.gameId}
+                      >
+                        <div className="profile-page__game-main">
+                          <span className="profile-page__game-date">
+                            {formatDate(game.startedAt)}
+                          </span>
 
-                      <div className="profile-page__game-result">
-                        <div>
-                          <span>Место</span>
-                          <strong>{game.place ?? "—"}</strong>
+                          <span className="profile-page__game-players">
+                            Место: {game.place} из {game.players.length}
+                          </span>
                         </div>
 
-                        <div>
-                          <span>Soul</span>
-                          <strong>{game.soul ?? "—"}</strong>
-                        </div>
+                        <div className="profile-page__game-result">
+                          <div>
+                            <span>Ходов</span>
+                            <strong>{game.turns}</strong>
+                          </div>
 
-                        <span
-                          className={[
-                            "profile-page__game-tag",
-                            game.won
-                              ? "profile-page__game-tag--won"
-                              : "profile-page__game-tag--lost",
-                          ].join(" ")}
-                        >
-                          {game.won ? "Победа" : "Поражение"}
-                        </span>
-                      </div>
-                    </article>
-                  ))}
+                          <div>
+                            <span>Soul</span>
+                            <strong>{game.finalSoul}</strong>
+                          </div>
+
+                          <span
+                            className={[
+                              "profile-page__game-tag",
+                              won
+                                ? "profile-page__game-tag--won"
+                                : "profile-page__game-tag--lost",
+                            ].join(" ")}
+                          >
+                            {won ? "Победа" : "Поражение"}
+                          </span>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </section>

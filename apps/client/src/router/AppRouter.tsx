@@ -15,6 +15,7 @@ import ProfilePage from "../pages/Profile/ProfilePage";
 import RulesPage from "../pages/Rules/RulesPage";
 import NewsPage from "../pages/News/NewsPage";
 import NewsArticlePage from "../pages/News/NewsArticlePage";
+import LeaderboardPage from "../pages/Leaderboard/LeaderboardPage";
 
 import PrivacyPage from "../pages/Legal/PrivacyPage";
 import TermsPage from "../pages/Legal/TermsPage";
@@ -60,6 +61,8 @@ function AppRouter() {
           <Route path="/collection" element={<CollectionPage />} />
 
           <Route path="/profile" element={<ProfilePage />} />
+
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
         </Route>
 
         <Route element={<AdminRoute />}>

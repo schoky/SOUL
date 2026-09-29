@@ -11,6 +11,8 @@ import gamesRoutes from "./routes/games.js";
 import newsRoutes from "./routes/news.js";
 import profileRoutes from "./routes/profile.js";
 import { roomRoutes } from "./routes/rooms.js";
+import historyRoutes from "./routes/history.js";
+import leaderboardRoutes from "./routes/leaderboard.js";
 
 import oauthRoutes from "../auth/oauth/oauthRoutes.js";
 
@@ -69,6 +71,14 @@ export async function createHttpApp() {
 
   await app.register(roomRoutes, {
     prefix: "/api/rooms",
+  });
+
+  await app.register(historyRoutes, {
+    prefix: "/api/users",
+  });
+
+  await app.register(leaderboardRoutes, {
+    prefix: "/api/leaderboard",
   });
 
   await app.register(adminRoutes, {

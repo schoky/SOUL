@@ -55,3 +55,13 @@ export type {
   RoomErrorResponse,
   CreateRoomRequest,
 } from "./types/room.js";
+
+export type {
+  GameHistoryItemDto,
+  GameHistoryResponse,
+} from "./types/game-history.js";
+
+export type {
+  LeaderboardEntryDto,
+  LeaderboardResponse,
+} from "./types/leaderboard.js";
