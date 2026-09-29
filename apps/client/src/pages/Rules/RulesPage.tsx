@@ -35,7 +35,7 @@ const ABILITIES: AbilityEntry[] = [
     description: "Первый провал по Туллеру за игру не отнимает Soul.",
   },
   {
-    character: "Рыночный акула",
+    character: "Рыночный перекуп",
     ability: "Выгодная сделка",
     description:
       "При успешном событии с Перекупом получает +1 Soul сверх награды.",

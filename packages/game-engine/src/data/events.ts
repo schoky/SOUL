@@ -2,20 +2,38 @@ import type { EventCard } from "@soul/shared";
 
 export const events: EventCard[] = [
   {
+    id: "deal-gone-wrong",
+    name: "Сделка сорвалась",
+
+    requirements: {
+      farmila: 4,
+      perekup: 4,
+      tuller: 4,
+    },
+
+    mainStat: "tuller",
+    reward: 2,
+    riskReward: 3,
+
+    description:
+      "Покупатель не пришёл, а товар уже на руках. Нужно срочно искать выход.",
+  },
+
+  {
     id: "raid-on-warehouse",
     name: "Рейд на склад",
 
     image: "/cards/events/raid-on-warehouse.webp",
 
     requirements: {
-      farmila: 3,
-      perekup: 2,
-      tuller: 4,
+      farmila: 5,
+      perekup: 4,
+      tuller: 5,
     },
 
     mainStat: "tuller",
-    reward: 2,
-    riskReward: 4,
+    reward: 3,
+    riskReward: 5,
 
     description:
       "Нужно пробраться на склад и забрать товар раньше, чем приедет охрана.",
@@ -28,14 +46,14 @@ export const events: EventCard[] = [
     image: "/cards/events/resell-batch.webp",
 
     requirements: {
-      farmila: 2,
-      perekup: 5,
-      tuller: 2,
+      farmila: 4,
+      perekup: 6,
+      tuller: 5,
     },
 
     mainStat: "perekup",
-    reward: 2,
-    riskReward: 4,
+    reward: 3,
+    riskReward: 5,
 
     description:
       "Нужно быстро найти покупателя и продать партию с максимальной выгодой.",
@@ -48,17 +66,35 @@ export const events: EventCard[] = [
     image: "/cards/events/night-shift.webp",
 
     requirements: {
-      farmila: 5,
-      perekup: 2,
-      tuller: 2,
+      farmila: 6,
+      perekup: 4,
+      tuller: 5,
     },
 
     mainStat: "farmila",
-    reward: 1,
-    riskReward: 3,
+    reward: 3,
+    riskReward: 5,
 
     description:
       "Работа до утра. Главное — не сдаться и довести смену до конца.",
+  },
+
+  {
+    id: "night-convoy",
+    name: "Ночной конвой",
+
+    requirements: {
+      farmila: 5,
+      perekup: 5,
+      tuller: 5,
+    },
+
+    mainStat: "tuller",
+    reward: 3,
+    riskReward: 5,
+
+    description:
+      "Колонна идёт через город ночью. Нужно перехватить её и не попасться.",
   },
 
   {
@@ -68,14 +104,14 @@ export const events: EventCard[] = [
     image: "/cards/events/black-market-deal.webp",
 
     requirements: {
-      farmila: 3,
-      perekup: 4,
-      tuller: 3,
+      farmila: 5,
+      perekup: 6,
+      tuller: 6,
     },
 
     mainStat: "perekup",
-    reward: 3,
-    riskReward: 5,
+    reward: 4,
+    riskReward: 6,
 
     description:
       "Опасная сделка, где ошибка в цене может полностью изменить результат.",
@@ -88,16 +124,106 @@ export const events: EventCard[] = [
     image: "/cards/events/warehouse-escape.webp",
 
     requirements: {
-      farmila: 2,
-      perekup: 3,
-      tuller: 5,
+      farmila: 5,
+      perekup: 5,
+      tuller: 7,
     },
 
     mainStat: "tuller",
-    reward: 3,
-    riskReward: 5,
+    reward: 4,
+    riskReward: 6,
 
     description:
       "Охрана уже заметила неладное. Нужно выбраться со склада, не потеряв товар.",
+  },
+
+  {
+    id: "cargo-theft",
+    name: "Кража груза",
+
+    requirements: {
+      farmila: 6,
+      perekup: 6,
+      tuller: 6,
+    },
+
+    mainStat: "tuller",
+    reward: 4,
+    riskReward: 6,
+
+    description:
+      "Вагон с ценным грузом стоит под охраной. Нужно вскрыть его быстро и без шума.",
+  },
+
+  {
+    id: "police-raid",
+    name: "Облава",
+
+    requirements: {
+      farmila: 7,
+      perekup: 5,
+      tuller: 6,
+    },
+
+    mainStat: "farmila",
+    reward: 4,
+    riskReward: 6,
+
+    description:
+      "Облава накрывает район. Спастись можно только выдержкой и холодной головой.",
+  },
+
+  {
+    id: "safe-cracking",
+    name: "Вскрытие сейфа",
+
+    requirements: {
+      farmila: 7,
+      perekup: 8,
+      tuller: 7,
+    },
+
+    mainStat: "perekup",
+    reward: 5,
+    riskReward: 8,
+
+    description:
+      "Толстые стены, хитрая сигнализация и всего одна ночь. Сейф должен быть вскрыт.",
+  },
+
+  {
+    id: "street-race",
+    name: "Уличная гонка",
+
+    requirements: {
+      farmila: 5,
+      perekup: 9,
+      tuller: 5,
+    },
+
+    mainStat: "perekup",
+    reward: 5,
+    riskReward: 8,
+
+    description:
+      "Уличная гонка на выживание. Ставки высоки, а соперники не знают пощады.",
+  },
+
+  {
+    id: "smuggling-tunnel",
+    name: "Тоннель контрабанды",
+
+    requirements: {
+      farmila: 8,
+      perekup: 6,
+      tuller: 8,
+    },
+
+    mainStat: "farmila",
+    reward: 5,
+    riskReward: 8,
+
+    description:
+      "Подземный ход завален и полон воды. Каждый шаг может стать последним.",
   },
 ];
