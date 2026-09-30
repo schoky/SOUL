@@ -284,6 +284,7 @@ const events: EventSeed[] = [
   {
     id: "night-convoy",
     name: "Ночной конвой",
+    image: "/cards/events/night-convoy.webp",
     requirements: {
       farmila: 5,
       perekup: 5,
@@ -331,6 +332,7 @@ const events: EventSeed[] = [
   {
     id: "cargo-theft",
     name: "Кража груза",
+    image: "/cards/events/cargo-theft.webp",
     requirements: {
       farmila: 6,
       perekup: 6,
@@ -346,6 +348,7 @@ const events: EventSeed[] = [
   {
     id: "police-raid",
     name: "Облава",
+    image: "/cards/events/police-raid.webp",
     requirements: {
       farmila: 7,
       perekup: 5,
@@ -361,6 +364,7 @@ const events: EventSeed[] = [
   {
     id: "safe-cracking",
     name: "Вскрытие сейфа",
+    image: "/cards/events/safe-cracking.webp",
     requirements: {
       farmila: 7,
       perekup: 8,
@@ -376,6 +380,7 @@ const events: EventSeed[] = [
   {
     id: "street-race",
     name: "Уличная гонка",
+    image: "/cards/events/street-race.webp",
     requirements: {
       farmila: 5,
       perekup: 9,
@@ -391,6 +396,7 @@ const events: EventSeed[] = [
   {
     id: "smuggling-tunnel",
     name: "Тоннель контрабанды",
+    image: "/cards/events/smuggling-tunnel.webp",
     requirements: {
       farmila: 8,
       perekup: 6,
