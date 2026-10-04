@@ -119,16 +119,17 @@ pnpm --filter @soul/client dev
 
 ## 🛠 Скрипты
 
-| Команда                                   | Описание                |
-|-------------------------------------------|-------------------------|
-| `pnpm --filter @soul/client dev`          | Запуск клиента          |
-| `pnpm --filter @soul/server dev`          | Запуск сервера          |
-| `pnpm --filter @soul/client build`        | Сборка клиента          |
-| `pnpm --filter @soul/server build`        | Сборка сервера          |
-| `pnpm --filter @soul/shared typecheck`    | Проверка типов `shared` |
-| `pnpm --filter @soul/server typecheck`    | Проверка типов сервера  |
-| `pnpm --filter @soul/client typecheck`    | Проверка типов клиента  |
-| `pnpm --filter @soul/database db:migrate` | Миграции Prisma         |
+| Команда                                   | Описание                  |
+|-------------------------------------------|---------------------------|
+| `pnpm --filter @soul/client dev`          | Запуск клиента            |
+| `pnpm --filter @soul/server dev`          | Запуск сервера            |
+| `pnpm --filter @soul/client build`        | Сборка клиента            |
+| `pnpm --filter @soul/server build`        | Сборка сервера            |
+| `pnpm --filter @soul/shared typecheck`    | Проверка типов `shared`   |
+| `pnpm --filter @soul/server typecheck`    | Проверка типов сервера    |
+| `pnpm --filter @soul/client typecheck`    | Проверка типов клиента    |
+| `pnpm --filter @soul/database db:migrate` | Миграции Prisma           |
+| `pnpm --filter @soul/database db:seed`    | Загрузка начальных данных |                         |
 
 ---
 
@@ -165,10 +166,13 @@ pnpm --filter @soul/client dev
 
 ```bash
 pnpm install
+pnpm --filter @soul/database db:migrate:deploy
+pnpm --filter @soul/database db:generate
 pnpm --filter @soul/client build
 pnpm --filter @soul/server build
-pnpm --filter @soul/database db:migrate:deploy
 ```
+
+Пошаговая инструкция — в [`docs/Deploy.md`](./docs/Deploy.md).
 
 ---
 
