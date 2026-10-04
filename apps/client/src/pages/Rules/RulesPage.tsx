@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
 
+import { GAME_RULES, RISK_CHANCES } from "@soul/shared";
+
 import MainLayout from "../../components/layout/MainLayout";
+
+// Проценты шансов — из общих правил.
+const RISK_SUCCESS_PERCENT = Math.round(RISK_CHANCES.SUCCESS * 100);
+const RISK_FAILURE_PERCENT = Math.round(RISK_CHANCES.FAILURE * 100);
+
+const PEREKUP_GAMBLE_PERCENT = Math.round(
+  GAME_RULES.PEREKUP_GAMBLE_CHANCE * 100,
+);
 
 type RuleCardProps = {
   number: string;
@@ -98,7 +108,7 @@ function RulesPage() {
 
           <p className="rules-page__description">
             Собирай правильные связки персонажей, выполняй события, рискуй ради
-            большей награды и первым набери 15 Soul.
+            большей награды и первым набери {GAME_RULES.WINNING_SOUL} Soul.
           </p>
 
           <Link
@@ -116,7 +126,7 @@ function RulesPage() {
           <RuleCard number="01" title="Персонажи">
             <p>
               В начале игры каждый игрок получает
-              <strong> 2 персонажа</strong>.
+              <strong> {GAME_RULES.CHARACTERS_PER_PLAYER} персонажа</strong>.
             </p>
 
             <p>У каждого персонажа есть три характеристики:</p>
@@ -157,7 +167,8 @@ function RulesPage() {
 
           <RuleCard number="03" title="Soul">
             <p>
-              Каждый игрок начинает с<strong> 3 Soul</strong>.
+              Каждый игрок начинает с
+              <strong> {GAME_RULES.STARTING_SOUL} Soul</strong>.
             </p>
 
             <p>
@@ -171,7 +182,9 @@ function RulesPage() {
             </p>
 
             <div className="rules-page__goal">
-              <span className="rules-page__goal-value">15</span>
+              <span className="rules-page__goal-value">
+                {GAME_RULES.WINNING_SOUL}
+              </span>
 
               <span className="rules-page__goal-label">
                 Soul для финального раунда
@@ -189,14 +202,14 @@ function RulesPage() {
             <p>
               Если требования события
               <strong> выполнены</strong> — шанс риска составляет{" "}
-              <strong>50%</strong>.
+              <strong>{RISK_SUCCESS_PERCENT}%</strong>.
             </p>
 
             <p>
               Если требования
               <strong> не выполнены</strong> — риск тоже доступен, но шанс
               падает до
-              <strong> 25%</strong>.
+              <strong> {RISK_FAILURE_PERCENT}%</strong>.
             </p>
 
             <p>
@@ -226,7 +239,8 @@ function RulesPage() {
                 <span className="rules-page__effect-value">В пролёте</span>
 
                 <span className="rules-page__effect-description">
-                  50/50 · −2 Soul при проигрыше
+                  {PEREKUP_GAMBLE_PERCENT}/{PEREKUP_GAMBLE_PERCENT} · −2 Soul
+                  при проигрыше
                 </span>
               </div>
 
@@ -250,7 +264,13 @@ function RulesPage() {
             </p>
 
             <p>
-              В начале твоего следующего хода все персонажи восстанавливаются.
+              В начале твоего следующего хода восстанавливается{" "}
+              <strong>только один истощённый персонаж</strong>.
+            </p>
+
+            <p>
+              Если у тебя было 2 карты в руке и ты обе использовал — на
+              следующем ходу доступна одна карта. Ещё через ход — снова две.
             </p>
 
             <p>
@@ -263,7 +283,8 @@ function RulesPage() {
           <RuleCard number="07" title="Победа">
             <p>
               Когда игрок достигает
-              <strong> 15 Soul</strong>, начинается финальный раунд.
+              <strong> {GAME_RULES.WINNING_SOUL} Soul</strong>, начинается
+              финальный раунд.
             </p>
 
             <p>Все остальные игроки получают ещё по одному ходу.</p>
@@ -278,7 +299,8 @@ function RulesPage() {
             <p>
               Если после финального раунда несколько игроков имеют одинаковое
               количество Soul — побеждает тот, кто{" "}
-              <strong>первым достиг 15 Soul</strong>и запустил финальный раунд.
+              <strong>первым достиг {GAME_RULES.WINNING_SOUL} Soul</strong> и
+              запустил финальный раунд.
             </p>
 
             <p>

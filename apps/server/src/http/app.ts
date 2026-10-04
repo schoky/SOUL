@@ -26,7 +26,7 @@ export async function createHttpApp() {
     origin: process.env.CLIENT_URL ?? "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   await app.register(cookie);

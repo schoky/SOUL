@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import {
   type Character,
+  GAME_RULES,
   type GameEventResolvedPayload,
   type GamePlayEventPayload,
   type GameSessionPayload,
@@ -33,9 +34,10 @@ import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
 import { useToastStore } from "../../stores/toastStore";
 
-const MAX_CARDS_PER_ACTION = 2;
-
-const WINNING_SOUL = 15;
+// Не хардкодим — берём из общих правил игры.
+const MAX_CARDS_PER_ACTION = GAME_RULES.CHARACTERS_PER_PLAYER;
+const WINNING_SOUL = GAME_RULES.WINNING_SOUL;
+const RISK_FAILURE_PERCENT = Math.round(RISK_CHANCES.FAILURE * 100);
 
 function findCharacter(
   characters: Character[],
@@ -818,9 +820,9 @@ function GamePage() {
 
             {selectedCardIds.length > 0 && !canSatisfy && (
               <p className="game-page__selection-hint">
-                Требования события не выполнены. Шанс риска <strong>25%</strong>
-                . Если риск не сыграет — сработает провал по основной
-                характеристике.
+                Требования события не выполнены. Шанс риска{" "}
+                <strong>{RISK_FAILURE_PERCENT}%</strong>. Если риск не сыграет —
+                сработает провал по основной характеристике.
               </p>
             )}
 

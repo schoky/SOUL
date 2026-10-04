@@ -4,14 +4,14 @@ import {
   createGame,
   createPlayer,
   playEvent,
-  startGame,
+  startGame
 } from "@soul/game-engine";
 
 import {
   type GameEndTurnPayload,
   type GamePlayEventPayload,
   type GameStartPayload,
-  SOCKET_EVENTS,
+  SOCKET_EVENTS
 } from "@soul/shared";
 
 import { characterRepository } from "../cards/characterRepository.js";
@@ -24,6 +24,12 @@ import { roomService } from "../rooms/roomService.js";
 import { getIO } from "./io.js";
 import { emitRoomUpdated } from "./roomEvents.js";
 import { emitStateUpdate } from "./stateEmitter.js";
+
+/**
+ * Сколько миллисекунд даём клиентам, чтобы увидеть результат хода,
+ * прежде чем передать ход следующему игроку.
+ */
+const TURN_HANDOFF_DELAY_MS = 2500;
 
 function buildSession(game: import("@soul/shared").GameState) {
   return {
@@ -156,13 +162,45 @@ export function registerGameHandlers(socket: Socket): void {
           );
         }
 
-        // Событие выполнено — сразу передаём
-        // ход следующему.
-        const nextGame = advanceTurnLoop(result.game);
+        // Не передаём ход мгновенно: даём клиентам
+        // ~2.5 секунды, чтобы увидеть результат,
+        // и только потом запускаем advanceTurnLoop.
+        //
+        // Перед переходом перечитываем игру — за время
+        // задержки мог сработать автопас, игрок мог
+        // выйти из комнаты, или состояние могло измениться.
+        setTimeout(() => {
+          void (async () => {
+            try {
+              const currentGame = await gameManager.resolve(payload.roomId);
 
-        await gameManager.set(payload.roomId, nextGame);
+              if (!currentGame) {
+                return;
+              }
 
-        await emitStateUpdate(payload.roomId, nextGame);
+              if (currentGame.status !== "playing") {
+                return;
+              }
+
+              if (currentGame.currentPlayerId !== userId) {
+                // Ход уже передан (например, автопасом) —
+                // не мешаем.
+                return;
+              }
+
+              const nextGame = advanceTurnLoop(currentGame);
+
+              await gameManager.set(payload.roomId, nextGame);
+
+              await emitStateUpdate(payload.roomId, nextGame);
+            } catch (error) {
+              console.error(
+                "Не удалось передать ход после результата события:",
+                error,
+              );
+            }
+          })();
+        }, TURN_HANDOFF_DELAY_MS);
       } catch (error) {
         const message =
           error instanceof Error

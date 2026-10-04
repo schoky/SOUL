@@ -1,7 +1,13 @@
 export const GAME_RULES = {
-  STARTING_SOUL: 3,
+  STARTING_SOUL: 2,
   CHARACTERS_PER_PLAYER: 2,
-  WINNING_SOUL: 15,
+  WINNING_SOUL: 20,
+
+  /**
+   * Шанс, что Перекуп не потеряет Soul при провале
+   * по своей основной характеристике (50/50).
+   */
+  PEREKUP_GAMBLE_CHANCE: 0.5,
 } as const;
 
 export const ROOM_RULES = {

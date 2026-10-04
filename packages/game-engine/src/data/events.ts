@@ -6,9 +6,9 @@ export const events: EventCard[] = [
     name: "Сделка сорвалась",
 
     requirements: {
-      farmila: 4,
-      perekup: 4,
-      tuller: 4,
+      farmila: 5,
+      perekup: 5,
+      tuller: 5,
     },
 
     mainStat: "tuller",
@@ -26,9 +26,9 @@ export const events: EventCard[] = [
     image: "/cards/events/raid-on-warehouse.webp",
 
     requirements: {
-      farmila: 5,
-      perekup: 4,
-      tuller: 5,
+      farmila: 6,
+      perekup: 5,
+      tuller: 6,
     },
 
     mainStat: "tuller",
@@ -46,9 +46,9 @@ export const events: EventCard[] = [
     image: "/cards/events/resell-batch.webp",
 
     requirements: {
-      farmila: 4,
-      perekup: 6,
-      tuller: 5,
+      farmila: 5,
+      perekup: 7,
+      tuller: 6,
     },
 
     mainStat: "perekup",
@@ -66,9 +66,9 @@ export const events: EventCard[] = [
     image: "/cards/events/night-shift.webp",
 
     requirements: {
-      farmila: 6,
-      perekup: 4,
-      tuller: 5,
+      farmila: 7,
+      perekup: 5,
+      tuller: 6,
     },
 
     mainStat: "farmila",
@@ -84,9 +84,9 @@ export const events: EventCard[] = [
     name: "Ночной конвой",
 
     requirements: {
-      farmila: 5,
-      perekup: 5,
-      tuller: 5,
+      farmila: 6,
+      perekup: 6,
+      tuller: 6,
     },
 
     mainStat: "tuller",
@@ -104,9 +104,9 @@ export const events: EventCard[] = [
     image: "/cards/events/black-market-deal.webp",
 
     requirements: {
-      farmila: 5,
-      perekup: 6,
-      tuller: 6,
+      farmila: 6,
+      perekup: 7,
+      tuller: 7,
     },
 
     mainStat: "perekup",
@@ -124,9 +124,9 @@ export const events: EventCard[] = [
     image: "/cards/events/warehouse-escape.webp",
 
     requirements: {
-      farmila: 5,
-      perekup: 5,
-      tuller: 7,
+      farmila: 6,
+      perekup: 6,
+      tuller: 8,
     },
 
     mainStat: "tuller",
@@ -142,9 +142,9 @@ export const events: EventCard[] = [
     name: "Кража груза",
 
     requirements: {
-      farmila: 6,
-      perekup: 6,
-      tuller: 6,
+      farmila: 7,
+      perekup: 7,
+      tuller: 7,
     },
 
     mainStat: "tuller",
@@ -160,9 +160,9 @@ export const events: EventCard[] = [
     name: "Облава",
 
     requirements: {
-      farmila: 7,
-      perekup: 5,
-      tuller: 6,
+      farmila: 8,
+      perekup: 6,
+      tuller: 7,
     },
 
     mainStat: "farmila",
@@ -178,9 +178,9 @@ export const events: EventCard[] = [
     name: "Вскрытие сейфа",
 
     requirements: {
-      farmila: 7,
-      perekup: 8,
-      tuller: 7,
+      farmila: 8,
+      perekup: 9,
+      tuller: 8,
     },
 
     mainStat: "perekup",
@@ -196,9 +196,9 @@ export const events: EventCard[] = [
     name: "Уличная гонка",
 
     requirements: {
-      farmila: 5,
-      perekup: 9,
-      tuller: 5,
+      farmila: 6,
+      perekup: 10,
+      tuller: 6,
     },
 
     mainStat: "perekup",
@@ -214,9 +214,9 @@ export const events: EventCard[] = [
     name: "Тоннель контрабанды",
 
     requirements: {
-      farmila: 8,
-      perekup: 6,
-      tuller: 8,
+      farmila: 9,
+      perekup: 7,
+      tuller: 9,
     },
 
     mainStat: "farmila",
