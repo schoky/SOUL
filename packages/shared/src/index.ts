@@ -19,6 +19,35 @@ export type {
   GameResultPlayerDto,
 } from "./types/game-result.js";
 
+// НОВЫЙ — друзья
+export type {
+  FriendshipStatus,
+  FriendDto,
+  IncomingFriendRequestDto,
+  OutgoingFriendRequestDto,
+  FriendsListResponse,
+  FriendRequestsResponse,
+  SendFriendRequestInput,
+  SendFriendRequestResponse,
+  AcceptFriendRequestResponse,
+} from "./types/friend.js";
+
+// НОВЫЙ — приглашения в игру
+export type {
+  InvitationStatus,
+  RoomInvitationDto,
+  RoomInvitationsResponse,
+  SendRoomInvitationInput,
+  SendRoomInvitationResponse,
+  AcceptRoomInvitationResponse,
+} from "./types/invitation.js";
+
+// НОВЫЙ — уведомления
+export type {
+  UnreadCountDto,
+  MarkNotificationsReadResponse,
+} from "./types/notification.js";
+
 export { SOCKET_EVENTS } from "./events/socket-events.js";
 
 export { GAME_RULES, ROOM_RULES, RISK_CHANCES } from "./constants/game.js";
@@ -40,6 +69,14 @@ export type {
   PlayerConnectionPayload,
   PlayersConnectionPayload,
   SocketErrorPayload,
+  // НОВЫЙ — realtime-события друзей и приглашений
+  FriendRequestReceivedPayload,
+  FriendRequestAcceptedPayload,
+  FriendRequestDeclinedPayload,
+  FriendRemovedPayload,
+  RoomInvitationReceivedPayload,
+  RoomInvitationAcceptedPayload,
+  RoomInvitationDeclinedPayload,
 } from "./events/socket-events.js";
 
 export type {

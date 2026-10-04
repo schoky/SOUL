@@ -6,16 +6,22 @@ const roomChannel = (roomId: string) => `room:${roomId}`;
 
 const LOBBY_CHANNEL = "lobby";
 
+const ADMIN_CHANNEL = "admin";
+
 export function emitRoomUpdated<T extends { id: string }>(room: T): void {
   const io = getIO();
 
   io.to(roomChannel(room.id)).emit(SOCKET_EVENTS.ROOM_UPDATED, { room });
+
+  io.to(ADMIN_CHANNEL).emit(SOCKET_EVENTS.ADMIN_ROOMS_UPDATED);
 }
 
 export function emitRoomDeleted(roomId: string): void {
   const io = getIO();
 
   io.to(roomChannel(roomId)).emit(SOCKET_EVENTS.ROOM_DELETED, { roomId });
+
+  io.to(ADMIN_CHANNEL).emit(SOCKET_EVENTS.ADMIN_ROOMS_UPDATED);
 }
 
 /**

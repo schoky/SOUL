@@ -85,6 +85,47 @@ class AdminRoomRepository {
       playersCount: game.players.length,
     }));
   }
+
+  async findPlayingGames() {
+    const games = await database.game.findMany({
+      where: {
+        status: "PLAYING",
+      },
+      include: {
+        room: true,
+        players: {
+          include: {
+            user: {
+              include: { profile: true },
+            },
+          },
+        },
+      },
+      orderBy: {
+        startedAt: "desc",
+      },
+    });
+
+    return games.map((game) => {
+      const state = game.state as {
+        turnNumber?: number;
+        currentPlayerId?: string;
+      } | null;
+
+      return {
+        id: game.id,
+        roomId: game.roomId,
+        roomCode: game.room.code,
+        startedAt: game.startedAt.toISOString(),
+        turnNumber: state?.turnNumber ?? 0,
+        currentPlayerId: state?.currentPlayerId ?? null,
+        players: game.players.map((p) => ({
+          userId: p.userId,
+          nickname: p.user.profile?.nickname ?? "—",
+        })),
+      };
+    });
+  }
 }
 
 export const adminRoomRepository = new AdminRoomRepository();

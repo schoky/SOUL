@@ -62,7 +62,9 @@ export const ModelName = {
   GameResult: 'GameResult',
   Character: 'Character',
   EventCard: 'EventCard',
-  News: 'News'
+  News: 'News',
+  Friendship: 'Friendship',
+  RoomInvitation: 'RoomInvitation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -240,6 +242,34 @@ export const NewsScalarFieldEnum = {
 } as const
 
 export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
+
+
+export const FriendshipScalarFieldEnum = {
+  id: 'id',
+  requesterId: 'requesterId',
+  addresseeId: 'addresseeId',
+  status: 'status',
+  createdAt: 'createdAt',
+  respondedAt: 'respondedAt',
+  readAt: 'readAt'
+} as const
+
+export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
+
+
+export const RoomInvitationScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  inviterId: 'inviterId',
+  inviteeId: 'inviteeId',
+  status: 'status',
+  createdAt: 'createdAt',
+  respondedAt: 'respondedAt',
+  expiresAt: 'expiresAt',
+  readAt: 'readAt'
+} as const
+
+export type RoomInvitationScalarFieldEnum = (typeof RoomInvitationScalarFieldEnum)[keyof typeof RoomInvitationScalarFieldEnum]
 
 
 export const SortOrder = {

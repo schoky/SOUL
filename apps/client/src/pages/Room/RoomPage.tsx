@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ROOM_RULES, SOCKET_EVENTS } from "@soul/shared";
-
 import type {
   GameStartedPayload,
   RoomDeletedPayload,
   RoomPreviewDto,
   RoomUpdatedPayload,
 } from "@soul/shared";
+import { ROOM_RULES, SOCKET_EVENTS } from "@soul/shared";
+
+import InviteFriendModal from "../../components/friends/InviteFriendModal";
 
 import MainLayout from "../../components/layout/MainLayout";
 import Skeleton from "../../components/ui/Skeleton";
@@ -132,6 +133,8 @@ function RoomPage() {
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
 
   const [joinError, setJoinError] = useState<string | null>(null);
+
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
 
   useEffect(() => {
     if (!roomId) {
@@ -537,6 +540,14 @@ function RoomPage() {
                 Скопировать приглашение
               </button>
 
+              <button
+                className="room-page__copy-button"
+                type="button"
+                onClick={() => setIsInviteOpen(true)}
+              >
+                Пригласить друга
+              </button>
+
               {copyStatus && (
                 <span className="room-page__copy-status">{copyStatus}</span>
               )}
@@ -724,6 +735,13 @@ function RoomPage() {
           </aside>
         </section>
       </main>
+
+      <InviteFriendModal
+        isOpen={isInviteOpen}
+        onClose={() => setIsInviteOpen(false)}
+        roomId={currentRoom.id}
+        roomCode={currentRoom.code}
+      />
     </MainLayout>
   );
 }

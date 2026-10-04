@@ -1,4 +1,5 @@
 import type { GameState, Player } from "@soul/shared";
+import { GAME_RULES } from "@soul/shared";
 
 export type TurnResult = {
   game: GameState;
@@ -48,17 +49,16 @@ export function startTurn(game: GameState): TurnResult {
     };
   }
 
-  // Восстанавливаем ровно одну истощённую карту за ход.
-  // Игрок сам решает, какую именно: восстанавливается
-  // первая слева направо. Порядок стабилен.
-  let recovered = false;
+  // Восстанавливаем GAME_RULES.RECOVERY_PER_TURN истощённых карт за ход.
+  // Восстанавливаются первые слева направо — порядок стабилен.
+  let recovered = 0;
 
   const updatedCharacters = player.characters.map((character) => {
-    if (!character.exhausted || recovered) {
+    if (!character.exhausted || recovered >= GAME_RULES.RECOVERY_PER_TURN) {
       return character;
     }
 
-    recovered = true;
+    recovered += 1;
 
     return { ...character, exhausted: false };
   });

@@ -5,6 +5,11 @@ import { authenticateRequest } from "../authMiddleware.js";
 import { roomService, RoomServiceError } from "../../rooms/roomService.js";
 
 import {
+  invitationService,
+  InvitationServiceError,
+} from "../../invitations/invitationService.js";
+
+import {
   emitLobbyUpdated,
   emitRoomDeleted,
   emitRoomUpdated,
@@ -64,6 +69,7 @@ export async function roomRoutes(app: FastifyInstance) {
       });
     },
   );
+
   /**
    * Публичное превью комнаты по ссылке-приглашению.
    */
@@ -101,6 +107,7 @@ export async function roomRoutes(app: FastifyInstance) {
       });
     },
   );
+
   /**
    * Получить конкретную комнату.
    */
@@ -356,6 +363,62 @@ export async function roomRoutes(app: FastifyInstance) {
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
+          return reply.code(400).send({
+            error: {
+              code: error.code,
+              message: error.message,
+            },
+          });
+        }
+
+        request.log.error(error);
+
+        return reply.code(500).send({
+          error: "Internal server error",
+        });
+      }
+    },
+  );
+
+  /**
+   * Отправить приглашение другу в текущую комнату.
+   */
+  app.post<{
+    Params: { id: string };
+    Body: { inviteeId: string };
+  }>(
+    "/:id/invitations",
+    {
+      preHandler: authenticateRequest,
+
+      schema: {
+        body: {
+          type: "object",
+          required: ["inviteeId"],
+          additionalProperties: false,
+          properties: {
+            inviteeId: { type: "string", minLength: 1 },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const user = request.user;
+
+      if (!user) {
+        return reply.code(401).send({ error: "Not authenticated" });
+      }
+
+      try {
+        const result = await invitationService.sendInvitation(
+          user.id,
+          request.params.id,
+          request.body.inviteeId,
+        );
+
+        return reply.code(201).send(result);
+      } catch (error) {
+        if (error instanceof InvitationServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,

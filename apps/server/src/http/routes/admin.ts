@@ -1,12 +1,20 @@
 import type { FastifyPluginAsync } from "fastify";
 
+import { finishGame } from "@soul/game-engine";
+
 import { requireAdmin } from "../adminMiddleware.js";
 
 import { adminStatsRepository } from "../../admin/adminStatsRepository.js";
 import { adminUserRepository } from "../../admin/adminUserRepository.js";
 import { adminRoomRepository } from "../../admin/adminRoomRepository.js";
 import { adminCardRepository } from "../../admin/adminCardRepository.js";
+import { socketLogs, type SocketLogType } from "../../admin/socketLogs.js";
 import { newsRepository } from "../../news/newsRepository.js";
+
+import { gameManager } from "../../game/gameManager.js";
+import { roomRepository } from "../../rooms/roomRepository.js";
+import { emitRoomUpdated } from "../../socket/roomEvents.js";
+import { emitStateUpdate } from "../../socket/stateEmitter.js";
 
 type ListUsersQuery = {
   search?: string;
@@ -130,6 +138,72 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
 
     return { rooms };
   });
+
+  app.get("/games/active", { preHandler: requireAdmin }, async () => {
+    const games = await adminRoomRepository.findPlayingGames();
+
+    return { games };
+  });
+
+  app.post<{ Params: { id: string } }>(
+    "/rooms/:id/force-finish",
+    { preHandler: requireAdmin },
+    async (request, reply) => {
+      const roomId = request.params.id;
+
+      try {
+        const room = await roomRepository.findById(roomId);
+
+        if (!room) {
+          return reply.code(404).send({ error: "Комната не найдена" });
+        }
+
+        if (room.status === "FINISHED") {
+          return reply.code(400).send({ error: "Комната уже завершена" });
+        }
+
+        if (room.status === "PLAYING") {
+          const game = await gameManager.resolve(roomId);
+
+          if (game && game.status === "playing") {
+            // emitStateUpdate сам сохранит итоги игры
+            // и обновит статус комнаты в БД.
+            const finishedGame = finishGame(game);
+
+            await emitStateUpdate(roomId, finishedGame);
+          } else {
+            await roomRepository.updateStatus(roomId, "FINISHED");
+            await roomRepository.setFinishedAt(roomId, new Date());
+
+            const updatedRoom = await roomRepository.findById(roomId);
+
+            if (updatedRoom) {
+              emitRoomUpdated(updatedRoom);
+            }
+          }
+        } else {
+          // Комната в статусе WAITING — игра ещё не стартовала.
+          await roomRepository.updateStatus(roomId, "FINISHED");
+          await roomRepository.setFinishedAt(roomId, new Date());
+
+          const updatedRoom = await roomRepository.findById(roomId);
+
+          if (updatedRoom) {
+            emitRoomUpdated(updatedRoom);
+          }
+        }
+
+        return { success: true };
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Не удалось завершить комнату";
+
+        return reply.code(400).send({ error: message });
+      }
+    },
+  );
 
   app.get("/games", { preHandler: requireAdmin }, async () => {
     const games = await adminRoomRepository.findRecentGames();
@@ -387,6 +461,71 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
       }
     },
   );
+
+  // ---------- Логи сокетов ----------
+
+  app.get<{
+    Querystring: { limit?: string; type?: string };
+  }>("/logs", { preHandler: requireAdmin }, async (request) => {
+    const rawLimit = Number(request.query.limit ?? 100);
+
+    const limit =
+      Number.isFinite(rawLimit) && rawLimit > 0 && rawLimit <= 500
+        ? Math.floor(rawLimit)
+        : 100;
+
+    const type = request.query.type as SocketLogType | undefined;
+
+    return {
+      logs: socketLogs.get({ limit, type }),
+    };
+  });
+
+  app.get<{
+    Querystring: { type?: string };
+  }>("/logs/export", { preHandler: requireAdmin }, async (request, reply) => {
+    const type = request.query.type as SocketLogType | undefined;
+
+    // Для CSV — старые сверху, чтобы читалось сверху вниз.
+    const logs = socketLogs.get({ limit: 500, type }).reverse();
+
+    function escapeCsv(value: string): string {
+      return `"${value.replace(/"/g, '""')}"`;
+    }
+
+    const header = [
+      "timestamp",
+      "type",
+      "userId",
+      "socketId",
+      "roomId",
+      "message",
+    ].join(",");
+
+    const rows = logs.map((log) =>
+      [
+        escapeCsv(log.timestamp),
+        escapeCsv(log.type),
+        escapeCsv(log.userId ?? ""),
+        escapeCsv(log.socketId ?? ""),
+        escapeCsv(log.roomId ?? ""),
+        escapeCsv(log.message),
+      ].join(","),
+    );
+
+    const csv = "\uFEFF" + [header, ...rows].join("\n");
+
+    const filename = `soul-logs-${new Date()
+      .toISOString()
+      .replace(/[:.]/g, "-")}.csv`;
+
+    reply
+      .header("Content-Type", "text/csv; charset=utf-8")
+      .header("Content-Disposition", `attachment; filename="${filename}"`)
+      .send(csv);
+
+    return reply;
+  });
 };
 
 export default adminRoutes;

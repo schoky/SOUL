@@ -8,6 +8,10 @@
 @use './components/toast';
 @use './components/modal';
 @use './components/skeleton';
+@use './components/tooltip';
+@use './components/ability-modal';
+@use './components/invite-modal';
+@use './components/notification-bell';
 
 @use './layouts/main';
 
@@ -25,3 +29,4 @@
 @use './pages/admin';
 @use './pages/history';
 @use './pages/leaderboard';
+@use './pages/friends';

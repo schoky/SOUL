@@ -8,7 +8,9 @@ const links = [
   { to: "/admin/characters", label: "Персонажи" },
   { to: "/admin/events", label: "События" },
   { to: "/admin/rooms", label: "Комнаты" },
+  { to: "/admin/active-games", label: "Активные партии" },
   { to: "/admin/games", label: "Игры" },
+  { to: "/admin/logs", label: "Логи" },
   { to: "/admin/news", label: "Новости" },
 ];
 

@@ -4,6 +4,7 @@ import type {
   Player,
   PlayerCharacter,
 } from "@soul/shared";
+import { GAME_RULES } from "@soul/shared";
 
 export type ResolvedCharacters = {
   cards: PlayerCharacter[];
@@ -20,8 +21,12 @@ export function resolveCharacters(
     throw new Error("At least one character card must be selected");
   }
 
-  if (characterCardIds.length > 2) {
-    throw new Error("Cannot select more than two character cards");
+  // CHARACTERS_PER_PLAYER одновременно ограничивает
+  // и размер руки, и максимальное число карт в одной связке.
+  if (characterCardIds.length > GAME_RULES.CHARACTERS_PER_PLAYER) {
+    throw new Error(
+      `Cannot select more than ${GAME_RULES.CHARACTERS_PER_PLAYER} character cards`,
+    );
   }
 
   if (new Set(characterCardIds).size !== characterCardIds.length) {

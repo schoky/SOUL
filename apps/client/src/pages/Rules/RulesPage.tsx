@@ -262,8 +262,9 @@ function RulesPage() {
             </p>
 
             <p>
-              В начале твоего следующего хода восстанавливается{" "}
-              <strong>только один истощённый персонаж</strong>.
+              В начале твоего следующего хода восстанавливается не более{" "}
+              <strong>{GAME_RULES.RECOVERY_PER_TURN}</strong> истощённых
+              персонажей.
             </p>
 
             <p>
@@ -278,7 +279,30 @@ function RulesPage() {
             </p>
           </RuleCard>
 
-          <RuleCard number="07" title="Победа">
+          <RuleCard number="07" title="Пропуск хода">
+            <p>
+              Если событие не подходит, можно пропустить ход, не используя
+              карты.
+            </p>
+
+            <p>
+              Пропуск стоит <strong>{GAME_RULES.SKIP_PENALTY} Soul</strong>.
+              Карты при этом не истощаются и остаются в руке.
+            </p>
+
+            <p>
+              Нельзя пропустить больше{" "}
+              <strong>{GAME_RULES.MAX_CONSECUTIVE_SKIPS} раза подряд</strong>.
+              Обычный ход (успех или риск) сбрасывает счётчик.
+            </p>
+
+            <p>
+              Ход из-за «Выгорания» по Фармиле — это не добровольный пропуск,
+              штрафом он не считается.
+            </p>
+          </RuleCard>
+
+          <RuleCard number="08" title="Победа">
             <p>
               Когда игрок достигает
               <strong> {GAME_RULES.WINNING_SOUL} Soul</strong>, начинается
@@ -293,7 +317,7 @@ function RulesPage() {
             </p>
           </RuleCard>
 
-          <RuleCard number="08" title="Ничья">
+          <RuleCard number="09" title="Ничья">
             <p>
               Если после финального раунда несколько игроков имеют одинаковое
               количество Soul — побеждает тот, кто{" "}

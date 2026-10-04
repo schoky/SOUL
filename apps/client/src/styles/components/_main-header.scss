@@ -95,6 +95,36 @@
 		}
 	}
 
+	&__nav-badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		min-width: 18px;
+		height: 18px;
+
+		margin-left: 6px;
+		padding: 0 6px;
+
+		border-radius: 999px;
+
+		background: linear-gradient(
+			180deg,
+			var(--color-purple),
+			var(--color-purple-dark)
+		);
+
+		color: var(--color-text);
+
+		font-family: 'Manrope', sans-serif;
+		font-size: 10px;
+		font-weight: 700;
+
+		line-height: 1;
+
+		box-shadow: 0 0 10px rgba(122, 59, 192, 0.4);
+	}
+
 	&__actions {
 		display: flex;
 		align-items: center;
@@ -175,8 +205,6 @@
 			box-shadow: 0 0 20px rgba(122, 59, 192, 0.32);
 		}
 	}
-
-	/* -------- Узкие экраны: уменьшаем шапку -------- */
 
 	@media (max-width: 480px) {
 		.main-header__inner {
@@ -308,6 +336,9 @@
 }
 
 .main-header__mobile-link {
+	display: inline-flex;
+	align-items: center;
+
 	padding: 14px 16px;
 
 	border: 1px solid transparent;
@@ -332,6 +363,34 @@
 
 	background: rgba(122, 59, 192, 0.1);
 	color: var(--color-text);
+}
+
+.main-header__mobile-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	min-width: 18px;
+	height: 18px;
+
+	margin-left: 8px;
+	padding: 0 6px;
+
+	border-radius: 999px;
+
+	background: linear-gradient(
+		180deg,
+		var(--color-purple),
+		var(--color-purple-dark)
+	);
+
+	color: var(--color-text);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 10px;
+	font-weight: 700;
+
+	line-height: 1;
 }
 
 .main-header__mobile-actions {

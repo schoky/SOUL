@@ -53,6 +53,8 @@ export function playEvent(
     soul: result.soul,
     status: result.status,
     skipNextTurn: result.skipNextTurn,
+    // Обычный ход сбрасывает счётчик пропусков.
+    consecutiveSkips: 0,
     characters: player.characters.map((character) => {
       if (!result.abilityUsedCardIds.includes(character.cardId)) {
         return character;

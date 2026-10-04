@@ -4,6 +4,7 @@ import {
   createGame,
   createPlayer,
   playEvent,
+  skipTurn,
   startGame
 } from "@soul/game-engine";
 
@@ -28,8 +29,11 @@ import { emitStateUpdate } from "./stateEmitter.js";
 /**
  * Сколько миллисекунд даём клиентам, чтобы увидеть результат хода,
  * прежде чем передать ход следующему игроку.
+ *
+ * Настраивается через TURN_HANDOFF_DELAY_MS в .env.
+ * По умолчанию — 2500 мс.
  */
-const TURN_HANDOFF_DELAY_MS = 2500;
+const TURN_HANDOFF_DELAY_MS = Number(process.env.TURN_HANDOFF_DELAY_MS ?? 2500);
 
 function buildSession(game: import("@soul/shared").GameState) {
   return {
@@ -163,8 +167,9 @@ export function registerGameHandlers(socket: Socket): void {
         }
 
         // Не передаём ход мгновенно: даём клиентам
-        // ~2.5 секунды, чтобы увидеть результат,
-        // и только потом запускаем advanceTurnLoop.
+        // TURN_HANDOFF_DELAY_MS миллисекунд, чтобы
+        // увидеть результат, и только потом запускаем
+        // advanceTurnLoop.
         //
         // Перед переходом перечитываем игру — за время
         // задержки мог сработать автопас, игрок мог
@@ -242,14 +247,18 @@ export function registerGameHandlers(socket: Socket): void {
       }
 
       try {
-        const nextGame = advanceTurnLoop(game);
+        // skipTurn списывает штраф и увеличивает счётчик,
+        // затем advanceTurnLoop передаёт ход дальше.
+        const skippedGame = skipTurn(game);
+
+        const nextGame = advanceTurnLoop(skippedGame);
 
         await gameManager.set(payload.roomId, nextGame);
 
         await emitStateUpdate(payload.roomId, nextGame);
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Не удалось завершить ход";
+          error instanceof Error ? error.message : "Не удалось пропустить ход";
 
         socket.emit(SOCKET_EVENTS.ERROR, {
           message,

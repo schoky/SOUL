@@ -243,6 +243,7 @@ export type RoomWhereInput = {
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.RoomMemberListRelationFilter
   games?: Prisma.GameListRelationFilter
+  invitations?: Prisma.RoomInvitationListRelationFilter
 }
 
 export type RoomOrderByWithRelationInput = {
@@ -257,6 +258,7 @@ export type RoomOrderByWithRelationInput = {
   host?: Prisma.UserOrderByWithRelationInput
   members?: Prisma.RoomMemberOrderByRelationAggregateInput
   games?: Prisma.GameOrderByRelationAggregateInput
+  invitations?: Prisma.RoomInvitationOrderByRelationAggregateInput
 }
 
 export type RoomWhereUniqueInput = Prisma.AtLeast<{
@@ -274,6 +276,7 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   members?: Prisma.RoomMemberListRelationFilter
   games?: Prisma.GameListRelationFilter
+  invitations?: Prisma.RoomInvitationListRelationFilter
 }, "id" | "code">
 
 export type RoomOrderByWithAggregationInput = {
@@ -317,6 +320,7 @@ export type RoomCreateInput = {
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
   members?: Prisma.RoomMemberCreateNestedManyWithoutRoomInput
   games?: Prisma.GameCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateInput = {
@@ -330,6 +334,7 @@ export type RoomUncheckedCreateInput = {
   finishedAt?: Date | string | null
   members?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutRoomInput
   games?: Prisma.GameUncheckedCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUpdateInput = {
@@ -343,6 +348,7 @@ export type RoomUpdateInput = {
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
   members?: Prisma.RoomMemberUpdateManyWithoutRoomNestedInput
   games?: Prisma.GameUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateInput = {
@@ -356,6 +362,7 @@ export type RoomUncheckedUpdateInput = {
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.RoomMemberUncheckedUpdateManyWithoutRoomNestedInput
   games?: Prisma.GameUncheckedUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateManyInput = {
@@ -528,6 +535,20 @@ export type RoomUpdateOneRequiredWithoutGamesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoomUpdateToOneWithWhereWithoutGamesInput, Prisma.RoomUpdateWithoutGamesInput>, Prisma.RoomUncheckedUpdateWithoutGamesInput>
 }
 
+export type RoomCreateNestedOneWithoutInvitationsInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutInvitationsInput, Prisma.RoomUncheckedCreateWithoutInvitationsInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutInvitationsInput
+  connect?: Prisma.RoomWhereUniqueInput
+}
+
+export type RoomUpdateOneRequiredWithoutInvitationsNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutInvitationsInput, Prisma.RoomUncheckedCreateWithoutInvitationsInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutInvitationsInput
+  upsert?: Prisma.RoomUpsertWithoutInvitationsInput
+  connect?: Prisma.RoomWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoomUpdateToOneWithWhereWithoutInvitationsInput, Prisma.RoomUpdateWithoutInvitationsInput>, Prisma.RoomUncheckedUpdateWithoutInvitationsInput>
+}
+
 export type RoomCreateWithoutHostInput = {
   id?: string
   code: string
@@ -538,6 +559,7 @@ export type RoomCreateWithoutHostInput = {
   finishedAt?: Date | string | null
   members?: Prisma.RoomMemberCreateNestedManyWithoutRoomInput
   games?: Prisma.GameCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateWithoutHostInput = {
@@ -550,6 +572,7 @@ export type RoomUncheckedCreateWithoutHostInput = {
   finishedAt?: Date | string | null
   members?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutRoomInput
   games?: Prisma.GameUncheckedCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomCreateOrConnectWithoutHostInput = {
@@ -602,6 +625,7 @@ export type RoomCreateWithoutMembersInput = {
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
   games?: Prisma.GameCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateWithoutMembersInput = {
@@ -614,6 +638,7 @@ export type RoomUncheckedCreateWithoutMembersInput = {
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   games?: Prisma.GameUncheckedCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomCreateOrConnectWithoutMembersInput = {
@@ -642,6 +667,7 @@ export type RoomUpdateWithoutMembersInput = {
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
   games?: Prisma.GameUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutMembersInput = {
@@ -654,6 +680,7 @@ export type RoomUncheckedUpdateWithoutMembersInput = {
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   games?: Prisma.GameUncheckedUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateWithoutGamesInput = {
@@ -666,6 +693,7 @@ export type RoomCreateWithoutGamesInput = {
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
   members?: Prisma.RoomMemberCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateWithoutGamesInput = {
@@ -678,6 +706,7 @@ export type RoomUncheckedCreateWithoutGamesInput = {
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   members?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutRoomInput
+  invitations?: Prisma.RoomInvitationUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomCreateOrConnectWithoutGamesInput = {
@@ -706,6 +735,7 @@ export type RoomUpdateWithoutGamesInput = {
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
   members?: Prisma.RoomMemberUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutGamesInput = {
@@ -718,6 +748,75 @@ export type RoomUncheckedUpdateWithoutGamesInput = {
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.RoomMemberUncheckedUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUncheckedUpdateManyWithoutRoomNestedInput
+}
+
+export type RoomCreateWithoutInvitationsInput = {
+  id?: string
+  code: string
+  status?: $Enums.RoomStatus
+  maxPlayers?: number
+  createdAt?: Date | string
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
+  members?: Prisma.RoomMemberCreateNestedManyWithoutRoomInput
+  games?: Prisma.GameCreateNestedManyWithoutRoomInput
+}
+
+export type RoomUncheckedCreateWithoutInvitationsInput = {
+  id?: string
+  code: string
+  hostUserId: string
+  status?: $Enums.RoomStatus
+  maxPlayers?: number
+  createdAt?: Date | string
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  members?: Prisma.RoomMemberUncheckedCreateNestedManyWithoutRoomInput
+  games?: Prisma.GameUncheckedCreateNestedManyWithoutRoomInput
+}
+
+export type RoomCreateOrConnectWithoutInvitationsInput = {
+  where: Prisma.RoomWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomCreateWithoutInvitationsInput, Prisma.RoomUncheckedCreateWithoutInvitationsInput>
+}
+
+export type RoomUpsertWithoutInvitationsInput = {
+  update: Prisma.XOR<Prisma.RoomUpdateWithoutInvitationsInput, Prisma.RoomUncheckedUpdateWithoutInvitationsInput>
+  create: Prisma.XOR<Prisma.RoomCreateWithoutInvitationsInput, Prisma.RoomUncheckedCreateWithoutInvitationsInput>
+  where?: Prisma.RoomWhereInput
+}
+
+export type RoomUpdateToOneWithWhereWithoutInvitationsInput = {
+  where?: Prisma.RoomWhereInput
+  data: Prisma.XOR<Prisma.RoomUpdateWithoutInvitationsInput, Prisma.RoomUncheckedUpdateWithoutInvitationsInput>
+}
+
+export type RoomUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
+  members?: Prisma.RoomMemberUpdateManyWithoutRoomNestedInput
+  games?: Prisma.GameUpdateManyWithoutRoomNestedInput
+}
+
+export type RoomUncheckedUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  hostUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  members?: Prisma.RoomMemberUncheckedUpdateManyWithoutRoomNestedInput
+  games?: Prisma.GameUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateManyHostInput = {
@@ -740,6 +839,7 @@ export type RoomUpdateWithoutHostInput = {
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.RoomMemberUpdateManyWithoutRoomNestedInput
   games?: Prisma.GameUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutHostInput = {
@@ -752,6 +852,7 @@ export type RoomUncheckedUpdateWithoutHostInput = {
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   members?: Prisma.RoomMemberUncheckedUpdateManyWithoutRoomNestedInput
   games?: Prisma.GameUncheckedUpdateManyWithoutRoomNestedInput
+  invitations?: Prisma.RoomInvitationUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateManyWithoutHostInput = {
@@ -772,11 +873,13 @@ export type RoomUncheckedUpdateManyWithoutHostInput = {
 export type RoomCountOutputType = {
   members: number
   games: number
+  invitations: number
 }
 
 export type RoomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | RoomCountOutputTypeCountMembersArgs
   games?: boolean | RoomCountOutputTypeCountGamesArgs
+  invitations?: boolean | RoomCountOutputTypeCountInvitationsArgs
 }
 
 /**
@@ -803,6 +906,13 @@ export type RoomCountOutputTypeCountGamesArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.GameWhereInput
 }
 
+/**
+ * RoomCountOutputType without action
+ */
+export type RoomCountOutputTypeCountInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomInvitationWhereInput
+}
+
 
 export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -816,6 +926,7 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Room$membersArgs<ExtArgs>
   games?: boolean | Prisma.Room$gamesArgs<ExtArgs>
+  invitations?: boolean | Prisma.Room$invitationsArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["room"]>
 
@@ -859,6 +970,7 @@ export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.Room$membersArgs<ExtArgs>
   games?: boolean | Prisma.Room$gamesArgs<ExtArgs>
+  invitations?: boolean | Prisma.Room$invitationsArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoomIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -874,6 +986,7 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     host: Prisma.$UserPayload<ExtArgs>
     members: Prisma.$RoomMemberPayload<ExtArgs>[]
     games: Prisma.$GamePayload<ExtArgs>[]
+    invitations: Prisma.$RoomInvitationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1281,6 +1394,7 @@ export interface Prisma__RoomClient<T, Null = never, ExtArgs extends runtime.Typ
   host<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Room$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   games<T extends Prisma.Room$gamesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$gamesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invitations<T extends Prisma.Room$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1764,6 +1878,30 @@ export type Room$gamesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.GameScalarFieldEnum | Prisma.GameScalarFieldEnum[]
+}
+
+/**
+ * Room.invitations
+ */
+export type Room$invitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomInvitation
+   */
+  select?: Prisma.RoomInvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomInvitation
+   */
+  omit?: Prisma.RoomInvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomInvitationInclude<ExtArgs> | null
+  where?: Prisma.RoomInvitationWhereInput
+  orderBy?: Prisma.RoomInvitationOrderByWithRelationInput | Prisma.RoomInvitationOrderByWithRelationInput[]
+  cursor?: Prisma.RoomInvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomInvitationScalarFieldEnum | Prisma.RoomInvitationScalarFieldEnum[]
 }
 
 /**

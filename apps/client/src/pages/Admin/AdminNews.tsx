@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
-
 import type { FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Modal from "../../components/ui/Modal";
 
 import {
+  type AdminNewsInput,
+  type AdminNewsItem,
   createAdminNews,
   deleteAdminNews,
   getAdminNews,
   updateAdminNews,
-  type AdminNewsInput,
-  type AdminNewsItem,
 } from "../../services/api/admin";
+
+import { slugify } from "../../utils/slugify";
 
 type FormState = {
   slug: string;
@@ -78,6 +79,8 @@ function AdminNews() {
 
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
 
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+
   const [formError, setFormError] = useState<string | null>(null);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -105,6 +108,7 @@ function AdminNews() {
   function openCreate() {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setSlugManuallyEdited(false);
     setFormError(null);
     setIsModalOpen(true);
   }
@@ -112,6 +116,10 @@ function AdminNews() {
   function openEdit(item: AdminNewsItem) {
     setEditingId(item.id);
     setForm(itemToForm(item));
+    // При редактировании существующей новости
+    // slug уже задан — считаем его «ручным»,
+    // чтобы авто-генерация не перезаписала URL.
+    setSlugManuallyEdited(true);
     setFormError(null);
     setIsModalOpen(true);
   }
@@ -119,8 +127,41 @@ function AdminNews() {
   function closeModal() {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setSlugManuallyEdited(false);
     setFormError(null);
     setIsModalOpen(false);
+  }
+
+  function handleTitleChange(value: string) {
+    setForm((prev) => {
+      if (!slugManuallyEdited) {
+        return {
+          ...prev,
+          title: value,
+          slug: slugify(value),
+        };
+      }
+
+      return { ...prev, title: value };
+    });
+  }
+
+  function handleSlugChange(value: string) {
+    setSlugManuallyEdited(true);
+
+    setForm((prev) => ({
+      ...prev,
+      slug: value,
+    }));
+  }
+
+  function handleRegenerateSlug() {
+    setForm((prev) => ({
+      ...prev,
+      slug: slugify(prev.title),
+    }));
+
+    setSlugManuallyEdited(false);
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -128,8 +169,17 @@ function AdminNews() {
 
     setFormError(null);
 
-    if (!form.slug.trim() || form.slug.trim().length < 2) {
+    const slug = form.slug.trim();
+
+    if (!slug || slug.length < 2) {
       setFormError("Slug обязателен (минимум 2 символа)");
+      return;
+    }
+
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+      setFormError(
+        "Slug может содержать только латиницу в нижнем регистре, цифры и дефис",
+      );
       return;
     }
 
@@ -203,6 +253,14 @@ function AdminNews() {
       alert(error instanceof Error ? error.message : "Не удалось удалить");
     }
   }
+
+  const previewUrl = useMemo(() => {
+    if (!form.slug.trim()) {
+      return null;
+    }
+
+    return `/news/${form.slug.trim()}`;
+  }, [form.slug]);
 
   return (
     <div className="admin-page">
@@ -341,42 +399,61 @@ function AdminNews() {
           }
         >
           <form className="modal__form" id="news-form" onSubmit={handleSubmit}>
-            <div className="modal__row modal__row--2">
-              <div className="modal__field">
-                <label className="modal__label">Slug</label>
+            <div className="modal__field">
+              <label className="modal__label">Заголовок</label>
 
+              <input
+                className="admin-input"
+                type="text"
+                value={form.title}
+                onChange={(event) => handleTitleChange(event.target.value)}
+                placeholder="Например: Обновление 1.2"
+                maxLength={200}
+                required
+              />
+            </div>
+
+            <div className="modal__field">
+              <label className="modal__label">Slug (часть URL)</label>
+
+              <div className="admin-slug-row">
                 <input
-                  className="admin-input"
+                  className="admin-input admin-slug-row__input"
                   type="text"
                   value={form.slug}
-                  onChange={(event) =>
-                    setForm({
-                      ...form,
-                      slug: event.target.value,
-                    })
-                  }
+                  onChange={(event) => handleSlugChange(event.target.value)}
                   placeholder="update-1-2"
+                  maxLength={80}
                   required
                 />
+
+                <button
+                  className="admin-button admin-button--small"
+                  type="button"
+                  onClick={handleRegenerateSlug}
+                  disabled={!form.title.trim()}
+                  title="Сгенерировать slug из заголовка"
+                >
+                  Из заголовка
+                </button>
               </div>
 
-              <div className="modal__field">
-                <label className="modal__label">Заголовок</label>
-
-                <input
-                  className="admin-input"
-                  type="text"
-                  value={form.title}
-                  onChange={(event) =>
-                    setForm({
-                      ...form,
-                      title: event.target.value,
-                    })
-                  }
-                  placeholder="Обновление 1.2"
-                  required
-                />
-              </div>
+              {previewUrl ? (
+                <span className="admin-slug-preview">
+                  Ссылка:{" "}
+                  <code>
+                    <span className="admin-slug-preview__domain">
+                      soul.example.ru
+                    </span>
+                    {previewUrl}
+                  </code>
+                </span>
+              ) : (
+                <span className="admin-hint">
+                  Slug генерируется автоматически из заголовка, но его можно
+                  отредактировать вручную. Разрешены латиница, цифры и дефис.
+                </span>
+              )}
             </div>
 
             <div className="modal__field">

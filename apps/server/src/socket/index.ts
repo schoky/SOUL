@@ -6,6 +6,8 @@ import { SOCKET_EVENTS } from "@soul/shared";
 
 import { getCurrentUserByToken } from "../auth/authService.js";
 
+import { socketLogs } from "../admin/socketLogs.js";
+
 import { gameManager } from "../game/gameManager.js";
 
 import { connectionTracker } from "./connectionTracker.js";
@@ -18,6 +20,8 @@ const SESSION_COOKIE = "soul_session";
 const CLIENT_ORIGIN = process.env.CLIENT_URL ?? "http://localhost:5173";
 
 const LOBBY_CHANNEL = "lobby";
+
+const ADMIN_CHANNEL = "admin";
 
 function parseCookies(header: string | undefined): Record<string, string> {
   if (!header) {
@@ -68,33 +72,73 @@ export function createSocketServer(httpServer: HttpServer): Server {
       const token = cookies[SESSION_COOKIE];
 
       if (!token) {
+        socketLogs.add({
+          type: "auth:failed",
+          socketId: socket.id,
+          message: "Нет токена сессии",
+        });
+
         return next(new Error("Not authenticated"));
       }
 
       const user = await getCurrentUserByToken(token);
 
       if (!user) {
+        socketLogs.add({
+          type: "auth:failed",
+          socketId: socket.id,
+          message: "Невалидный токен сессии",
+        });
+
         return next(new Error("Not authenticated"));
       }
 
       socket.data.userId = user.id;
+      socket.data.userRole = user.role;
 
       next();
     } catch (error) {
+      socketLogs.add({
+        type: "auth:failed",
+        socketId: socket.id,
+        message: error instanceof Error ? error.message : "Ошибка авторизации",
+      });
+
       next(error instanceof Error ? error : new Error("Auth failed"));
     }
   });
 
+  // Один слушатель на все новые логи — рассылаем
+  // их всем админам, кто подписан на канал.
+  socketLogs.on("log", (log) => {
+    io.to(ADMIN_CHANNEL).emit(SOCKET_EVENTS.ADMIN_LOG_ADDED, log);
+  });
+
   io.on("connection", (socket) => {
     const userId = socket.data.userId as string;
+    const userRole = socket.data.userRole as string | undefined;
 
     connectionTracker.addSocket(userId, socket.id);
+
+    // Подписываем сокет на личный канал пользователя.
+    // Сюда летят события друзей и приглашений в игру.
+    void socket.join(`user:${userId}`);
 
     // Если игрок был отключён и вернулся —
     // отменяем автопас.
     connectionTracker.cancelAutoPass(userId);
 
-    console.log(`Socket подключён: ${socket.id} (user: ${userId})`);
+    socketLogs.add({
+      type: "socket:connected",
+      userId,
+      socketId: socket.id,
+      message: `Socket подключён: ${socket.id} (user: ${userId})`,
+    });
+
+    // Админ автоматически подписывается на канал админки.
+    if (userRole === "ADMIN") {
+      void socket.join(ADMIN_CHANNEL);
+    }
 
     // Сообщаем всем в его комнате, что он вернулся.
     const currentRoomId = connectionTracker.getRoom(userId);
@@ -160,7 +204,13 @@ export function createSocketServer(httpServer: HttpServer): Server {
     registerGameHandlers(socket);
 
     socket.on("disconnect", () => {
-      console.log(`Socket отключён: ${socket.id} (user: ${userId})`);
+      socketLogs.add({
+        type: "socket:disconnected",
+        userId,
+        socketId: socket.id,
+        roomId: connectionTracker.getRoom(userId),
+        message: `Socket отключён: ${socket.id} (user: ${userId})`,
+      });
 
       const wasLast = connectionTracker.removeSocket(userId, socket.id);
 

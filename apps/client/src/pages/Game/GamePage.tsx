@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   type Character,
   GAME_RULES,
+  type GameEndTurnPayload,
   type GameEventResolvedPayload,
   type GamePlayEventPayload,
   type GameSessionPayload,
@@ -19,16 +20,19 @@ import {
   type StatType,
 } from "@soul/shared";
 
+import AbilityModal from "../../components/game/AbilityModal";
 import CardImage from "../../components/game/CardImage";
 import GameResult from "../../components/game/GameResult";
 
 import MainLayout from "../../components/layout/MainLayout";
 
+import Tooltip from "../../components/ui/Tooltip";
+
 import { socket } from "../../services/socket";
 
 import { useYourTurnNotification } from "../../hooks/useYourTurnNotification";
 
-import { playYourTurnSound } from "../../utils/sounds";
+import { playSound, playYourTurnSound } from "../../utils/sounds";
 
 import { useAuthStore } from "../../stores/authStore";
 import { useGameStore } from "../../stores/gameStore";
@@ -102,6 +106,14 @@ function GamePage() {
     null,
   );
 
+  const [isAbilityModalOpen, setIsAbilityModalOpen] = useState(false);
+
+  const [highlightedCharacterId, setHighlightedCharacterId] = useState<
+    string | null
+  >(null);
+
+  const [isConfirmingSkip, setIsConfirmingSkip] = useState(false);
+
   useEffect(() => {
     if (!roomId) {
       navigate("/lobby", {
@@ -154,6 +166,16 @@ function GamePage() {
           : soulDelta < 0
             ? `${soulDelta} Soul`
             : "без изменений Soul";
+
+      // Звук играем только для себя — иначе будет
+      // какофония, когда все ходят по кругу.
+      if (isSelf) {
+        if (!payload.risk) {
+          playSound(payload.success ? "success" : "fail");
+        } else {
+          playSound(payload.riskWon ? "risk-win" : "risk-lose");
+        }
+      }
 
       const currentGameState = useGameStore.getState().gameState;
 
@@ -245,7 +267,15 @@ function GamePage() {
 
   useEffect(() => {
     setSelectedCardIds([]);
+    setIsConfirmingSkip(false);
   }, [gameState?.currentPlayerId, gameState?.turnNumber]);
+
+  // Звук завершения игры — один раз при переходе в finished.
+  useEffect(() => {
+    if (gameState?.status === "finished") {
+      playSound("game-over");
+    }
+  }, [gameState?.status]);
 
   const self = useMemo(() => {
     if (!gameState || !user) {
@@ -307,6 +337,25 @@ function GamePage() {
     return checkRequirements(stats, gameState.currentEvent.requirements);
   }, [gameState?.currentEvent, selectedCardIds.length, stats]);
 
+  // Список персонажей игрока — для модалки со способностями.
+  const selfAbilities = useMemo<Character[]>(() => {
+    if (!self) {
+      return [];
+    }
+
+    return self.characters
+      .map((card) => findCharacter(characters, card.characterId))
+      .filter((item): item is Character => Boolean(item));
+  }, [self, characters]);
+
+  // Пропуски хода: сколько уже сделано подряд и сколько осталось.
+  const skipsUsed = self?.consecutiveSkips ?? 0;
+  const skipsRemaining = Math.max(
+    0,
+    GAME_RULES.MAX_CONSECUTIVE_SKIPS - skipsUsed,
+  );
+  const canSkip = skipsRemaining > 0;
+
   const riskChance = canSatisfy ? RISK_CHANCES.SUCCESS : RISK_CHANCES.FAILURE;
 
   const riskPercent = Math.round(riskChance * 100);
@@ -336,6 +385,7 @@ function GamePage() {
 
     setSelectedCardIds((previous) => {
       if (previous.includes(cardId)) {
+        playSound("card-deselect");
         return previous.filter((id) => id !== cardId);
       }
 
@@ -343,8 +393,19 @@ function GamePage() {
         return previous;
       }
 
+      playSound("card-select");
       return [...previous, cardId];
     });
+  }
+
+  function openAbilityModal(characterId: string | null = null) {
+    setHighlightedCharacterId(characterId);
+    setIsAbilityModalOpen(true);
+  }
+
+  function closeAbilityModal() {
+    setIsAbilityModalOpen(false);
+    setHighlightedCharacterId(null);
   }
 
   function handlePlayEvent(risk: boolean) {
@@ -361,6 +422,21 @@ function GamePage() {
     };
 
     socket.emit(SOCKET_EVENTS.GAME_PLAY_EVENT, payload);
+  }
+
+  function handleSkipTurn() {
+    if (!gameState || !isMyTurn) {
+      return;
+    }
+
+    setActionError(null);
+    setIsConfirmingSkip(false);
+
+    const payload: GameEndTurnPayload = {
+      roomId: gameState.id,
+    };
+
+    socket.emit(SOCKET_EVENTS.GAME_END_TURN, payload);
   }
 
   if (!gameState) {
@@ -638,6 +714,14 @@ function GamePage() {
 
                         <strong>{player.characters.length}</strong>
                       </div>
+
+                      {player.consecutiveSkips > 0 && (
+                        <div>
+                          <span>Пропусков</span>
+
+                          <strong>{player.consecutiveSkips}</strong>
+                        </div>
+                      )}
                     </div>
 
                     {isDisconnected && isCurrent && (
@@ -722,9 +806,23 @@ function GamePage() {
                 </h2>
               </div>
 
-              <span className="game-page__counter">
-                Выбрано: {selectedCardIds.length} / {MAX_CARDS_PER_ACTION}
-              </span>
+              <div className="game-page__counter-wrap">
+                <button
+                  className="game-page__ability-button"
+                  type="button"
+                  onClick={() => openAbilityModal(null)}
+                >
+                  <span className="game-page__ability-button-icon">?</span>
+
+                  <span className="game-page__ability-button-label">
+                    Способности
+                  </span>
+                </button>
+
+                <span className="game-page__counter">
+                  Выбрано: {selectedCardIds.length} / {MAX_CARDS_PER_ACTION}
+                </span>
+              </div>
             </div>
 
             <div
@@ -743,6 +841,7 @@ function GamePage() {
                   isSelected={selectedCardIds.includes(card.cardId)}
                   isSelectable={isMyTurn}
                   onToggle={() => toggleCard(card.cardId)}
+                  onOpenAbility={(characterId) => openAbilityModal(characterId)}
                   index={index}
                   key={card.cardId}
                 />
@@ -829,9 +928,67 @@ function GamePage() {
             {actionError && (
               <p className="game-page__action-error">{actionError}</p>
             )}
+
+            {isMyTurn && (
+              <div className="game-page__turn-actions">
+                {!canSkip ? (
+                  <p className="game-page__skip-limit">
+                    Лимит пропусков исчерпан — придётся ходить
+                  </p>
+                ) : isConfirmingSkip ? (
+                  <>
+                    <button
+                      className="
+                        game-page__button
+                        game-page__button--risk
+                      "
+                      type="button"
+                      onClick={handleSkipTurn}
+                    >
+                      Пропустить (−{GAME_RULES.SKIP_PENALTY} Soul)
+                    </button>
+
+                    <button
+                      className="
+                        game-page__button
+                        game-page__button--secondary
+                      "
+                      type="button"
+                      onClick={() => setIsConfirmingSkip(false)}
+                    >
+                      Отмена
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="
+                      game-page__button
+                      game-page__button--secondary
+                    "
+                    type="button"
+                    onClick={() => setIsConfirmingSkip(true)}
+                  >
+                    Пропустить ход ({skipsRemaining} из{" "}
+                    {GAME_RULES.MAX_CONSECUTIVE_SKIPS})
+                  </button>
+                )}
+              </div>
+            )}
           </section>
         )}
       </main>
+
+      <AbilityModal
+        isOpen={isAbilityModalOpen}
+        onClose={closeAbilityModal}
+        title={
+          highlightedCharacterId
+            ? "Способность персонажа"
+            : "Способности твоих персонажей"
+        }
+        characters={selfAbilities}
+        highlightId={highlightedCharacterId}
+      />
     </MainLayout>
   );
 }
@@ -842,6 +999,7 @@ type CharacterCardProps = {
   isSelected: boolean;
   isSelectable: boolean;
   onToggle: () => void;
+  onOpenAbility?: (characterId: string) => void;
   index: number;
 };
 
@@ -851,6 +1009,7 @@ function CharacterCard({
   isSelected,
   isSelectable,
   onToggle,
+  onOpenAbility,
   index,
 }: CharacterCardProps) {
   const disabled = !isSelectable || card.exhausted;
@@ -922,7 +1081,36 @@ function CharacterCard({
 
       {character?.ability && (
         <div className="game-page__card-ability">
-          <span>{character.ability.name}</span>
+          <div className="game-page__card-ability-header">
+            <span className="game-page__card-ability-name">
+              {character.ability.name}
+            </span>
+
+            {onOpenAbility && (
+              <Tooltip content="Подробнее о способности">
+                <span
+                  className="game-page__card-ability-help"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Подробнее о способности"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onOpenAbility(character.id);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      onOpenAbility(character.id);
+                    }
+                  }}
+                >
+                  ?
+                </span>
+              </Tooltip>
+            )}
+          </div>
 
           <p>{character.ability.description}</p>
         </div>

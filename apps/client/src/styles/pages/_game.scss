@@ -436,6 +436,13 @@
 	text-transform: uppercase;
 }
 
+.game-page__counter-wrap {
+	display: flex;
+	align-items: center;
+
+	gap: 12px;
+}
+
 .game-page__counter {
 	color: var(--color-text-muted);
 
@@ -444,6 +451,58 @@
 	font-weight: 600;
 
 	letter-spacing: 0.04em;
+}
+
+.game-page__ability-button {
+	min-height: 30px;
+
+	display: inline-flex;
+	align-items: center;
+
+	gap: 6px;
+
+	padding: 4px 12px;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: var(--radius-sm);
+
+	background: rgba(122, 59, 192, 0.08);
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+
+	transition: border-color 160ms ease, background 160ms ease,
+	color 160ms ease, box-shadow 160ms ease;
+}
+
+.game-page__ability-button:hover {
+	border-color: var(--color-purple-bright);
+
+	background: rgba(122, 59, 192, 0.18);
+	color: var(--color-purple-bright);
+
+	box-shadow: 0 0 14px rgba(122, 59, 192, 0.2);
+}
+
+.game-page__ability-button-icon {
+	width: 14px;
+	height: 14px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	border: 1px solid currentColor;
+	border-radius: 50%;
+
+	font-size: 9px;
+	font-weight: 700;
+	line-height: 1;
 }
 
 .game-page__cards {
@@ -598,11 +657,17 @@
 	margin-bottom: 18px;
 }
 
-.game-page__card-ability span {
-	display: block;
+.game-page__card-ability-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-	margin-bottom: 4px;
+	gap: 8px;
 
+	margin-bottom: 6px;
+}
+
+.game-page__card-ability-name {
 	color: var(--color-purple-light);
 
 	font-size: 10px;
@@ -610,6 +675,47 @@
 
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
+}
+
+.game-page__card-ability-help {
+	flex: 0 0 auto;
+
+	width: 18px;
+	height: 18px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 0;
+
+	border: 1px solid var(--color-border-purple);
+	border-radius: 50%;
+
+	background: rgba(122, 59, 192, 0.08);
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 10px;
+	font-weight: 700;
+
+	cursor: pointer;
+	user-select: none;
+
+	transition: border-color 140ms ease, background 140ms ease,
+	color 140ms ease, box-shadow 140ms ease;
+}
+
+.game-page__card-ability-help:hover,
+.game-page__card-ability-help:focus-visible {
+	border-color: var(--color-purple-bright);
+
+	background: rgba(122, 59, 192, 0.2);
+	color: var(--color-purple-bright);
+
+	box-shadow: 0 0 10px rgba(122, 59, 192, 0.3);
+
+	outline: none;
 }
 
 .game-page__card-ability p {
@@ -1715,6 +1821,10 @@
 		width: 100%;
 	}
 
+	.game-page__ability-button-label {
+		display: none;
+	}
+
 	.game-result {
 		padding: 40px 14px 64px;
 	}
@@ -2155,4 +2265,27 @@
 	font-weight: 600;
 
 	letter-spacing: 0.02em;
+}
+
+/* ============================================= */
+/*              Skip turn limit                  */
+/* ============================================= */
+
+.game-page__skip-limit {
+	margin: 0;
+	padding: 10px 14px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+
+	background: rgba(255, 255, 255, 0.03);
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+
+	letter-spacing: 0.02em;
+
+	text-align: center;
 }

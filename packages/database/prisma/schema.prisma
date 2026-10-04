@@ -29,6 +29,19 @@ enum OAuthProvider {
   TWITCH
 }
 
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -53,6 +66,12 @@ model User {
   wonResults  GameResult[] @relation("UserWonResults")
 
   newsArticles News[] @relation("NewsAuthor")
+
+  sentFriendRequests      Friendship[]     @relation("FriendshipRequester")
+  receivedFriendRequests  Friendship[]     @relation("FriendshipAddressee")
+
+  sentInvitations         RoomInvitation[] @relation("InvitationInviter")
+  receivedInvitations     RoomInvitation[] @relation("InvitationInvitee")
 }
 
 model Profile {
@@ -104,13 +123,14 @@ model Room {
   status      RoomStatus @default(WAITING)
   maxPlayers  Int        @default(6)
   createdAt   DateTime   @default(now())
-  startedAt  DateTime?
-  finishedAt DateTime?
+  startedAt   DateTime?
+  finishedAt  DateTime?
 
   host User @relation("RoomHost", fields: [hostUserId], references: [id])
 
-  members RoomMember[]
-  games   Game[]
+  members     RoomMember[]
+  games       Game[]
+  invitations RoomInvitation[]
 
   @@index([status, createdAt])
   @@index([hostUserId])
@@ -138,8 +158,8 @@ model Game {
 
   state Json?
 
-  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  winner User? @relation("UserWonGames", fields: [winnerId], references: [id])
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  winner User?  @relation("UserWonGames", fields: [winnerId], references: [id])
 
   players    GamePlayer[]
   gameResult GameResult?
@@ -165,8 +185,8 @@ model GameResult {
   winnerId  String?
   createdAt DateTime @default(now())
 
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  winner User? @relation("UserWonResults", fields: [winnerId], references: [id])
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  winner User?  @relation("UserWonResults", fields: [winnerId], references: [id])
 }
 
 model Character {
@@ -231,4 +251,40 @@ model News {
   author User @relation("NewsAuthor", fields: [authorId], references: [id])
 
   @@index([isPublished, publishedAt])
+}
+
+model Friendship {
+  id          String           @id @default(cuid())
+  requesterId String
+  addresseeId String
+  status      FriendshipStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  respondedAt DateTime?
+  readAt      DateTime?
+
+  requester User @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipAddressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([addresseeId, status])
+  @@index([requesterId, status])
+}
+
+model RoomInvitation {
+  id          String           @id @default(cuid())
+  roomId      String
+  inviterId   String
+  inviteeId   String
+  status      InvitationStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  respondedAt DateTime?
+  expiresAt   DateTime
+  readAt      DateTime?
+
+  room    Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  inviter User @relation("InvitationInviter", fields: [inviterId], references: [id], onDelete: Cascade)
+  invitee User @relation("InvitationInvitee", fields: [inviteeId], references: [id], onDelete: Cascade)
+
+  @@index([inviteeId, status])
+  @@index([roomId])
 }

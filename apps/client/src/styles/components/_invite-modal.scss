@@ -1,0 +1,193 @@
+.invite-modal__hint {
+	margin: 0 0 16px;
+
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.invite-modal__empty {
+	margin: 0;
+	padding: 24px 0;
+
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 13px;
+	line-height: 1.6;
+
+	text-align: center;
+}
+
+.invite-modal__list {
+	display: flex;
+	flex-direction: column;
+
+	gap: 8px;
+
+	margin: 0;
+	padding: 0;
+
+	max-height: 380px;
+
+	overflow-y: auto;
+
+	list-style: none;
+}
+
+.invite-modal__item {
+	display: flex;
+	align-items: center;
+
+	gap: 12px;
+
+	padding: 10px 12px;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+
+	background: rgba(10, 13, 19, 0.72);
+}
+
+.invite-modal__avatar-wrap {
+	position: relative;
+
+	flex: 0 0 auto;
+}
+
+.invite-modal__avatar {
+	width: 40px;
+	height: 40px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	overflow: hidden;
+
+	border: 1px solid var(--color-border);
+	border-radius: 50%;
+
+	background: var(--color-panel);
+
+	object-fit: cover;
+
+	color: var(--color-purple-light);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.invite-modal__avatar--placeholder {
+	background: linear-gradient(
+		135deg,
+		rgba(122, 59, 192, 0.24),
+		rgba(10, 13, 19, 0.9)
+	);
+}
+
+.invite-modal__online-dot {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+
+	width: 10px;
+	height: 10px;
+
+	border: 2px solid var(--color-bg);
+	border-radius: 50%;
+
+	background: var(--color-success);
+
+	box-shadow: 0 0 6px rgba(139, 217, 106, 0.6);
+}
+
+.invite-modal__info {
+	flex: 1;
+	min-width: 0;
+
+	display: flex;
+	flex-direction: column;
+
+	gap: 2px;
+}
+
+.invite-modal__name {
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+
+	overflow: hidden;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.invite-modal__status {
+	color: var(--color-text-muted);
+
+	font-family: 'Manrope', sans-serif;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.invite-modal__button {
+	min-height: 32px;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 6px 12px;
+
+	border: 1px solid var(--color-purple-light);
+	border-radius: var(--radius-sm);
+
+	background: linear-gradient(
+		180deg,
+		var(--color-purple),
+		var(--color-purple-dark)
+	);
+
+	color: var(--color-text);
+
+	font-family: 'Exo 2', sans-serif;
+	font-size: 10px;
+	font-weight: 700;
+
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+
+	transition: filter 140ms ease, box-shadow 140ms ease,
+	border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.invite-modal__button:hover:not(:disabled) {
+	filter: brightness(1.08);
+
+	box-shadow: 0 0 14px rgba(122, 59, 192, 0.24);
+}
+
+.invite-modal__button:disabled {
+	opacity: 0.55;
+
+	cursor: not-allowed;
+}
+
+.invite-modal__button--invited {
+	border-color: rgba(139, 217, 106, 0.5);
+
+	background: rgba(139, 217, 106, 0.12);
+	color: var(--color-success);
+
+	box-shadow: none;
+}
+
+.invite-modal__button--invited:disabled {
+	opacity: 1;
+}

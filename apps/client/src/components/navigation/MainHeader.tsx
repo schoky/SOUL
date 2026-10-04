@@ -5,6 +5,8 @@ import { useAuthStore } from "../../stores/authStore";
 
 import SoulLogo from "../branding/SoulLogo";
 
+import NotificationBell from "../notifications/NotificationBell";
+
 function MainHeader() {
   const location = useLocation();
 
@@ -68,6 +70,12 @@ function MainHeader() {
               Лидеры
             </NavLink>
 
+            {isAuthenticated && (
+              <NavLink className="main-header__nav-link" to="/friends">
+                Друзья
+              </NavLink>
+            )}
+
             <NavLink className="main-header__nav-link" to="/rules">
               Правила
             </NavLink>
@@ -80,6 +88,18 @@ function MainHeader() {
           <div className="main-header__actions">
             {isAuthenticated ? (
               <>
+                {user?.role === "ADMIN" && (
+                  <NavLink
+                    className="main-header__auth-button"
+                    to="/admin"
+                    title="Админ-панель"
+                  >
+                    Админка
+                  </NavLink>
+                )}
+
+                <NotificationBell />
+
                 <NavLink className="main-header__user" to="/profile">
                   {user?.profile.nickname}
                 </NavLink>
@@ -158,6 +178,16 @@ function MainHeader() {
             >
               Лидеры
             </NavLink>
+
+            {isAuthenticated && (
+              <NavLink
+                className="main-header__mobile-link"
+                to="/friends"
+                onClick={closeMenu}
+              >
+                Друзья
+              </NavLink>
+            )}
 
             <NavLink
               className="main-header__mobile-link"

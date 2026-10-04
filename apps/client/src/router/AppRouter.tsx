@@ -16,6 +16,7 @@ import RulesPage from "../pages/Rules/RulesPage";
 import NewsPage from "../pages/News/NewsPage";
 import NewsArticlePage from "../pages/News/NewsArticlePage";
 import LeaderboardPage from "../pages/Leaderboard/LeaderboardPage";
+import FriendsPage from "../pages/Friends/FriendsPage";
 
 import PrivacyPage from "../pages/Legal/PrivacyPage";
 import TermsPage from "../pages/Legal/TermsPage";
@@ -26,7 +27,9 @@ import AdminUsers from "../pages/Admin/AdminUsers";
 import AdminCharacters from "../pages/Admin/AdminCharacters";
 import AdminEvents from "../pages/Admin/AdminEvents";
 import AdminRooms from "../pages/Admin/AdminRooms";
+import AdminActiveGames from "../pages/Admin/AdminActiveGames";
 import AdminGames from "../pages/Admin/AdminGames";
+import AdminLogs from "../pages/Admin/AdminLogs";
 import AdminNews from "../pages/Admin/AdminNews";
 
 function AppRouter() {
@@ -63,6 +66,8 @@ function AppRouter() {
           <Route path="/profile" element={<ProfilePage />} />
 
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+
+          <Route path="/friends" element={<FriendsPage />} />
         </Route>
 
         <Route element={<AdminRoute />}>
@@ -77,7 +82,11 @@ function AppRouter() {
 
             <Route path="rooms" element={<AdminRooms />} />
 
+            <Route path="active-games" element={<AdminActiveGames />} />
+
             <Route path="games" element={<AdminGames />} />
+
+            <Route path="logs" element={<AdminLogs />} />
 
             <Route path="news" element={<AdminNews />} />
           </Route>

@@ -101,3 +101,13 @@ export type EventCard = Prisma.EventCardModel
  * 
  */
 export type News = Prisma.NewsModel
+/**
+ * Model Friendship
+ * 
+ */
+export type Friendship = Prisma.FriendshipModel
+/**
+ * Model RoomInvitation
+ * 
+ */
+export type RoomInvitation = Prisma.RoomInvitationModel

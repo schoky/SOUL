@@ -6,6 +6,7 @@ export { playEvent } from "./game/playEvent.js";
 export { finishGame } from "./game/finishGame.js";
 export { startFinalRound } from "./game/startFinalRound.js";
 export { determineWinner } from "./game/determineWinner.js";
+export { skipTurn } from "./game/skipTurn.js";
 
 // Ходы
 export { startTurn } from "./turns/startTurn.js";

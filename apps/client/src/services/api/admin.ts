@@ -84,7 +84,7 @@ export async function setUserRole(
   });
 }
 
-// ---------- Rooms & Games ----------
+// ---------- Rooms ----------
 
 export type AdminRoom = {
   id: string;
@@ -111,6 +111,15 @@ export async function getAdminRooms(): Promise<AdminRoom[]> {
   return response.rooms;
 }
 
+export async function forceFinishRoom(roomId: string): Promise<void> {
+  await apiRequest<{ success: boolean }>(
+    `/api/admin/rooms/${roomId}/force-finish`,
+    { method: "POST" },
+  );
+}
+
+// ---------- Games ----------
+
 export type AdminGame = {
   id: string;
   roomId: string;
@@ -126,6 +135,27 @@ export async function getAdminGames(): Promise<AdminGame[]> {
   const response = await apiRequest<{
     games: AdminGame[];
   }>("/api/admin/games");
+
+  return response.games;
+}
+
+export type AdminActiveGame = {
+  id: string;
+  roomId: string;
+  roomCode: string;
+  startedAt: string;
+  turnNumber: number;
+  currentPlayerId: string | null;
+  players: Array<{
+    userId: string;
+    nickname: string;
+  }>;
+};
+
+export async function getAdminActiveGames(): Promise<AdminActiveGame[]> {
+  const response = await apiRequest<{
+    games: AdminActiveGame[];
+  }>("/api/admin/games/active");
 
   return response.games;
 }
@@ -332,4 +362,67 @@ export async function deleteAdminNews(id: string): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/news/${id}`, {
     method: "DELETE",
   });
+}
+
+// ---------- Socket logs ----------
+
+export type AdminSocketLogType =
+  "socket:connected" | "socket:disconnected" | "auth:failed";
+
+export type AdminSocketLog = {
+  id: string;
+  timestamp: string;
+  type: AdminSocketLogType;
+  userId?: string;
+  socketId?: string;
+  roomId?: string;
+  message: string;
+};
+
+export async function getAdminSocketLogs(
+  params: {
+    limit?: number;
+    type?: AdminSocketLogType;
+  } = {},
+): Promise<AdminSocketLog[]> {
+  const searchParams = new URLSearchParams();
+
+  if (params.limit !== undefined) {
+    searchParams.set("limit", String(params.limit));
+  }
+
+  if (params.type) {
+    searchParams.set("type", params.type);
+  }
+
+  const query = searchParams.toString();
+
+  const response = await apiRequest<{ logs: AdminSocketLog[] }>(
+    `/api/admin/logs${query ? `?${query}` : ""}`,
+  );
+
+  return response.logs;
+}
+
+/**
+ * Формирует URL для скачивания CSV с логами.
+ *
+ * Используем прямой GET по /api/admin/logs/export
+ * (без apiRequest), потому что нам нужен именно
+ * файл, а не JSON.
+ */
+export function getAdminSocketLogsExportUrl(
+  params: {
+    type?: AdminSocketLogType;
+  } = {},
+): string {
+  const searchParams = new URLSearchParams();
+
+  if (params.type) {
+    searchParams.set("type", params.type);
+  }
+
+  const query = searchParams.toString();
+
+  return `/api/admin/logs/export${query ? `?${query}` : ""}`;
 }
