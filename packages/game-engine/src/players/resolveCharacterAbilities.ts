@@ -4,6 +4,7 @@ import type {
   Player,
   PlayerCharacter,
 } from "@soul/shared";
+import { GAME_RULES } from "@soul/shared";
 
 import { changeSoul } from "../rules/changeSoul.js";
 
@@ -51,8 +52,6 @@ export function resolveCharacterAbilities({
     }
 
     switch (character.ability.id) {
-      // -------- Существующие --------
-
       case "cold-blooded": {
         if (!success && event.mainStat === "tuller" && !card.abilityUsed) {
           soul = player.soul;
@@ -65,7 +64,7 @@ export function resolveCharacterAbilities({
 
       case "profitable-deal": {
         if (success && event.mainStat === "perekup") {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
@@ -73,17 +72,15 @@ export function resolveCharacterAbilities({
 
       case "work-to-exhaustion": {
         if (success && event.mainStat === "farmila") {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
       }
 
-      // -------- Новые --------
-
       case "precise-shot": {
         if (risk && riskWon === true) {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
@@ -99,7 +96,7 @@ export function resolveCharacterAbilities({
 
       case "lone-wolf": {
         if (success && cardCount === 1) {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
@@ -107,7 +104,7 @@ export function resolveCharacterAbilities({
 
       case "connections": {
         if (success && cardCount === 2) {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
@@ -115,7 +112,7 @@ export function resolveCharacterAbilities({
 
       case "first-aid": {
         if (success && event.mainStat === "tuller") {
-          soul = changeSoul(soul, 1);
+          soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;

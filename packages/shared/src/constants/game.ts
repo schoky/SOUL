@@ -8,6 +8,19 @@ export const GAME_RULES = {
    * по своей основной характеристике (50/50).
    */
   PEREKUP_GAMBLE_CHANCE: 0.5,
+
+  /**
+   * Штрафы при провале по основной характеристике события.
+   * Значения — сколько Soul списывается (положительные числа).
+   */
+  TULLER_FAILURE_PENALTY: 1,
+  PEREKUP_FAILURE_PENALTY: 2,
+
+  /**
+   * Бонус Soul, который дают способности персонажей
+   * за выполнение условий.
+   */
+  ABILITY_BONUS: 1,
 } as const;
 
 export const ROOM_RULES = {

@@ -1,5 +1,4 @@
 import type { EventCard, Player } from "@soul/shared";
-
 import { GAME_RULES } from "@soul/shared";
 
 import { changeSoul } from "./changeSoul.js";
@@ -19,7 +18,7 @@ export function resolveFailure(
   switch (event.mainStat) {
     case "tuller":
       return {
-        soul: changeSoul(player.soul, -1),
+        soul: changeSoul(player.soul, -GAME_RULES.TULLER_FAILURE_PENALTY),
         status: "za-kafan",
         skipNextTurn: false,
         gambleWon: null,
@@ -29,7 +28,9 @@ export function resolveFailure(
       const gambleWon = random() < GAME_RULES.PEREKUP_GAMBLE_CHANCE;
 
       return {
-        soul: gambleWon ? player.soul : changeSoul(player.soul, -2),
+        soul: gambleWon
+          ? player.soul
+          : changeSoul(player.soul, -GAME_RULES.PEREKUP_FAILURE_PENALTY),
 
         status: "v-prolete",
         skipNextTurn: false,

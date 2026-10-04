@@ -47,19 +47,17 @@ const ABILITIES: AbilityEntry[] = [
   {
     character: "Рыночный перекуп",
     ability: "Выгодная сделка",
-    description:
-      "При успешном событии с Перекупом получает +1 Soul сверх награды.",
+    description: `При успешном событии с Перекупом получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды.`,
   },
   {
     character: "Трудяга",
     ability: "На износ",
-    description:
-      "При успешном событии с Фармилой получает +1 Soul сверх награды.",
+    description: `При успешном событии с Фармилой получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды.`,
   },
   {
     character: "Снайпер",
     ability: "Точный выстрел",
-    description: "При выигранном риске получает +1 Soul сверх награды.",
+    description: `При выигранном риске получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды.`,
   },
   {
     character: "Курьер",
@@ -75,19 +73,17 @@ const ABILITIES: AbilityEntry[] = [
   {
     character: "Контрабандист",
     ability: "Одиночка",
-    description:
-      "При игре одной картой получает +1 Soul сверх награды при успехе.",
+    description: `При игре одной картой получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды при успехе.`,
   },
   {
     character: "Решала",
     ability: "Связи",
-    description: "При игре в связке получает +1 Soul сверх награды при успехе.",
+    description: `При игре в связке получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды при успехе.`,
   },
   {
     character: "Медик",
     ability: "Аптечка",
-    description:
-      "При успешном событии с Туллером получает +1 Soul сверх награды.",
+    description: `При успешном событии с Туллером получает +${GAME_RULES.ABILITY_BONUS} Soul сверх награды.`,
   },
   {
     character: "Информатор",
@@ -230,7 +226,9 @@ function RulesPage() {
 
                 <span className="rules-page__effect-value">Закафан</span>
 
-                <span className="rules-page__effect-description">−1 Soul</span>
+                <span className="rules-page__effect-description">
+                  −{GAME_RULES.TULLER_FAILURE_PENALTY} Soul
+                </span>
               </div>
 
               <div className="rules-page__effect">
@@ -239,8 +237,8 @@ function RulesPage() {
                 <span className="rules-page__effect-value">В пролёте</span>
 
                 <span className="rules-page__effect-description">
-                  {PEREKUP_GAMBLE_PERCENT}/{PEREKUP_GAMBLE_PERCENT} · −2 Soul
-                  при проигрыше
+                  {PEREKUP_GAMBLE_PERCENT}/{PEREKUP_GAMBLE_PERCENT} · −
+                  {GAME_RULES.PEREKUP_FAILURE_PENALTY} Soul при проигрыше
                 </span>
               </div>
 
