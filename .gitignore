@@ -11,3 +11,4 @@ dist/
 .idea/
 .vscode/
 soul-windows.dump
+packages/database/src/generated/
