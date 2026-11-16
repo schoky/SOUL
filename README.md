@@ -69,7 +69,7 @@ soul/
 ### Установка
 
 ```bash
-git clone https://github.com/your-username/soul.git
+git clone https://github.com/schoky/SOUL.git
 cd soul
 pnpm install
 ```
