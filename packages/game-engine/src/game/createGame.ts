@@ -1,18 +1,18 @@
-import type { EventCard, GameState, Player } from "@soul/shared";
+import type { EventCard, GameState, Player } from '@soul/shared';
 
-import { createEventDeck } from "../deck/createEventDeck.js";
+import { createEventDeck } from '../deck/createEventDeck.js';
 
 export function createGame(
   gameId: string,
   players: Player[],
   events: EventCard[],
-  random: () => number = Math.random,
+  random: () => number = Math.random
 ): GameState {
   const eventDeck = createEventDeck(events, random);
 
   return {
     id: gameId,
-    status: "waiting",
+    status: 'waiting',
     players,
     characters: [],
     currentPlayerId: null,
@@ -20,6 +20,6 @@ export function createGame(
     eventDeck,
     turnNumber: 0,
     winnerId: null,
-    finalRoundStartedBy: null,
+    finalRoundStartedBy: null
   };
 }

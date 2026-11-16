@@ -1,33 +1,27 @@
-import { useEffect, useState } from "react";
-
-import { useNavigate, useParams } from "react-router-dom";
-
 import type {
   GameStartedPayload,
   RoomDeletedPayload,
   RoomPreviewDto,
-  RoomUpdatedPayload,
-} from "@soul/shared";
-import { ROOM_RULES, SOCKET_EVENTS } from "@soul/shared";
+  RoomUpdatedPayload
+} from '@soul/shared';
+import { ROOM_RULES, SOCKET_EVENTS } from '@soul/shared';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import InviteFriendModal from "../../components/friends/InviteFriendModal";
-
-import MainLayout from "../../components/layout/MainLayout";
-import Skeleton from "../../components/ui/Skeleton";
-
-import { socket } from "../../services/socket";
-
-import { getRoomPreview } from "../../services/api/rooms";
-
-import { useAuthStore } from "../../stores/authStore";
-import { useGameStore } from "../../stores/gameStore";
-import { useRoomStore } from "../../stores/roomStore";
+import InviteFriendModal from '../../components/friends/InviteFriendModal';
+import MainLayout from '../../components/layout/MainLayout';
+import Skeleton from '../../components/ui/Skeleton';
+import { getRoomPreview } from '../../services/api/rooms';
+import { socket } from '../../services/socket';
+import { useAuthStore } from '../../stores/authStore';
+import { useGameStore } from '../../stores/gameStore';
+import { useRoomStore } from '../../stores/roomStore';
 
 function RoomSkeleton() {
   return (
     <MainLayout>
-      <main className="room-page">
-        <section className="skeleton-room__header">
+      <main className='room-page'>
+        <section className='skeleton-room__header'>
           <div>
             <Skeleton width={120} height={12} />
 
@@ -40,20 +34,20 @@ function RoomSkeleton() {
             </div>
 
             <div style={{ marginTop: 16 }}>
-              <Skeleton width={200} height={36} radius="4px" />
+              <Skeleton width={200} height={36} radius='4px' />
             </div>
           </div>
 
-          <Skeleton width={150} height={68} radius="6px" />
+          <Skeleton width={150} height={68} radius='6px' />
         </section>
 
-        <section className="skeleton-room__content">
-          <div className="skeleton-room__players">
+        <section className='skeleton-room__content'>
+          <div className='skeleton-room__players'>
             <Skeleton width={180} height={22} />
 
-            <div className="skeleton-room__players-list">
+            <div className='skeleton-room__players-list'>
               {[1, 2].map((i) => (
-                <div className="skeleton-room__player-row" key={i}>
+                <div className='skeleton-room__player-row' key={i}>
                   <div>
                     <Skeleton width={140} height={18} />
 
@@ -62,29 +56,29 @@ function RoomSkeleton() {
                     </div>
                   </div>
 
-                  <Skeleton width={70} height={28} radius="4px" />
+                  <Skeleton width={70} height={28} radius='4px' />
                 </div>
               ))}
             </div>
 
             <div style={{ marginTop: 22 }}>
-              <Skeleton width="100%" height={48} radius="4px" />
+              <Skeleton width='100%' height={48} radius='4px' />
             </div>
           </div>
 
-          <div className="skeleton-room__sidebar">
+          <div className='skeleton-room__sidebar'>
             <Skeleton width={140} height={14} />
 
             <div style={{ marginTop: 20 }}>
-              <Skeleton width="100%" height={48} />
+              <Skeleton width='100%' height={48} />
             </div>
 
             <div style={{ marginTop: 12 }}>
-              <Skeleton width="100%" height={48} />
+              <Skeleton width='100%' height={48} />
             </div>
 
-            <div style={{ marginTop: "auto" }}>
-              <Skeleton width="100%" height={48} radius="4px" />
+            <div style={{ marginTop: 'auto' }}>
+              <Skeleton width='100%' height={48} radius='4px' />
             </div>
           </div>
         </section>
@@ -138,7 +132,7 @@ function RoomPage() {
 
   useEffect(() => {
     if (!roomId) {
-      navigate("/lobby", { replace: true });
+      navigate('/lobby', { replace: true });
       return;
     }
 
@@ -150,7 +144,7 @@ function RoomPage() {
       return;
     }
 
-    if (errorCode !== "NOT_ROOM_MEMBER") {
+    if (errorCode !== 'NOT_ROOM_MEMBER') {
       return;
     }
 
@@ -172,11 +166,7 @@ function RoomPage() {
           return;
         }
 
-        setPreviewError(
-          error instanceof Error
-            ? error.message
-            : "Не удалось загрузить комнату",
-        );
+        setPreviewError(error instanceof Error ? error.message : 'Не удалось загрузить комнату');
       }
     }
 
@@ -209,7 +199,7 @@ function RoomPage() {
 
       clearCurrentRoom();
 
-      navigate("/lobby", { replace: true });
+      navigate('/lobby', { replace: true });
     };
 
     const handleGameStarted = (payload: GameStartedPayload) => {
@@ -222,27 +212,20 @@ function RoomPage() {
       handleConnect();
     }
 
-    socket.on("connect", handleConnect);
+    socket.on('connect', handleConnect);
     socket.on(SOCKET_EVENTS.ROOM_UPDATED, handleRoomUpdated);
     socket.on(SOCKET_EVENTS.ROOM_DELETED, handleRoomDeleted);
     socket.on(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
 
     return () => {
-      socket.off("connect", handleConnect);
+      socket.off('connect', handleConnect);
       socket.off(SOCKET_EVENTS.ROOM_UPDATED, handleRoomUpdated);
       socket.off(SOCKET_EVENTS.ROOM_DELETED, handleRoomDeleted);
       socket.off(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
 
       socket.emit(SOCKET_EVENTS.ROOM_UNSUBSCRIBE, { roomId });
     };
-  }, [
-    roomId,
-    currentRoom,
-    navigate,
-    applyRoomUpdate,
-    clearCurrentRoom,
-    setGameSession,
-  ]);
+  }, [roomId, currentRoom, navigate, applyRoomUpdate, clearCurrentRoom, setGameSession]);
 
   async function handleLeaveRoom() {
     if (!currentRoom) {
@@ -259,7 +242,7 @@ function RoomPage() {
       return;
     }
 
-    navigate("/lobby", { replace: true });
+    navigate('/lobby', { replace: true });
   }
 
   async function handleToggleReady() {
@@ -267,9 +250,7 @@ function RoomPage() {
       return;
     }
 
-    const self = currentRoom.members.find(
-      (member) => member.userId === user.id,
-    );
+    const self = currentRoom.members.find((member) => member.userId === user.id);
 
     if (!self) {
       return;
@@ -284,7 +265,7 @@ function RoomPage() {
     }
 
     socket.emit(SOCKET_EVENTS.GAME_START, {
-      roomId: currentRoom.id,
+      roomId: currentRoom.id
     });
   }
 
@@ -299,18 +280,18 @@ function RoomPage() {
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(url);
       } else {
-        const textarea = document.createElement("textarea");
+        const textarea = document.createElement('textarea');
 
         textarea.value = url;
         document.body.appendChild(textarea);
         textarea.select();
-        document.execCommand("copy");
+        document.execCommand('copy');
         document.body.removeChild(textarea);
       }
 
-      setCopyStatus("Ссылка скопирована");
+      setCopyStatus('Ссылка скопирована');
     } catch {
-      setCopyStatus("Не удалось скопировать");
+      setCopyStatus('Не удалось скопировать');
     }
 
     setTimeout(() => setCopyStatus(null), 2000);
@@ -330,8 +311,7 @@ function RoomPage() {
       return;
     }
 
-    const currentError =
-      useRoomStore.getState().error ?? "Не удалось войти в комнату";
+    const currentError = useRoomStore.getState().error ?? 'Не удалось войти в комнату';
 
     setJoinError(currentError);
   }
@@ -344,25 +324,22 @@ function RoomPage() {
 
   /* ---------- Превью (не участник) ---------- */
 
-  if (!currentRoom && errorCode === "NOT_ROOM_MEMBER") {
+  if (!currentRoom && errorCode === 'NOT_ROOM_MEMBER') {
     if (previewError) {
       return (
         <MainLayout>
-          <main className="room-page">
-            <section className="room-page__error">
-              <p className="room-page__eyebrow">ОШИБКА</p>
+          <main className='room-page'>
+            <section className='room-page__error'>
+              <p className='room-page__eyebrow'>ОШИБКА</p>
 
-              <h1 className="room-page__title">Не удалось открыть комнату</h1>
+              <h1 className='room-page__title'>Не удалось открыть комнату</h1>
 
-              <p className="room-page__description">{previewError}</p>
+              <p className='room-page__description'>{previewError}</p>
 
               <button
-                className="
-                  room-page__button
-                  room-page__button--secondary
-                "
-                type="button"
-                onClick={() => navigate("/lobby", { replace: true })}
+                className='room-page__button room-page__button--secondary'
+                type='button'
+                onClick={() => navigate('/lobby', { replace: true })}
               >
                 Вернуться в лобби
               </button>
@@ -376,81 +353,73 @@ function RoomPage() {
       return <RoomSkeleton />;
     }
 
-    const canJoin = preview.status === "WAITING";
+    const canJoin = preview.status === 'WAITING';
 
     return (
       <MainLayout>
-        <main className="room-page">
-          <section className="room-page__invite">
-            <p className="room-page__eyebrow">ПРИГЛАШЕНИЕ</p>
+        <main className='room-page'>
+          <section className='room-page__invite'>
+            <p className='room-page__eyebrow'>ПРИГЛАШЕНИЕ</p>
 
-            <h1 className="room-page__code">{preview.code}</h1>
+            <h1 className='room-page__code'>{preview.code}</h1>
 
-            <p className="room-page__description">
-              Хост приглашает тебя в комнату.
-            </p>
+            <p className='room-page__description'>Хост приглашает тебя в комнату.</p>
 
-            <div className="room-page__invite-info">
-              <div className="room-page__detail">
+            <div className='room-page__invite-info'>
+              <div className='room-page__detail'>
                 <span>Хост</span>
                 <strong>{preview.hostNickname}</strong>
               </div>
 
-              <div className="room-page__detail">
+              <div className='room-page__detail'>
                 <span>Игроков</span>
                 <strong>
                   {preview.membersCount} / {preview.maxPlayers}
                 </strong>
               </div>
 
-              <div className="room-page__detail">
+              <div className='room-page__detail'>
                 <span>Статус</span>
                 <strong>
-                  {preview.status === "WAITING"
-                    ? "Ожидание игроков"
-                    : preview.status === "PLAYING"
-                      ? "Игра идёт"
-                      : "Игра завершена"}
+                  {preview.status === 'WAITING'
+                    ? 'Ожидание игроков'
+                    : preview.status === 'PLAYING'
+                      ? 'Игра идёт'
+                      : 'Игра завершена'}
                 </strong>
               </div>
             </div>
 
             {!canJoin && (
-              <p className="room-page__invite-message">
-                {preview.status === "PLAYING"
-                  ? "Игра уже началась — присоединиться нельзя."
-                  : "Игра завершена — присоединиться нельзя."}
+              <p className='room-page__invite-message'>
+                {preview.status === 'PLAYING'
+                  ? 'Игра уже началась — присоединиться нельзя.'
+                  : 'Игра завершена — присоединиться нельзя.'}
               </p>
             )}
 
             {joinError && (
-              <p className="room-page__invite-message room-page__invite-message--error">
+              <p className='room-page__invite-message room-page__invite-message--error'>
                 {joinError}
               </p>
             )}
 
-            <div className="room-page__invite-actions">
+            <div className='room-page__invite-actions'>
               <button
-                className="
-                  room-page__button
-                  room-page__button--primary
-                "
-                type="button"
+                className='room-page__button room-page__button--primary'
+                type='button'
                 onClick={() => {
                   void handleJoinFromPreview();
                 }}
                 disabled={!canJoin || isMutating}
               >
-                {isMutating ? "Присоединяемся..." : "Войти в комнату"}
+                {isMutating ? 'Присоединяемся...' : 'Войти в комнату'}
               </button>
 
               <button
-                className="
-                  room-page__button
-                  room-page__button--secondary
-                "
-                type="button"
-                onClick={() => navigate("/lobby", { replace: true })}
+                className='room-page__button room-page__button--secondary'
+                type='button'
+                onClick={() => navigate('/lobby', { replace: true })}
               >
                 Вернуться в лобби
               </button>
@@ -466,21 +435,18 @@ function RoomPage() {
   if (error && !currentRoom) {
     return (
       <MainLayout>
-        <main className="room-page">
-          <section className="room-page__error">
-            <p className="room-page__eyebrow">ОШИБКА</p>
+        <main className='room-page'>
+          <section className='room-page__error'>
+            <p className='room-page__eyebrow'>ОШИБКА</p>
 
-            <h1 className="room-page__title">Не удалось открыть комнату</h1>
+            <h1 className='room-page__title'>Не удалось открыть комнату</h1>
 
-            <p className="room-page__description">{error}</p>
+            <p className='room-page__description'>{error}</p>
 
             <button
-              className="
-                room-page__button
-                room-page__button--secondary
-              "
-              type="button"
-              onClick={() => navigate("/lobby", { replace: true })}
+              className='room-page__button room-page__button--secondary'
+              type='button'
+              onClick={() => navigate('/lobby', { replace: true })}
             >
               Вернуться в лобби
             </button>
@@ -500,39 +466,32 @@ function RoomPage() {
 
   const isHost = currentRoom.hostUserId === user?.id;
 
-  const self = user
-    ? currentRoom.members.find((member) => member.userId === user.id)
-    : undefined;
+  const self = user ? currentRoom.members.find((member) => member.userId === user.id) : undefined;
 
-  const readyCount = currentRoom.members.filter(
-    (member) => member.isReady,
-  ).length;
+  const readyCount = currentRoom.members.filter((member) => member.isReady).length;
 
   const hasMinPlayers = currentRoom.members.length >= ROOM_RULES.MIN_PLAYERS;
 
   const everyoneReady =
-    currentRoom.members.length > 0 &&
-    currentRoom.members.every((member) => member.isReady);
+    currentRoom.members.length > 0 && currentRoom.members.every((member) => member.isReady);
 
   const canStart = isHost && hasMinPlayers && everyoneReady;
 
   return (
     <MainLayout>
-      <main className="room-page">
-        <section className="room-page__header">
+      <main className='room-page'>
+        <section className='room-page__header'>
           <div>
-            <p className="room-page__eyebrow">КОМНАТА</p>
+            <p className='room-page__eyebrow'>КОМНАТА</p>
 
-            <h1 className="room-page__code">{currentRoom.code}</h1>
+            <h1 className='room-page__code'>{currentRoom.code}</h1>
 
-            <p className="room-page__description">
-              Ожидание игроков перед началом игры.
-            </p>
+            <p className='room-page__description'>Ожидание игроков перед началом игры.</p>
 
-            <div className="room-page__invite-row">
+            <div className='room-page__invite-row'>
               <button
-                className="room-page__copy-button"
-                type="button"
+                className='room-page__copy-button'
+                type='button'
                 onClick={() => {
                   void handleCopyInvite();
                 }}
@@ -541,45 +500,43 @@ function RoomPage() {
               </button>
 
               <button
-                className="room-page__copy-button"
-                type="button"
+                className='room-page__copy-button'
+                type='button'
                 onClick={() => setIsInviteOpen(true)}
               >
                 Пригласить друга
               </button>
 
-              {copyStatus && (
-                <span className="room-page__copy-status">{copyStatus}</span>
-              )}
+              {copyStatus && <span className='room-page__copy-status'>{copyStatus}</span>}
             </div>
           </div>
 
-          <div className="room-page__meta">
+          <div className='room-page__meta'>
             <span>Игроков</span>
 
             <strong>
               {currentRoom.members.length}
-              {" / "}
+              {' / '}
               {currentRoom.maxPlayers}
             </strong>
           </div>
         </section>
 
-        <section className="room-page__content">
-          <div className="room-page__players">
-            <div className="room-page__section-header">
+        <section className='room-page__content'>
+          <div className='room-page__players'>
+            <div className='room-page__section-header'>
               <div>
-                <p className="room-page__eyebrow">УЧАСТНИКИ</p>
+                <p className='room-page__eyebrow'>УЧАСТНИКИ</p>
 
-                <h2 className="room-page__section-title">Игроки</h2>
+                <h2 className='room-page__section-title'>Игроки</h2>
               </div>
 
-              <span className="room-page__ready-counter">
+              <span className='room-page__ready-counter'>
                 Готовы: {readyCount} / {currentRoom.members.length}
               </span>
             </div>
 
-            <div className="room-page__players-list">
+            <div className='room-page__players-list'>
               {currentRoom.members.map((member) => {
                 const memberIsHost = member.userId === currentRoom.hostUserId;
 
@@ -588,23 +545,21 @@ function RoomPage() {
                 return (
                   <article
                     className={[
-                      "room-page__player",
-                      member.isReady ? "room-page__player--ready" : "",
+                      'room-page__player',
+                      member.isReady ? 'room-page__player--ready' : ''
                     ]
                       .filter(Boolean)
-                      .join(" ")}
+                      .join(' ')}
                     key={member.userId}
                   >
-                    <div className="room-page__player-main">
+                    <div className='room-page__player-main'>
                       <strong>{member.user.profile.nickname}</strong>
 
-                      <div className="room-page__player-tags">
-                        {memberIsHost && (
-                          <span className="room-page__player-tag">Хост</span>
-                        )}
+                      <div className='room-page__player-tags'>
+                        {memberIsHost && <span className='room-page__player-tag'>Хост</span>}
 
                         {memberIsSelf && (
-                          <span className="room-page__player-tag room-page__player-tag--self">
+                          <span className='room-page__player-tag room-page__player-tag--self'>
                             Ты
                           </span>
                         )}
@@ -613,13 +568,13 @@ function RoomPage() {
 
                     <span
                       className={[
-                        "room-page__player-status",
+                        'room-page__player-status',
                         member.isReady
-                          ? "room-page__player-status--ready"
-                          : "room-page__player-status--waiting",
-                      ].join(" ")}
+                          ? 'room-page__player-status--ready'
+                          : 'room-page__player-status--waiting'
+                      ].join(' ')}
                     >
-                      {member.isReady ? "Готов" : "Не готов"}
+                      {member.isReady ? 'Готов' : 'Не готов'}
                     </span>
                   </article>
                 );
@@ -629,78 +584,76 @@ function RoomPage() {
             {self && (
               <button
                 className={[
-                  "room-page__button",
-                  "room-page__button--ready-toggle",
-                  self.isReady ? "room-page__button--ghost" : "",
+                  'room-page__button',
+                  'room-page__button--ready-toggle',
+                  self.isReady ? 'room-page__button--ghost' : ''
                 ]
                   .filter(Boolean)
-                  .join(" ")}
-                type="button"
+                  .join(' ')}
+                type='button'
                 onClick={handleToggleReady}
                 disabled={isMutating}
               >
                 {self.isReady
                   ? isMutating
-                    ? "Отменяем..."
-                    : "Отменить готовность"
+                    ? 'Отменяем...'
+                    : 'Отменить готовность'
                   : isMutating
-                    ? "Готовимся..."
-                    : "Я готов"}
+                    ? 'Готовимся...'
+                    : 'Я готов'}
               </button>
             )}
           </div>
 
-          <aside className="room-page__sidebar">
-            <div className="room-page__room-info">
-              <p className="room-page__eyebrow">ИНФОРМАЦИЯ</p>
+          <aside className='room-page__sidebar'>
+            <div className='room-page__room-info'>
+              <p className='room-page__eyebrow'>ИНФОРМАЦИЯ</p>
 
-              <div className="room-page__detail">
+              <div className='room-page__detail'>
                 <span>Хост</span>
 
                 <strong>{currentRoom.host.profile.nickname}</strong>
               </div>
 
-              <div className="room-page__detail">
+              <div className='room-page__detail'>
                 <span>Статус</span>
 
-                <strong>
-                  {canStart ? "Готовы к старту" : "Ожидание игроков"}
-                </strong>
+                <strong>{canStart ? 'Готовы к старту' : 'Ожидание игроков'}</strong>
               </div>
 
-              <div className="room-page__detail">
+              <div className='room-page__detail'>
                 <span>Готовы</span>
 
                 <strong>
                   {readyCount}
-                  {" / "}
+                  {' / '}
                   {currentRoom.members.length}
                 </strong>
               </div>
             </div>
 
-            <div className="room-page__conditions">
-              <p className="room-page__eyebrow">УСЛОВИЯ СТАРТА</p>
+            <div className='room-page__conditions'>
+              <p className='room-page__eyebrow'>УСЛОВИЯ СТАРТА</p>
 
-              <ul className="room-page__conditions-list">
+              <ul className='room-page__conditions-list'>
                 <li
                   className={[
-                    "room-page__condition",
-                    hasMinPlayers ? "room-page__condition--done" : "",
+                    'room-page__condition',
+                    hasMinPlayers ? 'room-page__condition--done' : ''
                   ]
                     .filter(Boolean)
-                    .join(" ")}
+                    .join(' ')}
                 >
                   Минимум {ROOM_RULES.MIN_PLAYERS} игрока в комнате
                 </li>
 
                 <li
                   className={[
-                    "room-page__condition",
-                    everyoneReady ? "room-page__condition--done" : "",
+                    'room-page__condition',
+                    everyoneReady ? 'room-page__condition--done' : ''
                   ]
                     .filter(Boolean)
-                    .join(" ")}
+                    .join(' ')}
                 >
                   Все игроки готовы
                 </li>
@@ -709,11 +662,8 @@ function RoomPage() {
 
             {isHost && (
               <button
-                className="
-                  room-page__button
-                  room-page__button--start
-                "
-                type="button"
+                className='room-page__button room-page__button--start'
+                type='button'
                 onClick={handleStartGame}
                 disabled={!canStart}
               >
@@ -722,15 +672,12 @@ function RoomPage() {
             )}
 
             <button
-              className="
-                room-page__button
-                room-page__button--secondary
-              "
-              type="button"
+              className='room-page__button room-page__button--secondary'
+              type='button'
               onClick={handleLeaveRoom}
               disabled={isMutating}
             >
-              {isMutating ? "Выход..." : "Покинуть комнату"}
+              {isMutating ? 'Выход...' : 'Покинуть комнату'}
             </button>
           </aside>
         </section>

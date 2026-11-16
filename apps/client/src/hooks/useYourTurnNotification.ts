@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 type Params = {
   currentPlayerId: string | null;
@@ -15,11 +15,7 @@ type Params = {
  * Первый рендер игнорируется, чтобы не показывать
  * уведомление сразу при загрузке страницы или F5.
  */
-export function useYourTurnNotification({
-  currentPlayerId,
-  userId,
-  onYourTurn,
-}: Params): void {
+export function useYourTurnNotification({ currentPlayerId, userId, onYourTurn }: Params): void {
   const previousRef = useRef<string | null>(null);
 
   const onYourTurnRef = useRef(onYourTurn);

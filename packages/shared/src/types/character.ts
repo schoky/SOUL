@@ -1,4 +1,4 @@
-import type { CharacterStats } from "./stats.js";
+import type { CharacterStats } from './stats.js';
 
 export type CharacterAbility = {
   id: string;

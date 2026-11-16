@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest } from './client';
 
 export type NewsItem = {
   id: string;
@@ -11,7 +11,7 @@ export type NewsItem = {
 export async function getNews(): Promise<NewsItem[]> {
   const response = await apiRequest<{
     news: NewsItem[];
-  }>("/api/news");
+  }>('/api/news');
 
   return response.news;
 }

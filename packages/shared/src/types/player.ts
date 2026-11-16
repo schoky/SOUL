@@ -1,5 +1,5 @@
-import type { PlayerCharacter } from "./player-character.js";
-import type { Status } from "./status.js";
+import type { PlayerCharacter } from './player-character.js';
+import type { Status } from './status.js';
 
 export type Player = {
   id: string;

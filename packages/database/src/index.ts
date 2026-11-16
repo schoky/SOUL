@@ -1,4 +1,4 @@
-export { database } from "./client.js";
+export { database } from './client.js';
 
 export type {
   User,
@@ -13,5 +13,5 @@ export type {
   Game,
   GameStatus,
   GamePlayer,
-  GameResult,
-} from "./generated/prisma/client.js";
+  GameResult
+} from './generated/prisma/client.js';

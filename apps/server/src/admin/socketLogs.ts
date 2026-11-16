@@ -1,7 +1,6 @@
-import { EventEmitter } from "node:events";
+import { EventEmitter } from 'node:events';
 
-export type SocketLogType =
-  "socket:connected" | "socket:disconnected" | "auth:failed";
+export type SocketLogType = 'socket:connected' | 'socket:disconnected' | 'auth:failed';
 
 export type SocketLogEntry = {
   id: string;
@@ -20,11 +19,11 @@ class SocketLogs extends EventEmitter {
 
   private nextId = 1;
 
-  add(entry: Omit<SocketLogEntry, "id" | "timestamp">): SocketLogEntry {
+  add(entry: Omit<SocketLogEntry, 'id' | 'timestamp'>): SocketLogEntry {
     const log: SocketLogEntry = {
       id: String(this.nextId++),
       timestamp: new Date().toISOString(),
-      ...entry,
+      ...entry
     };
 
     this.logs.push(log);
@@ -35,7 +34,7 @@ class SocketLogs extends EventEmitter {
 
     // Оповещаем подписчиков (в socket/index.ts слушатель
     // рассылает новые логи админам через io).
-    this.emit("log", log);
+    this.emit('log', log);
 
     return log;
   }

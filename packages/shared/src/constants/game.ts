@@ -37,13 +37,13 @@ export const GAME_RULES = {
    * Сколько раз подряд можно пропустить ход.
    * Обычный ход (событие) сбрасывает счётчик.
    */
-  MAX_CONSECUTIVE_SKIPS: 2,
+  MAX_CONSECUTIVE_SKIPS: 2
 } as const;
 
 export const ROOM_RULES = {
   MIN_PLAYERS: 2,
   MAX_PLAYERS: 6,
-  ROOM_CODE_LENGTH: 6,
+  ROOM_CODE_LENGTH: 6
 } as const;
 
 /**
@@ -54,5 +54,5 @@ export const ROOM_RULES = {
  */
 export const RISK_CHANCES = {
   SUCCESS: 0.5,
-  FAILURE: 0.25,
+  FAILURE: 0.25
 } as const;

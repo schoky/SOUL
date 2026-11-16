@@ -1,4 +1,4 @@
-import type { Server } from "socket.io";
+import type { Server } from 'socket.io';
 
 let ioInstance: Server | null = null;
 
@@ -8,7 +8,7 @@ export function setIO(io: Server): void {
 
 export function getIO(): Server {
   if (!ioInstance) {
-    throw new Error("Socket.IO server has not been initialized");
+    throw new Error('Socket.IO server has not been initialized');
   }
 
   return ioInstance;

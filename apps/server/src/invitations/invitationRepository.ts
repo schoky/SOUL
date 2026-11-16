@@ -1,4 +1,4 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 const INVITATION_TTL_MS = 10 * 60 * 1000;
 
@@ -9,23 +9,19 @@ class InvitationRepository {
       include: {
         room: true,
         inviter: { include: { profile: true } },
-        invitee: { include: { profile: true } },
-      },
+        invitee: { include: { profile: true } }
+      }
     });
   }
 
-  async findPendingBetween(
-    roomId: string,
-    inviterId: string,
-    inviteeId: string,
-  ) {
+  async findPendingBetween(roomId: string, inviterId: string, inviteeId: string) {
     return database.roomInvitation.findFirst({
       where: {
         roomId,
         inviterId,
         inviteeId,
-        status: "PENDING",
-      },
+        status: 'PENDING'
+      }
     });
   }
 
@@ -38,18 +34,18 @@ class InvitationRepository {
         inviterId,
         inviteeId,
         expiresAt,
-        status: "PENDING",
-      },
+        status: 'PENDING'
+      }
     });
   }
 
-  async updateStatus(id: string, status: "ACCEPTED" | "DECLINED" | "EXPIRED") {
+  async updateStatus(id: string, status: 'ACCEPTED' | 'DECLINED' | 'EXPIRED') {
     return database.roomInvitation.update({
       where: { id },
       data: {
         status,
-        respondedAt: new Date(),
-      },
+        respondedAt: new Date()
+      }
     });
   }
 
@@ -59,28 +55,28 @@ class InvitationRepository {
     await database.roomInvitation.updateMany({
       where: {
         inviteeId: userId,
-        status: "PENDING",
-        expiresAt: { lt: now },
+        status: 'PENDING',
+        expiresAt: { lt: now }
       },
       data: {
-        status: "EXPIRED",
-        respondedAt: now,
-      },
+        status: 'EXPIRED',
+        respondedAt: now
+      }
     });
 
     return database.roomInvitation.findMany({
       where: {
         inviteeId: userId,
-        status: "PENDING",
-        expiresAt: { gte: now },
+        status: 'PENDING',
+        expiresAt: { gte: now }
       },
       include: {
         room: true,
-        inviter: { include: { profile: true } },
+        inviter: { include: { profile: true } }
       },
       orderBy: {
-        createdAt: "desc",
-      },
+        createdAt: 'desc'
+      }
     });
   }
 
@@ -90,10 +86,10 @@ class InvitationRepository {
     return database.roomInvitation.count({
       where: {
         inviteeId: userId,
-        status: "PENDING",
+        status: 'PENDING',
         expiresAt: { gte: now },
-        readAt: null,
-      },
+        readAt: null
+      }
     });
   }
 
@@ -103,13 +99,13 @@ class InvitationRepository {
     return database.roomInvitation.updateMany({
       where: {
         inviteeId: userId,
-        status: "PENDING",
+        status: 'PENDING',
         expiresAt: { gte: now },
-        readAt: null,
+        readAt: null
       },
       data: {
-        readAt: now,
-      },
+        readAt: now
+      }
     });
   }
 
@@ -120,9 +116,9 @@ class InvitationRepository {
       where: {
         inviteeId,
         roomId,
-        status: "PENDING",
-        expiresAt: { gte: now },
-      },
+        status: 'PENDING',
+        expiresAt: { gte: now }
+      }
     });
 
     return Boolean(invitation);

@@ -1,4 +1,4 @@
-export type InvitationStatus = "PENDING" | "ACCEPTED" | "DECLINED" | "EXPIRED";
+export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'EXPIRED';
 
 export type RoomInvitationDto = {
   id: string;

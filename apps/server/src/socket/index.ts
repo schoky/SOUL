@@ -1,27 +1,23 @@
-import type { Server as HttpServer } from "node:http";
+import type { Server as HttpServer } from 'node:http';
 
-import { Server } from "socket.io";
+import { SOCKET_EVENTS } from '@soul/shared';
+import { Server } from 'socket.io';
 
-import { SOCKET_EVENTS } from "@soul/shared";
+import { socketLogs } from '../admin/socketLogs.js';
+import { getCurrentUserByToken } from '../auth/authService.js';
+import { gameManager } from '../game/gameManager.js';
+import { connectionTracker } from './connectionTracker.js';
+import { handlePlayerDisconnect } from './disconnectHandler.js';
+import { registerGameHandlers } from './gameHandlers.js';
+import { setIO } from './io.js';
 
-import { getCurrentUserByToken } from "../auth/authService.js";
+const SESSION_COOKIE = 'soul_session';
 
-import { socketLogs } from "../admin/socketLogs.js";
+const CLIENT_ORIGIN = process.env.CLIENT_URL ?? 'http://localhost:5173';
 
-import { gameManager } from "../game/gameManager.js";
+const LOBBY_CHANNEL = 'lobby';
 
-import { connectionTracker } from "./connectionTracker.js";
-import { handlePlayerDisconnect } from "./disconnectHandler.js";
-import { registerGameHandlers } from "./gameHandlers.js";
-import { setIO } from "./io.js";
-
-const SESSION_COOKIE = "soul_session";
-
-const CLIENT_ORIGIN = process.env.CLIENT_URL ?? "http://localhost:5173";
-
-const LOBBY_CHANNEL = "lobby";
-
-const ADMIN_CHANNEL = "admin";
+const ADMIN_CHANNEL = 'admin';
 
 function parseCookies(header: string | undefined): Record<string, string> {
   if (!header) {
@@ -30,14 +26,14 @@ function parseCookies(header: string | undefined): Record<string, string> {
 
   const result: Record<string, string> = {};
 
-  for (const pair of header.split(";")) {
+  for (const pair of header.split(';')) {
     const trimmed = pair.trim();
 
     if (!trimmed) {
       continue;
     }
 
-    const eq = trimmed.indexOf("=");
+    const eq = trimmed.indexOf('=');
 
     if (eq === -1) {
       continue;
@@ -61,8 +57,8 @@ export function createSocketServer(httpServer: HttpServer): Server {
   const io = new Server(httpServer, {
     cors: {
       origin: CLIENT_ORIGIN,
-      credentials: true,
-    },
+      credentials: true
+    }
   });
 
   io.use(async (socket, next) => {
@@ -73,24 +69,24 @@ export function createSocketServer(httpServer: HttpServer): Server {
 
       if (!token) {
         socketLogs.add({
-          type: "auth:failed",
+          type: 'auth:failed',
           socketId: socket.id,
-          message: "Нет токена сессии",
+          message: 'Нет токена сессии'
         });
 
-        return next(new Error("Not authenticated"));
+        return next(new Error('Not authenticated'));
       }
 
       const user = await getCurrentUserByToken(token);
 
       if (!user) {
         socketLogs.add({
-          type: "auth:failed",
+          type: 'auth:failed',
           socketId: socket.id,
-          message: "Невалидный токен сессии",
+          message: 'Невалидный токен сессии'
         });
 
-        return next(new Error("Not authenticated"));
+        return next(new Error('Not authenticated'));
       }
 
       socket.data.userId = user.id;
@@ -99,22 +95,22 @@ export function createSocketServer(httpServer: HttpServer): Server {
       next();
     } catch (error) {
       socketLogs.add({
-        type: "auth:failed",
+        type: 'auth:failed',
         socketId: socket.id,
-        message: error instanceof Error ? error.message : "Ошибка авторизации",
+        message: error instanceof Error ? error.message : 'Ошибка авторизации'
       });
 
-      next(error instanceof Error ? error : new Error("Auth failed"));
+      next(error instanceof Error ? error : new Error('Auth failed'));
     }
   });
 
   // Один слушатель на все новые логи — рассылаем
   // их всем админам, кто подписан на канал.
-  socketLogs.on("log", (log) => {
+  socketLogs.on('log', (log) => {
     io.to(ADMIN_CHANNEL).emit(SOCKET_EVENTS.ADMIN_LOG_ADDED, log);
   });
 
-  io.on("connection", (socket) => {
+  io.on('connection', (socket) => {
     const userId = socket.data.userId as string;
     const userRole = socket.data.userRole as string | undefined;
 
@@ -129,14 +125,14 @@ export function createSocketServer(httpServer: HttpServer): Server {
     connectionTracker.cancelAutoPass(userId);
 
     socketLogs.add({
-      type: "socket:connected",
+      type: 'socket:connected',
       userId,
       socketId: socket.id,
-      message: `Socket подключён: ${socket.id} (user: ${userId})`,
+      message: `Socket подключён: ${socket.id} (user: ${userId})`
     });
 
     // Админ автоматически подписывается на канал админки.
-    if (userRole === "ADMIN") {
+    if (userRole === 'ADMIN') {
       void socket.join(ADMIN_CHANNEL);
     }
 
@@ -146,7 +142,7 @@ export function createSocketServer(httpServer: HttpServer): Server {
     if (currentRoomId) {
       io.to(`room:${currentRoomId}`).emit(SOCKET_EVENTS.PLAYER_CONNECTION, {
         playerId: userId,
-        connected: true,
+        connected: true
       });
     }
 
@@ -158,58 +154,52 @@ export function createSocketServer(httpServer: HttpServer): Server {
       void socket.leave(LOBBY_CHANNEL);
     });
 
-    socket.on(
-      SOCKET_EVENTS.ROOM_SUBSCRIBE,
-      async (payload: { roomId?: string }) => {
-        if (!payload?.roomId) {
-          return;
-        }
+    socket.on(SOCKET_EVENTS.ROOM_SUBSCRIBE, async (payload: { roomId?: string }) => {
+      if (!payload?.roomId) {
+        return;
+      }
 
-        const roomId = payload.roomId;
+      const roomId = payload.roomId;
 
-        void socket.join(`room:${roomId}`);
+      void socket.join(`room:${roomId}`);
 
-        connectionTracker.setRoom(userId, roomId);
+      connectionTracker.setRoom(userId, roomId);
 
-        try {
-          const game = await gameManager.resolve(roomId);
+      try {
+        const game = await gameManager.resolve(roomId);
 
-          if (game) {
-            socket.emit(SOCKET_EVENTS.GAME_STATE, {
-              gameState: game,
-              characters: game.characters,
-            });
-          }
-
-          socket.emit(SOCKET_EVENTS.PLAYERS_CONNECTION, {
-            connections: connectionTracker.getConnectionMap(roomId),
+        if (game) {
+          socket.emit(SOCKET_EVENTS.GAME_STATE, {
+            gameState: game,
+            characters: game.characters
           });
-        } catch (error) {
-          console.error("Не удалось загрузить состояние игры:", error);
-        }
-      },
-    );
-
-    socket.on(
-      SOCKET_EVENTS.ROOM_UNSUBSCRIBE,
-      (payload: { roomId?: string }) => {
-        if (!payload?.roomId) {
-          return;
         }
 
-        void socket.leave(`room:${payload.roomId}`);
-      },
-    );
+        socket.emit(SOCKET_EVENTS.PLAYERS_CONNECTION, {
+          connections: connectionTracker.getConnectionMap(roomId)
+        });
+      } catch (error) {
+        console.error('Не удалось загрузить состояние игры:', error);
+      }
+    });
+
+    socket.on(SOCKET_EVENTS.ROOM_UNSUBSCRIBE, (payload: { roomId?: string }) => {
+      if (!payload?.roomId) {
+        return;
+      }
+
+      void socket.leave(`room:${payload.roomId}`);
+    });
 
     registerGameHandlers(socket);
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       socketLogs.add({
-        type: "socket:disconnected",
+        type: 'socket:disconnected',
         userId,
         socketId: socket.id,
         roomId: connectionTracker.getRoom(userId),
-        message: `Socket отключён: ${socket.id} (user: ${userId})`,
+        message: `Socket отключён: ${socket.id} (user: ${userId})`
       });
 
       const wasLast = connectionTracker.removeSocket(userId, socket.id);
@@ -227,7 +217,7 @@ export function createSocketServer(httpServer: HttpServer): Server {
 
       io.to(`room:${roomId}`).emit(SOCKET_EVENTS.PLAYER_CONNECTION, {
         playerId: userId,
-        connected: false,
+        connected: false
       });
 
       void handlePlayerDisconnect(roomId, userId);

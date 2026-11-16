@@ -1,11 +1,8 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { authenticateRequest } from "./authMiddleware.js";
+import { authenticateRequest } from './authMiddleware.js';
 
-export async function requireAdmin(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
+export async function requireAdmin(request: FastifyRequest, reply: FastifyReply) {
   // Сначала обычная аутентификация
   await authenticateRequest(request, reply);
 
@@ -16,9 +13,9 @@ export async function requireAdmin(
 
   const user = request.user;
 
-  if (!user || user.role !== "ADMIN") {
+  if (!user || user.role !== 'ADMIN') {
     return reply.code(403).send({
-      error: "Forbidden",
+      error: 'Forbidden'
     });
   }
 }

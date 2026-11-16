@@ -8,13 +8,13 @@ type SkeletonProps = {
 function Skeleton({ width, height, radius, className }: SkeletonProps) {
   return (
     <span
-      className={["skeleton", className].filter(Boolean).join(" ")}
+      className={['skeleton', className].filter(Boolean).join(' ')}
       style={{
         width,
         height,
-        borderRadius: radius,
+        borderRadius: radius
       }}
-      aria-hidden="true"
+      aria-hidden='true'
     />
   );
 }

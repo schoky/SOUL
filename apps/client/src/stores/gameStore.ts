@@ -1,6 +1,5 @@
-import { create } from "zustand";
-
-import type { Character, GameState } from "@soul/shared";
+import type { Character, GameState } from '@soul/shared';
+import { create } from 'zustand';
 
 export type HistoryEntry = {
   turnNumber: number;
@@ -47,13 +46,13 @@ export const useGameStore = create<GameStore>((set) => ({
   setGameSession(gameState, characters) {
     set({
       gameState,
-      characters,
+      characters
     });
   },
 
   pushHistory(entry) {
     set((state) => ({
-      history: [entry, ...state.history].slice(0, 8),
+      history: [entry, ...state.history].slice(0, 8)
     }));
   },
 
@@ -65,8 +64,8 @@ export const useGameStore = create<GameStore>((set) => ({
     set((state) => ({
       playersConnection: {
         ...state.playersConnection,
-        [playerId]: connected,
-      },
+        [playerId]: connected
+      }
     }));
   },
 
@@ -79,7 +78,7 @@ export const useGameStore = create<GameStore>((set) => ({
       gameState: null,
       characters: [],
       history: [],
-      playersConnection: {},
+      playersConnection: {}
     });
-  },
+  }
 }));

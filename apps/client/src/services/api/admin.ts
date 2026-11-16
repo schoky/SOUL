@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest } from './client';
 
 // ---------- Stats ----------
 
@@ -12,7 +12,7 @@ export type AdminStats = {
 };
 
 export async function getAdminStats(): Promise<AdminStats> {
-  return apiRequest<AdminStats>("/api/admin/stats");
+  return apiRequest<AdminStats>('/api/admin/stats');
 }
 
 // ---------- Users ----------
@@ -20,7 +20,7 @@ export async function getAdminStats(): Promise<AdminStats> {
 export type AdminUser = {
   id: string;
   email: string;
-  role: "USER" | "ADMIN";
+  role: 'USER' | 'ADMIN';
   isBlocked: boolean;
   createdAt: string;
   lastLoginAt: string | null;
@@ -41,46 +41,38 @@ export async function getAdminUsers(
     search?: string;
     limit?: number;
     offset?: number;
-  } = {},
+  } = {}
 ): Promise<AdminUsersResponse> {
   const searchParams = new URLSearchParams();
 
   if (params.search) {
-    searchParams.set("search", params.search);
+    searchParams.set('search', params.search);
   }
 
   if (params.limit !== undefined) {
-    searchParams.set("limit", String(params.limit));
+    searchParams.set('limit', String(params.limit));
   }
 
   if (params.offset !== undefined) {
-    searchParams.set("offset", String(params.offset));
+    searchParams.set('offset', String(params.offset));
   }
 
   const query = searchParams.toString();
 
-  return apiRequest<AdminUsersResponse>(
-    `/api/admin/users${query ? `?${query}` : ""}`,
-  );
+  return apiRequest<AdminUsersResponse>(`/api/admin/users${query ? `?${query}` : ''}`);
 }
 
-export async function setUserBlocked(
-  userId: string,
-  isBlocked: boolean,
-): Promise<void> {
+export async function setUserBlocked(userId: string, isBlocked: boolean): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/users/${userId}/blocked`, {
-    method: "PATCH",
-    body: JSON.stringify({ isBlocked }),
+    method: 'PATCH',
+    body: JSON.stringify({ isBlocked })
   });
 }
 
-export async function setUserRole(
-  userId: string,
-  role: "USER" | "ADMIN",
-): Promise<void> {
+export async function setUserRole(userId: string, role: 'USER' | 'ADMIN'): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/users/${userId}/role`, {
-    method: "PATCH",
-    body: JSON.stringify({ role }),
+    method: 'PATCH',
+    body: JSON.stringify({ role })
   });
 }
 
@@ -89,7 +81,7 @@ export async function setUserRole(
 export type AdminRoom = {
   id: string;
   code: string;
-  status: "WAITING" | "PLAYING" | "FINISHED";
+  status: 'WAITING' | 'PLAYING' | 'FINISHED';
   maxPlayers: number;
   createdAt: string;
   host: {
@@ -106,16 +98,15 @@ export type AdminRoom = {
 export async function getAdminRooms(): Promise<AdminRoom[]> {
   const response = await apiRequest<{
     rooms: AdminRoom[];
-  }>("/api/admin/rooms");
+  }>('/api/admin/rooms');
 
   return response.rooms;
 }
 
 export async function forceFinishRoom(roomId: string): Promise<void> {
-  await apiRequest<{ success: boolean }>(
-    `/api/admin/rooms/${roomId}/force-finish`,
-    { method: "POST" },
-  );
+  await apiRequest<{ success: boolean }>(`/api/admin/rooms/${roomId}/force-finish`, {
+    method: 'POST'
+  });
 }
 
 // ---------- Games ----------
@@ -124,7 +115,7 @@ export type AdminGame = {
   id: string;
   roomId: string;
   roomCode: string;
-  status: "PLAYING" | "FINISHED";
+  status: 'PLAYING' | 'FINISHED';
   startedAt: string;
   finishedAt: string | null;
   winner: { id: string; nickname: string } | null;
@@ -134,7 +125,7 @@ export type AdminGame = {
 export async function getAdminGames(): Promise<AdminGame[]> {
   const response = await apiRequest<{
     games: AdminGame[];
-  }>("/api/admin/games");
+  }>('/api/admin/games');
 
   return response.games;
 }
@@ -155,7 +146,7 @@ export type AdminActiveGame = {
 export async function getAdminActiveGames(): Promise<AdminActiveGame[]> {
   const response = await apiRequest<{
     games: AdminActiveGame[];
-  }>("/api/admin/games/active");
+  }>('/api/admin/games/active');
 
   return response.games;
 }
@@ -192,19 +183,17 @@ export type AdminCharacterInput = {
 export async function getAdminCharacters(): Promise<AdminCharacter[]> {
   const response = await apiRequest<{
     characters: AdminCharacter[];
-  }>("/api/admin/characters");
+  }>('/api/admin/characters');
 
   return response.characters;
 }
 
-export async function createAdminCharacter(
-  input: AdminCharacterInput,
-): Promise<AdminCharacter> {
+export async function createAdminCharacter(input: AdminCharacterInput): Promise<AdminCharacter> {
   const response = await apiRequest<{
     character: AdminCharacter;
-  }>("/api/admin/characters", {
-    method: "POST",
-    body: JSON.stringify(input),
+  }>('/api/admin/characters', {
+    method: 'POST',
+    body: JSON.stringify(input)
   });
 
   return response.character;
@@ -212,13 +201,13 @@ export async function createAdminCharacter(
 
 export async function updateAdminCharacter(
   id: string,
-  input: Partial<AdminCharacterInput>,
+  input: Partial<AdminCharacterInput>
 ): Promise<AdminCharacter> {
   const response = await apiRequest<{
     character: AdminCharacter;
   }>(`/api/admin/characters/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(input),
+    method: 'PATCH',
+    body: JSON.stringify(input)
   });
 
   return response.character;
@@ -226,7 +215,7 @@ export async function updateAdminCharacter(
 
 export async function deleteAdminCharacter(id: string): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/characters/${id}`, {
-    method: "DELETE",
+    method: 'DELETE'
   });
 }
 
@@ -264,19 +253,17 @@ export type AdminEventInput = {
 export async function getAdminEvents(): Promise<AdminEvent[]> {
   const response = await apiRequest<{
     events: AdminEvent[];
-  }>("/api/admin/events");
+  }>('/api/admin/events');
 
   return response.events;
 }
 
-export async function createAdminEvent(
-  input: AdminEventInput,
-): Promise<AdminEvent> {
+export async function createAdminEvent(input: AdminEventInput): Promise<AdminEvent> {
   const response = await apiRequest<{
     event: AdminEvent;
-  }>("/api/admin/events", {
-    method: "POST",
-    body: JSON.stringify(input),
+  }>('/api/admin/events', {
+    method: 'POST',
+    body: JSON.stringify(input)
   });
 
   return response.event;
@@ -284,13 +271,13 @@ export async function createAdminEvent(
 
 export async function updateAdminEvent(
   id: string,
-  input: Partial<AdminEventInput>,
+  input: Partial<AdminEventInput>
 ): Promise<AdminEvent> {
   const response = await apiRequest<{
     event: AdminEvent;
   }>(`/api/admin/events/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(input),
+    method: 'PATCH',
+    body: JSON.stringify(input)
   });
 
   return response.event;
@@ -298,7 +285,7 @@ export async function updateAdminEvent(
 
 export async function deleteAdminEvent(id: string): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/events/${id}`, {
-    method: "DELETE",
+    method: 'DELETE'
   });
 }
 
@@ -326,19 +313,17 @@ export type AdminNewsInput = {
 export async function getAdminNews(): Promise<AdminNewsItem[]> {
   const response = await apiRequest<{
     news: AdminNewsItem[];
-  }>("/api/admin/news");
+  }>('/api/admin/news');
 
   return response.news;
 }
 
-export async function createAdminNews(
-  input: AdminNewsInput,
-): Promise<AdminNewsItem> {
+export async function createAdminNews(input: AdminNewsInput): Promise<AdminNewsItem> {
   const response = await apiRequest<{
     item: AdminNewsItem;
-  }>("/api/admin/news", {
-    method: "POST",
-    body: JSON.stringify(input),
+  }>('/api/admin/news', {
+    method: 'POST',
+    body: JSON.stringify(input)
   });
 
   return response.item;
@@ -346,13 +331,13 @@ export async function createAdminNews(
 
 export async function updateAdminNews(
   id: string,
-  input: Partial<AdminNewsInput>,
+  input: Partial<AdminNewsInput>
 ): Promise<AdminNewsItem> {
   const response = await apiRequest<{
     item: AdminNewsItem;
   }>(`/api/admin/news/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(input),
+    method: 'PATCH',
+    body: JSON.stringify(input)
   });
 
   return response.item;
@@ -360,14 +345,13 @@ export async function updateAdminNews(
 
 export async function deleteAdminNews(id: string): Promise<void> {
   await apiRequest<{ success: boolean }>(`/api/admin/news/${id}`, {
-    method: "DELETE",
+    method: 'DELETE'
   });
 }
 
 // ---------- Socket logs ----------
 
-export type AdminSocketLogType =
-  "socket:connected" | "socket:disconnected" | "auth:failed";
+export type AdminSocketLogType = 'socket:connected' | 'socket:disconnected' | 'auth:failed';
 
 export type AdminSocketLog = {
   id: string;
@@ -383,22 +367,22 @@ export async function getAdminSocketLogs(
   params: {
     limit?: number;
     type?: AdminSocketLogType;
-  } = {},
+  } = {}
 ): Promise<AdminSocketLog[]> {
   const searchParams = new URLSearchParams();
 
   if (params.limit !== undefined) {
-    searchParams.set("limit", String(params.limit));
+    searchParams.set('limit', String(params.limit));
   }
 
   if (params.type) {
-    searchParams.set("type", params.type);
+    searchParams.set('type', params.type);
   }
 
   const query = searchParams.toString();
 
   const response = await apiRequest<{ logs: AdminSocketLog[] }>(
-    `/api/admin/logs${query ? `?${query}` : ""}`,
+    `/api/admin/logs${query ? `?${query}` : ''}`
   );
 
   return response.logs;
@@ -414,15 +398,15 @@ export async function getAdminSocketLogs(
 export function getAdminSocketLogsExportUrl(
   params: {
     type?: AdminSocketLogType;
-  } = {},
+  } = {}
 ): string {
   const searchParams = new URLSearchParams();
 
   if (params.type) {
-    searchParams.set("type", params.type);
+    searchParams.set('type', params.type);
   }
 
   const query = searchParams.toString();
 
-  return `/api/admin/logs/export${query ? `?${query}` : ""}`;
+  return `/api/admin/logs/export${query ? `?${query}` : ''}`;
 }

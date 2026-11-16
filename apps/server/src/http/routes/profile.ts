@@ -1,9 +1,8 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { FastifyPluginAsync } from 'fastify';
 
-import { authenticateRequest } from "../authMiddleware.js";
-
-import { updateProfile } from "../../players/profileService.js";
-import { statsRepository } from "../../players/statsRepository.js";
+import { updateProfile } from '../../players/profileService.js';
+import { statsRepository } from '../../players/statsRepository.js';
+import { authenticateRequest } from '../authMiddleware.js';
 
 type UpdateProfileBody = {
   nickname?: string;
@@ -12,16 +11,16 @@ type UpdateProfileBody = {
 
 const profileRoutes: FastifyPluginAsync = async (app) => {
   app.get(
-    "/",
+    '/',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -29,29 +28,29 @@ const profileRoutes: FastifyPluginAsync = async (app) => {
         id: user.id,
         email: user.email,
         role: user.role,
-        profile: user.profile,
+        profile: user.profile
       };
-    },
+    }
   );
 
   app.get(
-    "/stats",
+    '/stats',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       const stats = await statsRepository.getOverview(user.id);
 
       return reply.send(stats);
-    },
+    }
   );
 
   app.get<{
@@ -59,66 +58,64 @@ const profileRoutes: FastifyPluginAsync = async (app) => {
       limit?: string;
     };
   }>(
-    "/games",
+    '/games',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       const rawLimit = Number(request.query.limit ?? 10);
 
       const limit =
-        Number.isFinite(rawLimit) && rawLimit > 0 && rawLimit <= 50
-          ? Math.floor(rawLimit)
-          : 10;
+        Number.isFinite(rawLimit) && rawLimit > 0 && rawLimit <= 50 ? Math.floor(rawLimit) : 10;
 
       const games = await statsRepository.getRecentGames(user.id, limit);
 
       return reply.send({ games });
-    },
+    }
   );
 
   app.patch<{
     Body: UpdateProfileBody;
   }>(
-    "/",
+    '/',
     {
       preHandler: authenticateRequest,
 
       schema: {
         body: {
-          type: "object",
+          type: 'object',
           additionalProperties: false,
           minProperties: 1,
 
           properties: {
             nickname: {
-              type: "string",
+              type: 'string',
               minLength: 3,
-              maxLength: 20,
+              maxLength: 20
             },
 
             avatar: {
-              type: ["string", "null"],
-              maxLength: 500,
-            },
-          },
-        },
-      },
+              type: ['string', 'null'],
+              maxLength: 500
+            }
+          }
+        }
+      }
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -126,35 +123,32 @@ const profileRoutes: FastifyPluginAsync = async (app) => {
         const profile = await updateProfile(user.id, request.body);
 
         return {
-          profile,
+          profile
         };
       } catch (error) {
-        if (
-          error instanceof Error &&
-          error.message === "Nickname is already taken"
-        ) {
+        if (error instanceof Error && error.message === 'Nickname is already taken') {
           return reply.code(409).send({
-            error: error.message,
+            error: error.message
           });
         }
 
         if (
           error instanceof Error &&
-          (error.message.includes("Nickname must be") ||
-            error.message.includes("At least one profile field"))
+          (error.message.includes('Nickname must be') ||
+            error.message.includes('At least one profile field'))
         ) {
           return reply.code(400).send({
-            error: error.message,
+            error: error.message
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 };
 

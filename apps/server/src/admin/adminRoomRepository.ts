@@ -1,33 +1,33 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 class AdminRoomRepository {
   async findActive() {
     const rooms = await database.room.findMany({
       where: {
         status: {
-          in: ["WAITING", "PLAYING"],
-        },
+          in: ['WAITING', 'PLAYING']
+        }
       },
       include: {
         host: {
           include: {
-            profile: true,
-          },
+            profile: true
+          }
         },
         members: {
           include: {
             user: {
               include: {
-                profile: true,
-              },
-            },
-          },
-        },
+                profile: true
+              }
+            }
+          }
+        }
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc'
       },
-      take: 50,
+      take: 50
     });
 
     return rooms.map((room) => ({
@@ -38,13 +38,13 @@ class AdminRoomRepository {
       createdAt: room.createdAt.toISOString(),
       host: {
         id: room.host.id,
-        nickname: room.host.profile?.nickname ?? "—",
+        nickname: room.host.profile?.nickname ?? '—'
       },
       members: room.members.map((m) => ({
         userId: m.userId,
-        nickname: m.user.profile?.nickname ?? "—",
-        isReady: m.isReady,
-      })),
+        nickname: m.user.profile?.nickname ?? '—',
+        isReady: m.isReady
+      }))
     }));
   }
 
@@ -53,20 +53,20 @@ class AdminRoomRepository {
       include: {
         room: true,
         winner: {
-          include: { profile: true },
+          include: { profile: true }
         },
         players: {
           include: {
             user: {
-              include: { profile: true },
-            },
-          },
-        },
+              include: { profile: true }
+            }
+          }
+        }
       },
       orderBy: {
-        startedAt: "desc",
+        startedAt: 'desc'
       },
-      take: limit,
+      take: limit
     });
 
     return games.map((game) => ({
@@ -79,31 +79,31 @@ class AdminRoomRepository {
       winner: game.winner
         ? {
             id: game.winner.id,
-            nickname: game.winner.profile?.nickname ?? "—",
+            nickname: game.winner.profile?.nickname ?? '—'
           }
         : null,
-      playersCount: game.players.length,
+      playersCount: game.players.length
     }));
   }
 
   async findPlayingGames() {
     const games = await database.game.findMany({
       where: {
-        status: "PLAYING",
+        status: 'PLAYING'
       },
       include: {
         room: true,
         players: {
           include: {
             user: {
-              include: { profile: true },
-            },
-          },
-        },
+              include: { profile: true }
+            }
+          }
+        }
       },
       orderBy: {
-        startedAt: "desc",
-      },
+        startedAt: 'desc'
+      }
     });
 
     return games.map((game) => {
@@ -121,8 +121,8 @@ class AdminRoomRepository {
         currentPlayerId: state?.currentPlayerId ?? null,
         players: game.players.map((p) => ({
           userId: p.userId,
-          nickname: p.user.profile?.nickname ?? "—",
-        })),
+          nickname: p.user.profile?.nickname ?? '—'
+        }))
       };
     });
   }

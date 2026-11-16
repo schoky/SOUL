@@ -1,4 +1,4 @@
-import type { OAuthProvider } from "@soul/database";
+import type { OAuthProvider } from '@soul/database';
 
 export type OAuthProviderConfig = {
   authorizeUrl: string;
@@ -13,40 +13,38 @@ export type OAuthProviderConfig = {
 
 export const OAUTH_PROVIDERS: Record<OAuthProvider, OAuthProviderConfig> = {
   GOOGLE: {
-    authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
-    tokenUrl: "https://oauth2.googleapis.com/token",
-    userInfoUrl: "https://www.googleapis.com/oauth2/v3/userinfo",
-    scopes: ["openid", "email", "profile"],
-    clientIdEnv: "GOOGLE_CLIENT_ID",
-    clientSecretEnv: "GOOGLE_CLIENT_SECRET",
+    authorizeUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    tokenUrl: 'https://oauth2.googleapis.com/token',
+    userInfoUrl: 'https://www.googleapis.com/oauth2/v3/userinfo',
+    scopes: ['openid', 'email', 'profile'],
+    clientIdEnv: 'GOOGLE_CLIENT_ID',
+    clientSecretEnv: 'GOOGLE_CLIENT_SECRET'
   },
 
   DISCORD: {
-    authorizeUrl: "https://discord.com/oauth2/authorize",
-    tokenUrl: "https://discord.com/api/oauth2/token",
-    userInfoUrl: "https://discord.com/api/users/@me",
-    scopes: ["identify", "email"],
-    clientIdEnv: "DISCORD_CLIENT_ID",
-    clientSecretEnv: "DISCORD_CLIENT_SECRET",
+    authorizeUrl: 'https://discord.com/oauth2/authorize',
+    tokenUrl: 'https://discord.com/api/oauth2/token',
+    userInfoUrl: 'https://discord.com/api/users/@me',
+    scopes: ['identify', 'email'],
+    clientIdEnv: 'DISCORD_CLIENT_ID',
+    clientSecretEnv: 'DISCORD_CLIENT_SECRET'
   },
 
   TWITCH: {
-    authorizeUrl: "https://id.twitch.tv/oauth2/authorize",
-    tokenUrl: "https://id.twitch.tv/oauth2/token",
-    userInfoUrl: "https://api.twitch.tv/helix/users",
-    scopes: ["user:read:email"],
-    clientIdEnv: "TWITCH_CLIENT_ID",
-    clientSecretEnv: "TWITCH_CLIENT_SECRET",
-  },
+    authorizeUrl: 'https://id.twitch.tv/oauth2/authorize',
+    tokenUrl: 'https://id.twitch.tv/oauth2/token',
+    userInfoUrl: 'https://api.twitch.tv/helix/users',
+    scopes: ['user:read:email'],
+    clientIdEnv: 'TWITCH_CLIENT_ID',
+    clientSecretEnv: 'TWITCH_CLIENT_SECRET'
+  }
 };
 
 export function isOAuthProvider(value: string): value is OAuthProvider {
-  return value === "GOOGLE" || value === "DISCORD" || value === "TWITCH";
+  return value === 'GOOGLE' || value === 'DISCORD' || value === 'TWITCH';
 }
 
-export function getProviderConfig(
-  provider: OAuthProvider,
-): OAuthProviderConfig {
+export function getProviderConfig(provider: OAuthProvider): OAuthProviderConfig {
   return OAUTH_PROVIDERS[provider];
 }
 
@@ -75,11 +73,11 @@ export function getClientSecret(provider: OAuthProvider): string {
 }
 
 export function getRedirectBase(): string {
-  return process.env.OAUTH_REDIRECT_BASE ?? "http://localhost:3000";
+  return process.env.OAUTH_REDIRECT_BASE ?? 'http://localhost:3000';
 }
 
 export function getClientUrl(): string {
-  return process.env.CLIENT_URL ?? "http://localhost:5173";
+  return process.env.CLIENT_URL ?? 'http://localhost:5173';
 }
 
 export function buildRedirectUri(provider: OAuthProvider): string {

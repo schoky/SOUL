@@ -1,22 +1,18 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { FastifyPluginAsync } from 'fastify';
 
-import { authenticateRequest } from "../authMiddleware.js";
-
-import {
-  friendService,
-  FriendServiceError,
-} from "../../friends/friendService.js";
+import { friendService, FriendServiceError } from '../../friends/friendService.js';
+import { authenticateRequest } from '../authMiddleware.js';
 
 type SendRequestBody = {
   nickname: string;
 };
 
 const friendsRoutes: FastifyPluginAsync = async (app) => {
-  app.get("/", { preHandler: authenticateRequest }, async (request, reply) => {
+  app.get('/', { preHandler: authenticateRequest }, async (request, reply) => {
     const user = request.user;
 
     if (!user) {
-      return reply.code(401).send({ error: "Not authenticated" });
+      return reply.code(401).send({ error: 'Not authenticated' });
     }
 
     const data = await friendService.listFriends(user.id);
@@ -24,61 +20,54 @@ const friendsRoutes: FastifyPluginAsync = async (app) => {
     return reply.send(data);
   });
 
-  app.get(
-    "/requests",
-    { preHandler: authenticateRequest },
-    async (request, reply) => {
-      const user = request.user;
+  app.get('/requests', { preHandler: authenticateRequest }, async (request, reply) => {
+    const user = request.user;
 
-      if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
-      }
+    if (!user) {
+      return reply.code(401).send({ error: 'Not authenticated' });
+    }
 
-      const data = await friendService.listRequests(user.id);
+    const data = await friendService.listRequests(user.id);
 
-      return reply.send(data);
-    },
-  );
+    return reply.send(data);
+  });
 
   app.post<{ Body: SendRequestBody }>(
-    "/requests",
+    '/requests',
     {
       preHandler: authenticateRequest,
 
       config: {
         rateLimit: {
           max: 20,
-          timeWindow: "1 minute",
-        },
+          timeWindow: '1 minute'
+        }
       },
 
       schema: {
         body: {
-          type: "object",
-          required: ["nickname"],
+          type: 'object',
+          required: ['nickname'],
           additionalProperties: false,
           properties: {
             nickname: {
-              type: "string",
+              type: 'string',
               minLength: 3,
-              maxLength: 20,
-            },
-          },
-        },
-      },
+              maxLength: 20
+            }
+          }
+        }
+      }
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
-        const result = await friendService.sendRequest(
-          user.id,
-          request.body.nickname,
-        );
+        const result = await friendService.sendRequest(user.id, request.body.nickname);
 
         return reply.code(201).send(result);
       } catch (error) {
@@ -86,35 +75,32 @@ const friendsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   app.post<{ Params: { id: string } }>(
-    "/requests/:id/accept",
+    '/requests/:id/accept',
     { preHandler: authenticateRequest },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
-        const result = await friendService.acceptRequest(
-          user.id,
-          request.params.id,
-        );
+        const result = await friendService.acceptRequest(user.id, request.params.id);
 
         return reply.send(result);
       } catch (error) {
@@ -122,28 +108,28 @@ const friendsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   app.post<{ Params: { id: string } }>(
-    "/requests/:id/decline",
+    '/requests/:id/decline',
     { preHandler: authenticateRequest },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
@@ -155,28 +141,28 @@ const friendsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   app.delete<{ Params: { userId: string } }>(
-    "/:userId",
+    '/:userId',
     { preHandler: authenticateRequest },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
@@ -188,18 +174,18 @@ const friendsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 };
 

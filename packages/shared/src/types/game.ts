@@ -1,9 +1,9 @@
-import type { Character } from "./character.js";
-import type { EventCard } from "./event.js";
-import type { EventDeck } from "./event-deck.js";
-import type { Player } from "./player.js";
+import type { Character } from './character.js';
+import type { EventDeck } from './event-deck.js';
+import type { EventCard } from './event.js';
+import type { Player } from './player.js';
 
-export type GameStatus = "waiting" | "playing" | "finished";
+export type GameStatus = 'waiting' | 'playing' | 'finished';
 
 export type GameState = {
   id: string;

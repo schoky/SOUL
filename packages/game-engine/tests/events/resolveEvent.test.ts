@@ -1,49 +1,43 @@
-import { describe, expect, it } from "vitest";
+import type { EventCard, Player, PlayerCharacter } from '@soul/shared';
+import { describe, expect, it } from 'vitest';
 
-import type { EventCard, Player, PlayerCharacter } from "@soul/shared";
-
-import { characters } from "../../src/data/characters";
-import { events } from "../../src/data/events";
-import { resolveEvent } from "../../src/events/resolveEvent";
+import { characters } from '../../src/data/characters';
+import { events } from '../../src/data/events';
+import { resolveEvent } from '../../src/events/resolveEvent';
 
 const killerCard: PlayerCharacter = {
-  cardId: "player-1-character-1",
-  characterId: "killer",
+  cardId: 'player-1-character-1',
+  characterId: 'killer',
   exhausted: false,
-  abilityUsed: false,
+  abilityUsed: false
 };
 
 const workaholicCard: PlayerCharacter = {
-  cardId: "player-1-character-2",
-  characterId: "workaholic",
+  cardId: 'player-1-character-2',
+  characterId: 'workaholic',
   exhausted: false,
-  abilityUsed: false,
+  abilityUsed: false
 };
 
 const player: Player = {
-  id: "player-1",
-  name: "Тестовый игрок",
+  id: 'player-1',
+  name: 'Тестовый игрок',
   soul: 5,
   characters: [killerCard, workaholicCard],
   status: null,
   isReady: false,
-  skipNextTurn: false,
+  skipNextTurn: false
 };
 
-describe("resolveEvent", () => {
-  it("успешно выполняет событие одним персонажем", () => {
-    const event = events.find((item) => item.id === "raid-on-warehouse");
+describe('resolveEvent', () => {
+  it('успешно выполняет событие одним персонажем', () => {
+    const event = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
-    const result = resolveEvent(
-      player,
-      ["player-1-character-1"],
-      event,
-      characters,
-    );
+    const result = resolveEvent(player, ['player-1-character-1'], event, characters);
 
     expect(result.success).toBe(true);
     expect(result.soul).toBe(7);
@@ -53,22 +47,22 @@ describe("resolveEvent", () => {
     expect(result.riskWon).toBeNull();
   });
 
-  it("успешно выполняет событие связкой двух персонажей и применяет способность", () => {
+  it('успешно выполняет событие связкой двух персонажей и применяет способность', () => {
     const event: EventCard = {
-      id: "combo-event",
-      name: "Тестовая связка",
+      id: 'combo-event',
+      name: 'Тестовая связка',
       requirements: { farmila: 8, perekup: 4, tuller: 6 },
-      mainStat: "farmila",
+      mainStat: 'farmila',
       reward: 2,
       riskReward: 4,
-      description: "Событие для проверки связки.",
+      description: 'Событие для проверки связки.'
     };
 
     const result = resolveEvent(
       player,
-      ["player-1-character-1", "player-1-character-2"],
+      ['player-1-character-1', 'player-1-character-2'],
       event,
-      characters,
+      characters
     );
 
     expect(result.success).toBe(true);
@@ -76,146 +70,113 @@ describe("resolveEvent", () => {
     expect(result.riskWon).toBeNull();
   });
 
-  it("не позволяет выполнить событие, если выбранный персонаж не соответствует требованиям", () => {
-    const event = events.find((item) => item.id === "night-shift");
+  it('не позволяет выполнить событие, если выбранный персонаж не соответствует требованиям', () => {
+    const event = events.find((item) => item.id === 'night-shift');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
-    const result = resolveEvent(
-      player,
-      ["player-1-character-1"],
-      event,
-      characters,
-    );
+    const result = resolveEvent(player, ['player-1-character-1'], event, characters);
 
     expect(result.success).toBe(false);
     expect(result.riskWon).toBeNull();
   });
 
-  it("выбрасывает ошибку, если карта персонажа отсутствует у игрока", () => {
-    const event = events.find((item) => item.id === "raid-on-warehouse");
+  it('выбрасывает ошибку, если карта персонажа отсутствует у игрока', () => {
+    const event = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
     expect(() => {
-      resolveEvent(player, ["unknown-character-card"], event, characters);
+      resolveEvent(player, ['unknown-character-card'], event, characters);
     }).toThrow('Character card "unknown-character-card" not found');
   });
 
-  it("не позволяет использовать уставшую карту персонажа", () => {
+  it('не позволяет использовать уставшую карту персонажа', () => {
     const exhaustedPlayer: Player = {
       ...player,
-      characters: [{ ...killerCard, exhausted: true }, workaholicCard],
+      characters: [{ ...killerCard, exhausted: true }, workaholicCard]
     };
 
-    const event = events.find((item) => item.id === "raid-on-warehouse");
+    const event = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
     expect(() => {
-      resolveEvent(
-        exhaustedPlayer,
-        ["player-1-character-1"],
-        event,
-        characters,
-      );
+      resolveEvent(exhaustedPlayer, ['player-1-character-1'], event, characters);
     }).toThrow('Character card "player-1-character-1" is exhausted');
   });
 
-  it("выигрывает риск и получает повышенную награду", () => {
-    const event = events.find((item) => item.id === "raid-on-warehouse");
+  it('выигрывает риск и получает повышенную награду', () => {
+    const event = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
-    const result = resolveEvent(
-      player,
-      ["player-1-character-1"],
-      event,
-      characters,
-      true,
-      () => 0,
-    );
+    const result = resolveEvent(player, ['player-1-character-1'], event, characters, true, () => 0);
 
     expect(result.success).toBe(true);
     expect(result.riskWon).toBe(true);
     expect(result.soul).toBe(9);
   });
 
-  it("проигрывает риск и получает эффект основной характеристики", () => {
-    const event = events.find((item) => item.id === "raid-on-warehouse");
+  it('проигрывает риск и получает эффект основной характеристики', () => {
+    const event = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
     const result = resolveEvent(
       player,
-      ["player-1-character-1"],
+      ['player-1-character-1'],
       event,
       characters,
       true,
-      () => 0.99,
+      () => 0.99
     );
 
     expect(result.success).toBe(false);
     expect(result.riskWon).toBe(false);
-    expect(result.status).toBe("za-kafan");
+    expect(result.status).toBe('za-kafan');
   });
 
-  it("разрешает риск при невыполненных требованиях, но с меньшим шансом", () => {
-    const event = events.find((item) => item.id === "night-shift");
+  it('разрешает риск при невыполненных требованиях, но с меньшим шансом', () => {
+    const event = events.find((item) => item.id === 'night-shift');
 
     if (!event) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
-    const won = resolveEvent(
-      player,
-      ["player-1-character-1"],
-      event,
-      characters,
-      true,
-      () => 0.2,
-    );
+    const won = resolveEvent(player, ['player-1-character-1'], event, characters, true, () => 0.2);
 
     expect(won.riskWon).toBe(true);
     expect(won.success).toBe(true);
 
-    const lost = resolveEvent(
-      player,
-      ["player-1-character-1"],
-      event,
-      characters,
-      true,
-      () => 0.3,
-    );
+    const lost = resolveEvent(player, ['player-1-character-1'], event, characters, true, () => 0.3);
 
     expect(lost.riskWon).toBe(false);
     expect(lost.success).toBe(false);
 
-    const satisfiedEvent = events.find(
-      (item) => item.id === "raid-on-warehouse",
-    );
+    const satisfiedEvent = events.find((item) => item.id === 'raid-on-warehouse');
 
     if (!satisfiedEvent) {
-      throw new Error("Событие не найдено");
+      throw new Error('Событие не найдено');
     }
 
     const wonSatisfied = resolveEvent(
       player,
-      ["player-1-character-1"],
+      ['player-1-character-1'],
       satisfiedEvent,
       characters,
       true,
-      () => 0.3,
+      () => 0.3
     );
 
     expect(wonSatisfied.riskWon).toBe(true);

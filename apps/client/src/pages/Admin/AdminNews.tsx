@@ -1,18 +1,16 @@
-import type { FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import type { FormEvent } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import Modal from "../../components/ui/Modal";
-
+import Modal from '../../components/ui/Modal';
 import {
   type AdminNewsInput,
   type AdminNewsItem,
   createAdminNews,
   deleteAdminNews,
   getAdminNews,
-  updateAdminNews,
-} from "../../services/api/admin";
-
-import { slugify } from "../../utils/slugify";
+  updateAdminNews
+} from '../../services/api/admin';
+import { slugify } from '../../utils/slugify';
 
 type FormState = {
   slug: string;
@@ -22,10 +20,10 @@ type FormState = {
 };
 
 const EMPTY_FORM: FormState = {
-  slug: "",
-  title: "",
-  body: "",
-  isPublished: false,
+  slug: '',
+  title: '',
+  body: '',
+  isPublished: false
 };
 
 function itemToForm(item: AdminNewsItem): FormState {
@@ -33,7 +31,7 @@ function itemToForm(item: AdminNewsItem): FormState {
     slug: item.slug,
     title: item.title,
     body: item.body,
-    isPublished: item.isPublished,
+    isPublished: item.isPublished
   };
 }
 
@@ -42,27 +40,27 @@ function formToInput(form: FormState): AdminNewsInput {
     slug: form.slug.trim(),
     title: form.title.trim(),
     body: form.body.trim(),
-    isPublished: form.isPublished,
+    isPublished: form.isPublished
   };
 }
 
 function formatDate(value: string | null): string {
   if (!value) {
-    return "—";
+    return '—';
   }
 
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "—";
+    return '—';
   }
 
-  return date.toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   });
 }
 
@@ -93,9 +91,7 @@ function AdminNews() {
       const data = await getAdminNews();
       setItems(data);
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Не удалось загрузить новости",
-      );
+      setError(error instanceof Error ? error.message : 'Не удалось загрузить новости');
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +134,7 @@ function AdminNews() {
         return {
           ...prev,
           title: value,
-          slug: slugify(value),
+          slug: slugify(value)
         };
       }
 
@@ -151,14 +147,14 @@ function AdminNews() {
 
     setForm((prev) => ({
       ...prev,
-      slug: value,
+      slug: value
     }));
   }
 
   function handleRegenerateSlug() {
     setForm((prev) => ({
       ...prev,
-      slug: slugify(prev.title),
+      slug: slugify(prev.title)
     }));
 
     setSlugManuallyEdited(false);
@@ -172,24 +168,22 @@ function AdminNews() {
     const slug = form.slug.trim();
 
     if (!slug || slug.length < 2) {
-      setFormError("Slug обязателен (минимум 2 символа)");
+      setFormError('Slug обязателен (минимум 2 символа)');
       return;
     }
 
     if (!/^[a-z0-9-]+$/.test(slug)) {
-      setFormError(
-        "Slug может содержать только латиницу в нижнем регистре, цифры и дефис",
-      );
+      setFormError('Slug может содержать только латиницу в нижнем регистре, цифры и дефис');
       return;
     }
 
     if (!form.title.trim()) {
-      setFormError("Заголовок обязателен");
+      setFormError('Заголовок обязателен');
       return;
     }
 
     if (!form.body.trim()) {
-      setFormError("Текст новости обязателен");
+      setFormError('Текст новости обязателен');
       return;
     }
 
@@ -201,9 +195,7 @@ function AdminNews() {
       if (editingId) {
         const updated = await updateAdminNews(editingId, input);
 
-        setItems((prev) =>
-          prev.map((item) => (item.id === editingId ? updated : item)),
-        );
+        setItems((prev) => prev.map((item) => (item.id === editingId ? updated : item)));
       } else {
         const created = await createAdminNews(input);
 
@@ -212,9 +204,7 @@ function AdminNews() {
 
       closeModal();
     } catch (error) {
-      setFormError(
-        error instanceof Error ? error.message : "Не удалось сохранить новость",
-      );
+      setFormError(error instanceof Error ? error.message : 'Не удалось сохранить новость');
     } finally {
       setIsSaving(false);
     }
@@ -223,25 +213,17 @@ function AdminNews() {
   async function handleTogglePublish(item: AdminNewsItem) {
     try {
       const updated = await updateAdminNews(item.id, {
-        isPublished: !item.isPublished,
+        isPublished: !item.isPublished
       });
 
-      setItems((prev) =>
-        prev.map((entry) => (entry.id === item.id ? updated : entry)),
-      );
+      setItems((prev) => prev.map((entry) => (entry.id === item.id ? updated : entry)));
     } catch (error) {
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Не удалось изменить публикацию",
-      );
+      alert(error instanceof Error ? error.message : 'Не удалось изменить публикацию');
     }
   }
 
   async function handleDelete(item: AdminNewsItem) {
-    if (
-      !window.confirm(`Удалить новость «${item.title}»? Действие необратимо.`)
-    ) {
+    if (!window.confirm(`Удалить новость «${item.title}»? Действие необратимо.`)) {
       return;
     }
 
@@ -250,7 +232,7 @@ function AdminNews() {
 
       setItems((prev) => prev.filter((entry) => entry.id !== item.id));
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Не удалось удалить");
+      alert(error instanceof Error ? error.message : 'Не удалось удалить');
     }
   }
 
@@ -263,42 +245,34 @@ function AdminNews() {
   }, [form.slug]);
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
-        <p className="admin-page__eyebrow">НОВОСТИ</p>
+    <div className='admin-page'>
+      <header className='admin-page__header'>
+        <p className='admin-page__eyebrow'>НОВОСТИ</p>
 
-        <h1 className="admin-page__title">Управление новостями</h1>
+        <h1 className='admin-page__title'>Управление новостями</h1>
       </header>
 
-      <div className="admin-toolbar">
-        <button
-          className="admin-button admin-button--primary"
-          type="button"
-          onClick={openCreate}
-        >
+      <div className='admin-toolbar'>
+        <button className='admin-button admin-button--primary' type='button' onClick={openCreate}>
           + Добавить новость
         </button>
 
-        <button
-          className="admin-button"
-          type="button"
-          onClick={() => void load()}
-        >
+        <button className='admin-button' type='button' onClick={() => void load()}>
           Обновить
         </button>
       </div>
 
-      {isLoading && <p className="admin-loading">Загружаем…</p>}
+      {isLoading && <p className='admin-loading'>Загружаем…</p>}
 
-      {error && <p className="admin-error">{error}</p>}
+      {error && <p className='admin-error'>{error}</p>}
 
       {!isLoading && !error && items.length === 0 && (
-        <p className="admin-empty">Пока нет ни одной новости</p>
+        <p className='admin-empty'>Пока нет ни одной новости</p>
       )}
 
       {!isLoading && !error && items.length > 0 && (
-        <div className="admin-table-wrapper">
-          <table className="admin-table">
+        <div className='admin-table-wrapper'>
+          <table className='admin-table'>
             <thead>
               <tr>
                 <th>Slug</th>
@@ -313,53 +287,49 @@ function AdminNews() {
             <tbody>
               {items.map((item) => (
                 <tr key={item.id}>
-                  <td data-label="Slug">
+                  <td data-label='Slug'>
                     <code>{item.slug}</code>
                   </td>
 
-                  <td data-label="Заголовок">
+                  <td data-label='Заголовок'>
                     <strong>{item.title}</strong>
                   </td>
 
-                  <td data-label="Статус">
+                  <td data-label='Статус'>
                     <span
                       className={[
-                        "admin-badge",
-                        item.isPublished
-                          ? "admin-badge--success"
-                          : "admin-badge--warning",
-                      ].join(" ")}
+                        'admin-badge',
+                        item.isPublished ? 'admin-badge--success' : 'admin-badge--warning'
+                      ].join(' ')}
                     >
-                      {item.isPublished ? "Опубликована" : "Черновик"}
+                      {item.isPublished ? 'Опубликована' : 'Черновик'}
                     </span>
                   </td>
 
-                  <td data-label="Опубликована">
-                    {formatDate(item.publishedAt)}
-                  </td>
+                  <td data-label='Опубликована'>{formatDate(item.publishedAt)}</td>
 
-                  <td data-label="Создана">{formatDate(item.createdAt)}</td>
+                  <td data-label='Создана'>{formatDate(item.createdAt)}</td>
 
-                  <td className="admin-table__actions">
+                  <td className='admin-table__actions'>
                     <button
-                      className="admin-button admin-button--small"
-                      type="button"
+                      className='admin-button admin-button--small'
+                      type='button'
                       onClick={() => openEdit(item)}
                     >
                       Изменить
                     </button>
 
                     <button
-                      className="admin-button admin-button--small"
-                      type="button"
+                      className='admin-button admin-button--small'
+                      type='button'
                       onClick={() => void handleTogglePublish(item)}
                     >
-                      {item.isPublished ? "Снять" : "Опубликовать"}
+                      {item.isPublished ? 'Снять' : 'Опубликовать'}
                     </button>
 
                     <button
-                      className="admin-button admin-button--small admin-button--danger"
-                      type="button"
+                      className='admin-button admin-button--small admin-button--danger'
+                      type='button'
                       onClick={() => void handleDelete(item)}
                     >
                       Удалить
@@ -374,13 +344,13 @@ function AdminNews() {
 
       {isModalOpen && (
         <Modal
-          title={editingId ? "Редактировать новость" : "Новая новость"}
+          title={editingId ? 'Редактировать новость' : 'Новая новость'}
           onClose={closeModal}
           footer={
             <>
               <button
-                className="admin-button"
-                type="button"
+                className='admin-button'
+                type='button'
                 onClick={closeModal}
                 disabled={isSaving}
               >
@@ -388,105 +358,102 @@ function AdminNews() {
               </button>
 
               <button
-                className="admin-button admin-button--primary"
-                type="submit"
-                form="news-form"
+                className='admin-button admin-button--primary'
+                type='submit'
+                form='news-form'
                 disabled={isSaving}
               >
-                {isSaving ? "Сохраняем…" : "Сохранить"}
+                {isSaving ? 'Сохраняем…' : 'Сохранить'}
               </button>
             </>
           }
         >
-          <form className="modal__form" id="news-form" onSubmit={handleSubmit}>
-            <div className="modal__field">
-              <label className="modal__label">Заголовок</label>
+          <form className='modal__form' id='news-form' onSubmit={handleSubmit}>
+            <div className='modal__field'>
+              <label className='modal__label'>Заголовок</label>
 
               <input
-                className="admin-input"
-                type="text"
+                className='admin-input'
+                type='text'
                 value={form.title}
                 onChange={(event) => handleTitleChange(event.target.value)}
-                placeholder="Например: Обновление 1.2"
+                placeholder='Например: Обновление 1.2'
                 maxLength={200}
                 required
               />
             </div>
 
-            <div className="modal__field">
-              <label className="modal__label">Slug (часть URL)</label>
+            <div className='modal__field'>
+              <label className='modal__label'>Slug (часть URL)</label>
 
-              <div className="admin-slug-row">
+              <div className='admin-slug-row'>
                 <input
-                  className="admin-input admin-slug-row__input"
-                  type="text"
+                  className='admin-input admin-slug-row__input'
+                  type='text'
                   value={form.slug}
                   onChange={(event) => handleSlugChange(event.target.value)}
-                  placeholder="update-1-2"
+                  placeholder='update-1-2'
                   maxLength={80}
                   required
                 />
 
                 <button
-                  className="admin-button admin-button--small"
-                  type="button"
+                  className='admin-button admin-button--small'
+                  type='button'
                   onClick={handleRegenerateSlug}
                   disabled={!form.title.trim()}
-                  title="Сгенерировать slug из заголовка"
+                  title='Сгенерировать slug из заголовка'
                 >
                   Из заголовка
                 </button>
               </div>
 
               {previewUrl ? (
-                <span className="admin-slug-preview">
-                  Ссылка:{" "}
+                <span className='admin-slug-preview'>
+                  Ссылка:{' '}
                   <code>
-                    <span className="admin-slug-preview__domain">
-                      soul.example.ru
-                    </span>
+                    <span className='admin-slug-preview__domain'>soul.example.ru</span>
                     {previewUrl}
                   </code>
                 </span>
               ) : (
-                <span className="admin-hint">
-                  Slug генерируется автоматически из заголовка, но его можно
-                  отредактировать вручную. Разрешены латиница, цифры и дефис.
+                <span className='admin-hint'>
+                  Slug генерируется автоматически из заголовка, но его можно отредактировать
+                  вручную. Разрешены латиница, цифры и дефис.
                 </span>
               )}
             </div>
 
-            <div className="modal__field">
-              <label className="modal__label">Текст новости</label>
+            <div className='modal__field'>
+              <label className='modal__label'>Текст новости</label>
 
               <textarea
-                className="admin-input admin-input--textarea"
+                className='admin-input admin-input--textarea'
                 value={form.body}
                 onChange={(event) =>
                   setForm({
                     ...form,
-                    body: event.target.value,
+                    body: event.target.value
                   })
                 }
                 rows={12}
-                placeholder="Абзацы разделяются пустой строкой."
+                placeholder='Абзацы разделяются пустой строкой.'
                 required
               />
 
-              <span className="admin-hint">
-                Абзацы разделяются пустой строкой. Разметка не поддерживается —
-                только текст.
+              <span className='admin-hint'>
+                Абзацы разделяются пустой строкой. Разметка не поддерживается — только текст.
               </span>
             </div>
 
-            <label className="modal__checkbox">
+            <label className='modal__checkbox'>
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={form.isPublished}
                 onChange={(event) =>
                   setForm({
                     ...form,
-                    isPublished: event.target.checked,
+                    isPublished: event.target.checked
                   })
                 }
               />
@@ -494,7 +461,7 @@ function AdminNews() {
               <span>Опубликовать сразу</span>
             </label>
 
-            {formError && <p className="modal__error">{formError}</p>}
+            {formError && <p className='modal__error'>{formError}</p>}
           </form>
         </Modal>
       )}

@@ -1,6 +1,5 @@
-import { database } from "@soul/database";
-
-import type { Character } from "@soul/shared";
+import { database } from '@soul/database';
+import type { Character } from '@soul/shared';
 
 function toEngineCharacter(row: {
   slug: string;
@@ -19,8 +18,8 @@ function toEngineCharacter(row: {
     stats: {
       farmila: row.farmila,
       perekup: row.perekup,
-      tuller: row.tuller,
-    },
+      tuller: row.tuller
+    }
   };
 
   if (row.image) {
@@ -31,7 +30,7 @@ function toEngineCharacter(row: {
     character.ability = {
       id: row.abilityId,
       name: row.abilityName,
-      description: row.abilityDescription,
+      description: row.abilityDescription
     };
   }
 
@@ -42,8 +41,8 @@ class CharacterRepository {
   async findAll(): Promise<Character[]> {
     const rows = await database.character.findMany({
       orderBy: {
-        createdAt: "asc",
-      },
+        createdAt: 'asc'
+      }
     });
 
     return rows.map(toEngineCharacter);
@@ -51,7 +50,7 @@ class CharacterRepository {
 
   async findBySlug(slug: string) {
     const row = await database.character.findUnique({
-      where: { slug },
+      where: { slug }
     });
 
     if (!row) {

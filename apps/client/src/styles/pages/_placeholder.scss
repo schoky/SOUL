@@ -1,29 +1,28 @@
 .placeholder-page {
-	width: 100%;
-	max-width: 1200px;
+  width: 100%;
+  max-width: 1200px;
 
-	margin: 0 auto;
+  margin: 0 auto;
 
-	padding: 64px 24px;
+  padding: 64px 24px;
 
-	color: var(--color-text);
+  color: var(--color-text);
 
-	h1 {
-		margin: 0 0 16px;
+  h1 {
+    margin: 0 0 16px;
 
-		font-family: 'Exo 2',
-		sans-serif;
+    font-family: 'Exo 2', sans-serif;
 
-		font-size: 32px;
-		font-weight: 600;
-	}
+    font-size: 32px;
+    font-weight: 600;
+  }
 
-	p {
-		margin: 8px 0;
+  p {
+    margin: 8px 0;
 
-		color: var(--color-text-secondary);
+    color: var(--color-text-secondary);
 
-		font-size: 14px;
-		line-height: 1.6;
-	}
+    font-size: 14px;
+    line-height: 1.6;
+  }
 }

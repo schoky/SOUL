@@ -1,6 +1,5 @@
-import { database } from "@soul/database";
-
-import type { EventCard, StatType } from "@soul/shared";
+import { database } from '@soul/database';
+import type { EventCard, StatType } from '@soul/shared';
 
 function toEngineEvent(row: {
   slug: string;
@@ -20,12 +19,12 @@ function toEngineEvent(row: {
     requirements: {
       farmila: row.farmila,
       perekup: row.perekup,
-      tuller: row.tuller,
+      tuller: row.tuller
     },
     mainStat: row.mainStat as StatType,
     reward: row.reward,
     riskReward: row.riskReward,
-    description: row.description,
+    description: row.description
   };
 
   if (row.image) {
@@ -39,8 +38,8 @@ class EventRepository {
   async findAll(): Promise<EventCard[]> {
     const rows = await database.eventCard.findMany({
       orderBy: {
-        createdAt: "asc",
-      },
+        createdAt: 'asc'
+      }
     });
 
     return rows.map(toEngineEvent);
@@ -48,7 +47,7 @@ class EventRepository {
 
   async findBySlug(slug: string) {
     const row = await database.eventCard.findUnique({
-      where: { slug },
+      where: { slug }
     });
 
     if (!row) {

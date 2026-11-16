@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import type { GameState, GameResultDto } from '@soul/shared';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { useNavigate } from "react-router-dom";
-
-import type { GameState, GameResultDto } from "@soul/shared";
-
-import { getGameResult } from "../../services/api/games";
-
-import { useAuthStore } from "../../stores/authStore";
-import { useRoomStore } from "../../stores/roomStore";
-import { useToastStore } from "../../stores/toastStore";
+import { getGameResult } from '../../services/api/games';
+import { useAuthStore } from '../../stores/authStore';
+import { useRoomStore } from '../../stores/roomStore';
+import { useToastStore } from '../../stores/toastStore';
 
 type GameResultProps = {
   gameState: GameState;
@@ -16,27 +13,27 @@ type GameResultProps = {
 
 function formatDateTime(value: string | null): string {
   if (!value) {
-    return "—";
+    return '—';
   }
 
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "—";
+    return '—';
   }
 
-  return date.toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   });
 }
 
 function formatDuration(startedAt: string, finishedAt: string | null): string {
   if (!finishedAt) {
-    return "—";
+    return '—';
   }
 
   const start = new Date(startedAt).getTime();
@@ -44,7 +41,7 @@ function formatDuration(startedAt: string, finishedAt: string | null): string {
   const end = new Date(finishedAt).getTime();
 
   if (Number.isNaN(start) || Number.isNaN(end) || end < start) {
-    return "—";
+    return '—';
   }
 
   const totalSeconds = Math.round((end - start) / 1000);
@@ -139,7 +136,7 @@ function GameResult({ gameState }: GameResultProps) {
       userId: player.id,
       name: player.name,
       place: index + 1,
-      finalSoul: player.soul,
+      finalSoul: player.soul
     }));
 
   const players = result?.players ?? fallbackPlayers;
@@ -155,7 +152,7 @@ function GameResult({ gameState }: GameResultProps) {
       // игнорируем — уходим в лобби в любом случае
     }
 
-    navigate("/lobby");
+    navigate('/lobby');
   }
 
   async function handlePlayAgain() {
@@ -167,7 +164,7 @@ function GameResult({ gameState }: GameResultProps) {
       const room = await createRoom();
 
       if (!room) {
-        pushToast("error", "Не удалось создать комнату");
+        pushToast('error', 'Не удалось создать комнату');
 
         setIsStartingNew(false);
 
@@ -176,44 +173,43 @@ function GameResult({ gameState }: GameResultProps) {
 
       navigate(`/room/${room.id}`);
     } catch {
-      pushToast("error", "Не удалось создать комнату");
+      pushToast('error', 'Не удалось создать комнату');
 
       setIsStartingNew(false);
     }
   }
 
   return (
-    <main className="game-result">
-      <section className="game-result__hero">
-        <p className="game-result__eyebrow">ИГРА ЗАВЕРШЕНА</p>
+    <main className='game-result'>
+      <section className='game-result__hero'>
+        <p className='game-result__eyebrow'>ИГРА ЗАВЕРШЕНА</p>
 
         {winner ? (
-          <h1 className="game-result__title">
-            Победил <span className="game-result__winner">{winner.name}</span>
+          <h1 className='game-result__title'>
+            Победил <span className='game-result__winner'>{winner.name}</span>
           </h1>
         ) : (
-          <h1 className="game-result__title">Ничья</h1>
+          <h1 className='game-result__title'>Ничья</h1>
         )}
 
         {result && (
-          <p className="game-result__subtitle">
-            {result.turns} ход ·{" "}
-            {formatDuration(result.startedAt, result.finishedAt)}
+          <p className='game-result__subtitle'>
+            {result.turns} ход · {formatDuration(result.startedAt, result.finishedAt)}
           </p>
         )}
       </section>
 
-      <section className="game-result__board">
-        <div className="game-result__board-header">
-          <p className="game-result__eyebrow">ИТОГИ</p>
+      <section className='game-result__board'>
+        <div className='game-result__board-header'>
+          <p className='game-result__eyebrow'>ИТОГИ</p>
 
-          <h2 className="game-result__board-title">Финальная таблица</h2>
+          <h2 className='game-result__board-title'>Финальная таблица</h2>
         </div>
 
         {isLoading ? (
-          <p className="game-result__loading">Загружаем результаты...</p>
+          <p className='game-result__loading'>Загружаем результаты...</p>
         ) : (
-          <div className="game-result__rows">
+          <div className='game-result__rows'>
             {players.map((player) => {
               const isSelf = player.userId === user?.id;
 
@@ -221,35 +217,30 @@ function GameResult({ gameState }: GameResultProps) {
 
               return (
                 <article
-                  className={[
-                    "game-result__row",
-                    isWinner ? "game-result__row--winner" : "",
-                  ]
+                  className={['game-result__row', isWinner ? 'game-result__row--winner' : '']
                     .filter(Boolean)
-                    .join(" ")}
+                    .join(' ')}
                   key={player.userId}
                 >
-                  <div className="game-result__row-place">
-                    <span className="game-result__place-number">
-                      {player.place}
-                    </span>
+                  <div className='game-result__row-place'>
+                    <span className='game-result__place-number'>{player.place}</span>
 
-                    <span className="game-result__place-label">место</span>
+                    <span className='game-result__place-label'>место</span>
                   </div>
 
-                  <div className="game-result__row-name">
+                  <div className='game-result__row-name'>
                     <strong>{player.name}</strong>
 
-                    {isSelf && <span className="game-result__row-tag">Ты</span>}
+                    {isSelf && <span className='game-result__row-tag'>Ты</span>}
 
                     {isWinner && (
-                      <span className="game-result__row-tag game-result__row-tag--winner">
+                      <span className='game-result__row-tag game-result__row-tag--winner'>
                         Победитель
                       </span>
                     )}
                   </div>
 
-                  <div className="game-result__row-soul">
+                  <div className='game-result__row-soul'>
                     <span>Soul</span>
 
                     <strong>{player.finalSoul}</strong>
@@ -261,45 +252,40 @@ function GameResult({ gameState }: GameResultProps) {
         )}
 
         {result && (
-          <div className="game-result__meta">
-            <div className="game-result__meta-item">
+          <div className='game-result__meta'>
+            <div className='game-result__meta-item'>
               <span>Начало</span>
               <strong>{formatDateTime(result.startedAt)}</strong>
             </div>
 
-            <div className="game-result__meta-item">
+            <div className='game-result__meta-item'>
               <span>Конец</span>
               <strong>{formatDateTime(result.finishedAt)}</strong>
             </div>
 
-            <div className="game-result__meta-item">
+            <div className='game-result__meta-item'>
               <span>Длительность</span>
-              <strong>
-                {formatDuration(result.startedAt, result.finishedAt)}
-              </strong>
+              <strong>{formatDuration(result.startedAt, result.finishedAt)}</strong>
             </div>
           </div>
         )}
       </section>
 
-      <section className="game-result__actions">
+      <section className='game-result__actions'>
         <button
-          className="
-            game-result__button
-            game-result__button--primary
-          "
-          type="button"
+          className='game-result__button game-result__button--primary'
+          type='button'
           onClick={() => {
             void handlePlayAgain();
           }}
           disabled={isMutating || isStartingNew}
         >
-          {isStartingNew ? "Создаём комнату..." : "Играть снова"}
+          {isStartingNew ? 'Создаём комнату...' : 'Играть снова'}
         </button>
 
         <button
-          className="game-result__button"
-          type="button"
+          className='game-result__button'
+          type='button'
           onClick={() => {
             void handleReturnToLobby();
           }}

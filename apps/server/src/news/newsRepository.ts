@@ -1,14 +1,14 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 class NewsRepository {
   async findPublished() {
     return database.news.findMany({
       where: {
-        isPublished: true,
+        isPublished: true
       },
       orderBy: {
-        publishedAt: "desc",
-      },
+        publishedAt: 'desc'
+      }
     });
   }
 
@@ -16,22 +16,22 @@ class NewsRepository {
     return database.news.findFirst({
       where: {
         slug,
-        isPublished: true,
-      },
+        isPublished: true
+      }
     });
   }
 
   async findAll() {
     return database.news.findMany({
       orderBy: {
-        createdAt: "desc",
-      },
+        createdAt: 'desc'
+      }
     });
   }
 
   async findById(id: string) {
     return database.news.findUnique({
-      where: { id },
+      where: { id }
     });
   }
 
@@ -49,8 +49,8 @@ class NewsRepository {
         body: data.body,
         isPublished: data.isPublished,
         publishedAt: data.isPublished ? new Date() : null,
-        authorId: data.authorId,
-      },
+        authorId: data.authorId
+      }
     });
   }
 
@@ -61,10 +61,10 @@ class NewsRepository {
       title?: string;
       body?: string;
       isPublished?: boolean;
-    },
+    }
   ) {
     const existing = await database.news.findUnique({
-      where: { id },
+      where: { id }
     });
 
     if (!existing) {
@@ -82,14 +82,14 @@ class NewsRepository {
       where: { id },
       data: {
         ...data,
-        publishedAt,
-      },
+        publishedAt
+      }
     });
   }
 
   async delete(id: string) {
     return database.news.delete({
-      where: { id },
+      where: { id }
     });
   }
 }

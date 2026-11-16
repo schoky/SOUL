@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
+import { SOCKET_EVENTS } from '@soul/shared';
+import { useEffect, useState } from 'react';
 
-import { SOCKET_EVENTS } from "@soul/shared";
-
-import {
-  type AdminRoom,
-  forceFinishRoom,
-  getAdminRooms,
-} from "../../services/api/admin";
-
-import { socket } from "../../services/socket";
+import { type AdminRoom, forceFinishRoom, getAdminRooms } from '../../services/api/admin';
+import { socket } from '../../services/socket';
 
 function AdminRooms() {
   const [rooms, setRooms] = useState<AdminRoom[]>([]);
@@ -75,33 +69,31 @@ function AdminRooms() {
 
       setConfirmingRoomId(null);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Не удалось завершить комнату",
-      );
+      setError(err instanceof Error ? err.message : 'Не удалось завершить комнату');
     } finally {
       setProcessingRoomId(null);
     }
   }
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
-        <p className="admin-page__eyebrow">КОМНАТЫ</p>
+    <div className='admin-page'>
+      <header className='admin-page__header'>
+        <p className='admin-page__eyebrow'>КОМНАТЫ</p>
 
-        <h1 className="admin-page__title">Активные комнаты</h1>
+        <h1 className='admin-page__title'>Активные комнаты</h1>
       </header>
 
-      {error && <p className="admin-error">{error}</p>}
+      {error && <p className='admin-error'>{error}</p>}
 
-      {isLoading && <p className="admin-loading">Загружаем…</p>}
+      {isLoading && <p className='admin-loading'>Загружаем…</p>}
 
       {!isLoading && rooms.length === 0 && (
-        <p className="admin-empty">Сейчас нет активных комнат</p>
+        <p className='admin-empty'>Сейчас нет активных комнат</p>
       )}
 
       {!isLoading && rooms.length > 0 && (
-        <div className="admin-table-wrapper">
-          <table className="admin-table">
+        <div className='admin-table-wrapper'>
+          <table className='admin-table'>
             <thead>
               <tr>
                 <th>Код</th>
@@ -116,52 +108,46 @@ function AdminRooms() {
             <tbody>
               {rooms.map((room) => (
                 <tr key={room.id}>
-                  <td data-label="Код">
+                  <td data-label='Код'>
                     <strong>{room.code}</strong>
                   </td>
 
-                  <td data-label="Статус">
+                  <td data-label='Статус'>
                     <span
                       className={[
-                        "admin-badge",
-                        room.status === "PLAYING"
-                          ? "admin-badge--warning"
-                          : "admin-badge--success",
-                      ].join(" ")}
+                        'admin-badge',
+                        room.status === 'PLAYING' ? 'admin-badge--warning' : 'admin-badge--success'
+                      ].join(' ')}
                     >
                       {room.status}
                     </span>
                   </td>
 
-                  <td data-label="Хост">{room.host.nickname}</td>
+                  <td data-label='Хост'>{room.host.nickname}</td>
 
-                  <td data-label="Игроков">
+                  <td data-label='Игроков'>
                     {room.members.length} / {room.maxPlayers}
                   </td>
 
-                  <td data-label="Создана">
-                    {new Date(room.createdAt).toLocaleString("ru-RU")}
-                  </td>
+                  <td data-label='Создана'>{new Date(room.createdAt).toLocaleString('ru-RU')}</td>
 
-                  <td data-label="Действия">
+                  <td data-label='Действия'>
                     {confirmingRoomId === room.id ? (
-                      <div className="admin-table__actions">
+                      <div className='admin-table__actions'>
                         <button
-                          className="admin-button admin-button--small admin-button--danger"
-                          type="button"
+                          className='admin-button admin-button--small admin-button--danger'
+                          type='button'
                           disabled={processingRoomId === room.id}
                           onClick={() => {
                             void handleForceFinish(room.id);
                           }}
                         >
-                          {processingRoomId === room.id
-                            ? "Завершаем…"
-                            : "Да, завершить"}
+                          {processingRoomId === room.id ? 'Завершаем…' : 'Да, завершить'}
                         </button>
 
                         <button
-                          className="admin-button admin-button--small"
-                          type="button"
+                          className='admin-button admin-button--small'
+                          type='button'
                           disabled={processingRoomId === room.id}
                           onClick={() => setConfirmingRoomId(null)}
                         >
@@ -169,10 +155,10 @@ function AdminRooms() {
                         </button>
                       </div>
                     ) : (
-                      <div className="admin-table__actions">
+                      <div className='admin-table__actions'>
                         <button
-                          className="admin-button admin-button--small admin-button--danger"
-                          type="button"
+                          className='admin-button admin-button--small admin-button--danger'
+                          type='button'
                           onClick={() => setConfirmingRoomId(room.id)}
                         >
                           Завершить

@@ -1,18 +1,17 @@
-import dotenv from "dotenv";
+import { PrismaPg } from '@prisma/adapter-pg';
+import dotenv from 'dotenv';
 
-import { PrismaPg } from "@prisma/adapter-pg";
-
-import { PrismaClient } from "../src/generated/prisma/client.js";
+import { PrismaClient } from '../src/generated/prisma/client.js';
 
 dotenv.config({
-  path: "../../.env",
-  override: true,
+  path: '../../.env',
+  override: true
 });
 
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error("DATABASE_URL is not defined");
+  throw new Error('DATABASE_URL is not defined');
 }
 
 const adapter = new PrismaPg({ connectionString });
@@ -52,369 +51,352 @@ type EventSeed = {
 
 const characters: CharacterSeed[] = [
   {
-    id: "killer",
-    name: "Киллер",
-    image: "/cards/characters/killer.webp",
+    id: 'killer',
+    name: 'Киллер',
+    image: '/cards/characters/killer.webp',
     stats: {
       farmila: 4,
       perekup: 2,
-      tuller: 5,
+      tuller: 5
     },
     ability: {
-      id: "cold-blooded",
-      name: "Хладнокровие",
-      description: "Первый провал по Туллеру за игру не отнимает Soul.",
-    },
+      id: 'cold-blooded',
+      name: 'Хладнокровие',
+      description: 'Первый провал по Туллеру за игру не отнимает Soul.'
+    }
   },
 
   {
-    id: "market-shark",
-    name: "Рыночный перекуп",
-    image: "/cards/characters/market-shark.webp",
+    id: 'market-shark',
+    name: 'Рыночный перекуп',
+    image: '/cards/characters/market-shark.webp',
     stats: {
       farmila: 2,
       perekup: 5,
-      tuller: 4,
+      tuller: 4
     },
     ability: {
-      id: "profitable-deal",
-      name: "Выгодная сделка",
-      description:
-        "При успешном событии с Перекупом получает на 1 Soul больше.",
-    },
+      id: 'profitable-deal',
+      name: 'Выгодная сделка',
+      description: 'При успешном событии с Перекупом получает на 1 Soul больше.'
+    }
   },
 
   {
-    id: "workaholic",
-    name: "Трудяга",
-    image: "/cards/characters/workaholic.webp",
+    id: 'workaholic',
+    name: 'Трудяга',
+    image: '/cards/characters/workaholic.webp',
     stats: {
       farmila: 5,
       perekup: 4,
-      tuller: 2,
+      tuller: 2
     },
     ability: {
-      id: "work-to-exhaustion",
-      name: "На износ",
-      description:
-        "При успешном событии с Фармилой получает дополнительный Soul.",
-    },
+      id: 'work-to-exhaustion',
+      name: 'На износ',
+      description: 'При успешном событии с Фармилой получает дополнительный Soul.'
+    }
   },
 
   {
-    id: "sniper",
-    name: "Снайпер",
-    image: "/cards/characters/sniper.webp",
+    id: 'sniper',
+    name: 'Снайпер',
+    image: '/cards/characters/sniper.webp',
     stats: {
       farmila: 3,
       perekup: 4,
-      tuller: 4,
+      tuller: 4
     },
     ability: {
-      id: "precise-shot",
-      name: "Точный выстрел",
-      description: "При выигранном риске получает дополнительный Soul.",
-    },
+      id: 'precise-shot',
+      name: 'Точный выстрел',
+      description: 'При выигранном риске получает дополнительный Soul.'
+    }
   },
 
   {
-    id: "courier",
-    name: "Курьер",
-    image: "/cards/characters/courier.webp",
+    id: 'courier',
+    name: 'Курьер',
+    image: '/cards/characters/courier.webp',
     stats: {
       farmila: 4,
       perekup: 4,
-      tuller: 3,
+      tuller: 3
     },
     ability: {
-      id: "agility",
-      name: "Вёрткость",
-      description: "При провале по Фармиле не пропускает следующий ход.",
-    },
+      id: 'agility',
+      name: 'Вёрткость',
+      description: 'При провале по Фармиле не пропускает следующий ход.'
+    }
   },
 
   {
-    id: "mechanic",
-    name: "Механик",
-    image: "/cards/characters/mechanic.webp",
+    id: 'mechanic',
+    name: 'Механик',
+    image: '/cards/characters/mechanic.webp',
     stats: {
       farmila: 5,
       perekup: 2,
-      tuller: 4,
+      tuller: 4
     },
     ability: {
-      id: "resilience",
-      name: "Запас прочности",
-      description: "Если играется в связке, не становится истощённым.",
-    },
+      id: 'resilience',
+      name: 'Запас прочности',
+      description: 'Если играется в связке, не становится истощённым.'
+    }
   },
 
   {
-    id: "smuggler",
-    name: "Контрабандист",
-    image: "/cards/characters/smuggler.webp",
+    id: 'smuggler',
+    name: 'Контрабандист',
+    image: '/cards/characters/smuggler.webp',
     stats: {
       farmila: 3,
       perekup: 3,
-      tuller: 5,
+      tuller: 5
     },
     ability: {
-      id: "lone-wolf",
-      name: "Одиночка",
-      description:
-        "При игре одной картой (без связки) получает +1 Soul при успехе.",
-    },
+      id: 'lone-wolf',
+      name: 'Одиночка',
+      description: 'При игре одной картой (без связки) получает +1 Soul при успехе.'
+    }
   },
 
   {
-    id: "fixer",
-    name: "Решала",
-    image: "/cards/characters/fixer.webp",
+    id: 'fixer',
+    name: 'Решала',
+    image: '/cards/characters/fixer.webp',
     stats: {
       farmila: 4,
       perekup: 5,
-      tuller: 2,
+      tuller: 2
     },
     ability: {
-      id: "connections",
-      name: "Связи",
-      description: "При игре в связке получает +1 Soul при успехе.",
-    },
+      id: 'connections',
+      name: 'Связи',
+      description: 'При игре в связке получает +1 Soul при успехе.'
+    }
   },
 
   {
-    id: "medic",
-    name: "Медик",
-    image: "/cards/characters/medic.webp",
+    id: 'medic',
+    name: 'Медик',
+    image: '/cards/characters/medic.webp',
     stats: {
       farmila: 2,
       perekup: 4,
-      tuller: 5,
+      tuller: 5
     },
     ability: {
-      id: "first-aid",
-      name: "Аптечка",
-      description:
-        "При успешном событии с Туллером получает дополнительный Soul.",
-    },
+      id: 'first-aid',
+      name: 'Аптечка',
+      description: 'При успешном событии с Туллером получает дополнительный Soul.'
+    }
   },
 
   {
-    id: "informant",
-    name: "Информатор",
-    image: "/cards/characters/informant.webp",
+    id: 'informant',
+    name: 'Информатор',
+    image: '/cards/characters/informant.webp',
     stats: {
       farmila: 6,
       perekup: 3,
-      tuller: 2,
+      tuller: 2
     },
     ability: {
-      id: "hunch",
-      name: "Чутьё",
-      description:
-        "Первый провал риска при выполненных требованиях не отнимает Soul.",
-    },
-  },
+      id: 'hunch',
+      name: 'Чутьё',
+      description: 'Первый провал риска при выполненных требованиях не отнимает Soul.'
+    }
+  }
 ];
 
 const events: EventSeed[] = [
   {
-    id: "deal-gone-wrong",
-    name: "Сделка сорвалась",
+    id: 'deal-gone-wrong',
+    name: 'Сделка сорвалась',
     requirements: {
       farmila: 5,
       perekup: 5,
-      tuller: 5,
+      tuller: 5
     },
-    mainStat: "tuller",
+    mainStat: 'tuller',
     reward: 2,
     riskReward: 3,
-    description:
-      "Покупатель не пришёл, а товар уже на руках. Нужно срочно искать выход.",
+    description: 'Покупатель не пришёл, а товар уже на руках. Нужно срочно искать выход.'
   },
 
   {
-    id: "raid-on-warehouse",
-    name: "Рейд на склад",
-    image: "/cards/events/raid-on-warehouse.webp",
+    id: 'raid-on-warehouse',
+    name: 'Рейд на склад',
+    image: '/cards/events/raid-on-warehouse.webp',
     requirements: {
       farmila: 6,
       perekup: 5,
-      tuller: 6,
+      tuller: 6
     },
-    mainStat: "tuller",
+    mainStat: 'tuller',
     reward: 3,
     riskReward: 5,
-    description:
-      "Нужно пробраться на склад и забрать товар раньше, чем приедет охрана.",
+    description: 'Нужно пробраться на склад и забрать товар раньше, чем приедет охрана.'
   },
 
   {
-    id: "resell-batch",
-    name: "Перепродажа партии",
-    image: "/cards/events/resell-batch.webp",
+    id: 'resell-batch',
+    name: 'Перепродажа партии',
+    image: '/cards/events/resell-batch.webp',
     requirements: {
       farmila: 5,
       perekup: 7,
-      tuller: 6,
+      tuller: 6
     },
-    mainStat: "perekup",
+    mainStat: 'perekup',
     reward: 3,
     riskReward: 5,
-    description:
-      "Нужно быстро найти покупателя и продать партию с максимальной выгодой.",
+    description: 'Нужно быстро найти покупателя и продать партию с максимальной выгодой.'
   },
 
   {
-    id: "night-shift",
-    name: "Ночная смена",
-    image: "/cards/events/night-shift.webp",
+    id: 'night-shift',
+    name: 'Ночная смена',
+    image: '/cards/events/night-shift.webp',
     requirements: {
       farmila: 7,
       perekup: 5,
-      tuller: 6,
+      tuller: 6
     },
-    mainStat: "farmila",
+    mainStat: 'farmila',
     reward: 3,
     riskReward: 5,
-    description:
-      "Работа до утра. Главное — не сдаться и довести смену до конца.",
+    description: 'Работа до утра. Главное — не сдаться и довести смену до конца.'
   },
 
   {
-    id: "night-convoy",
-    name: "Ночной конвой",
-    image: "/cards/events/night-convoy.webp",
+    id: 'night-convoy',
+    name: 'Ночной конвой',
+    image: '/cards/events/night-convoy.webp',
     requirements: {
       farmila: 6,
       perekup: 6,
-      tuller: 6,
+      tuller: 6
     },
-    mainStat: "tuller",
+    mainStat: 'tuller',
     reward: 3,
     riskReward: 5,
-    description:
-      "Колонна идёт через город ночью. Нужно перехватить её и не попасться.",
+    description: 'Колонна идёт через город ночью. Нужно перехватить её и не попасться.'
   },
 
   {
-    id: "black-market-deal",
-    name: "Сделка на чёрном рынке",
-    image: "/cards/events/black-market-deal.webp",
+    id: 'black-market-deal',
+    name: 'Сделка на чёрном рынке',
+    image: '/cards/events/black-market-deal.webp',
     requirements: {
       farmila: 6,
       perekup: 7,
-      tuller: 7,
+      tuller: 7
     },
-    mainStat: "perekup",
+    mainStat: 'perekup',
     reward: 4,
     riskReward: 6,
-    description:
-      "Опасная сделка, где ошибка в цене может полностью изменить результат.",
+    description: 'Опасная сделка, где ошибка в цене может полностью изменить результат.'
   },
 
   {
-    id: "warehouse-escape",
-    name: "Побег со склада",
-    image: "/cards/events/warehouse-escape.webp",
+    id: 'warehouse-escape',
+    name: 'Побег со склада',
+    image: '/cards/events/warehouse-escape.webp',
     requirements: {
       farmila: 6,
       perekup: 6,
-      tuller: 8,
+      tuller: 8
     },
-    mainStat: "tuller",
+    mainStat: 'tuller',
     reward: 4,
     riskReward: 6,
-    description:
-      "Охрана уже заметила неладное. Нужно выбраться со склада, не потеряв товар.",
+    description: 'Охрана уже заметила неладное. Нужно выбраться со склада, не потеряв товар.'
   },
 
   {
-    id: "cargo-theft",
-    name: "Кража груза",
-    image: "/cards/events/cargo-theft.webp",
+    id: 'cargo-theft',
+    name: 'Кража груза',
+    image: '/cards/events/cargo-theft.webp',
     requirements: {
       farmila: 7,
       perekup: 7,
-      tuller: 7,
+      tuller: 7
     },
-    mainStat: "tuller",
+    mainStat: 'tuller',
     reward: 4,
     riskReward: 6,
-    description:
-      "Вагон с ценным грузом стоит под охраной. Нужно вскрыть его быстро и без шума.",
+    description: 'Вагон с ценным грузом стоит под охраной. Нужно вскрыть его быстро и без шума.'
   },
 
   {
-    id: "police-raid",
-    name: "Облава",
-    image: "/cards/events/police-raid.webp",
+    id: 'police-raid',
+    name: 'Облава',
+    image: '/cards/events/police-raid.webp',
     requirements: {
       farmila: 8,
       perekup: 6,
-      tuller: 7,
+      tuller: 7
     },
-    mainStat: "farmila",
+    mainStat: 'farmila',
     reward: 4,
     riskReward: 6,
-    description:
-      "Облава накрывает район. Спастись можно только выдержкой и холодной головой.",
+    description: 'Облава накрывает район. Спастись можно только выдержкой и холодной головой.'
   },
 
   {
-    id: "safe-cracking",
-    name: "Вскрытие сейфа",
-    image: "/cards/events/safe-cracking.webp",
+    id: 'safe-cracking',
+    name: 'Вскрытие сейфа',
+    image: '/cards/events/safe-cracking.webp',
     requirements: {
       farmila: 8,
       perekup: 9,
-      tuller: 8,
+      tuller: 8
     },
-    mainStat: "perekup",
+    mainStat: 'perekup',
     reward: 5,
     riskReward: 8,
-    description:
-      "Толстые стены, хитрая сигнализация и всего одна ночь. Сейф должен быть вскрыт.",
+    description: 'Толстые стены, хитрая сигнализация и всего одна ночь. Сейф должен быть вскрыт.'
   },
 
   {
-    id: "street-race",
-    name: "Уличная гонка",
-    image: "/cards/events/street-race.webp",
+    id: 'street-race',
+    name: 'Уличная гонка',
+    image: '/cards/events/street-race.webp',
     requirements: {
       farmila: 6,
       perekup: 10,
-      tuller: 6,
+      tuller: 6
     },
-    mainStat: "perekup",
+    mainStat: 'perekup',
     reward: 5,
     riskReward: 8,
-    description:
-      "Уличная гонка на выживание. Ставки высоки, а соперники не знают пощады.",
+    description: 'Уличная гонка на выживание. Ставки высоки, а соперники не знают пощады.'
   },
 
   {
-    id: "smuggling-tunnel",
-    name: "Тоннель контрабанды",
-    image: "/cards/events/smuggling-tunnel.webp",
+    id: 'smuggling-tunnel',
+    name: 'Тоннель контрабанды',
+    image: '/cards/events/smuggling-tunnel.webp',
     requirements: {
       farmila: 9,
       perekup: 7,
-      tuller: 9,
+      tuller: 9
     },
-    mainStat: "farmila",
+    mainStat: 'farmila',
     reward: 5,
     riskReward: 8,
-    description:
-      "Подземный ход завален и полон воды. Каждый шаг может стать последним.",
-  },
+    description: 'Подземный ход завален и полон воды. Каждый шаг может стать последним.'
+  }
 ];
 
 async function seedCharacters() {
   for (const character of characters) {
     await database.character.upsert({
       where: {
-        slug: character.id,
+        slug: character.id
       },
 
       create: {
@@ -426,7 +408,7 @@ async function seedCharacters() {
         tuller: character.stats.tuller,
         abilityId: character.ability?.id ?? null,
         abilityName: character.ability?.name ?? null,
-        abilityDescription: character.ability?.description ?? null,
+        abilityDescription: character.ability?.description ?? null
       },
 
       update: {
@@ -437,8 +419,8 @@ async function seedCharacters() {
         tuller: character.stats.tuller,
         abilityId: character.ability?.id ?? null,
         abilityName: character.ability?.name ?? null,
-        abilityDescription: character.ability?.description ?? null,
-      },
+        abilityDescription: character.ability?.description ?? null
+      }
     });
   }
 
@@ -449,7 +431,7 @@ async function seedEvents() {
   for (const event of events) {
     await database.eventCard.upsert({
       where: {
-        slug: event.id,
+        slug: event.id
       },
 
       create: {
@@ -462,7 +444,7 @@ async function seedEvents() {
         mainStat: event.mainStat,
         reward: event.reward,
         riskReward: event.riskReward,
-        description: event.description,
+        description: event.description
       },
 
       update: {
@@ -474,8 +456,8 @@ async function seedEvents() {
         mainStat: event.mainStat,
         reward: event.reward,
         riskReward: event.riskReward,
-        description: event.description,
-      },
+        description: event.description
+      }
     });
   }
 
@@ -483,12 +465,12 @@ async function seedEvents() {
 }
 
 async function main() {
-  console.log("Начинаем seed...");
+  console.log('Начинаем seed...');
 
   await seedCharacters();
   await seedEvents();
 
-  console.log("Seed завершён.");
+  console.log('Seed завершён.');
 }
 
 main()

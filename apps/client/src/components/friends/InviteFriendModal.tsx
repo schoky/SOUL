@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import Modal from "../ui/Modal";
-
-import { useFriendsStore } from "../../stores/friendsStore";
-import { useToastStore } from "../../stores/toastStore";
-
-import { sendRoomInvitation } from "../../services/api/invitations";
+import { sendRoomInvitation } from '../../services/api/invitations';
+import { useFriendsStore } from '../../stores/friendsStore';
+import { useToastStore } from '../../stores/toastStore';
+import Modal from '../ui/Modal';
 
 type InviteFriendModalProps = {
   isOpen: boolean;
@@ -14,12 +12,7 @@ type InviteFriendModalProps = {
   roomCode: string;
 };
 
-function InviteFriendModal({
-  isOpen,
-  onClose,
-  roomId,
-  roomCode,
-}: InviteFriendModalProps) {
+function InviteFriendModal({ isOpen, onClose, roomId, roomCode }: InviteFriendModalProps) {
   const friends = useFriendsStore((state) => state.friends);
 
   const pushToast = useToastStore((state) => state.push);
@@ -39,17 +32,14 @@ function InviteFriendModal({
   const sortedFriends = useMemo(() => {
     return [...friends].sort((a, b) => {
       if (a.isOnline === b.isOnline) {
-        return a.nickname.localeCompare(b.nickname, "ru");
+        return a.nickname.localeCompare(b.nickname, 'ru');
       }
 
       return a.isOnline ? -1 : 1;
     });
   }, [friends]);
 
-  const onlineCount = useMemo(
-    () => friends.filter((f) => f.isOnline).length,
-    [friends],
-  );
+  const onlineCount = useMemo(() => friends.filter((f) => f.isOnline).length, [friends]);
 
   async function handleInvite(friendUserId: string) {
     setProcessingId(friendUserId);
@@ -67,16 +57,11 @@ function InviteFriendModal({
 
       const friend = friends.find((f) => f.userId === friendUserId);
 
-      pushToast(
-        "success",
-        `Приглашение отправлено: ${friend?.nickname ?? "друг"}`,
-      );
+      pushToast('success', `Приглашение отправлено: ${friend?.nickname ?? 'друг'}`);
     } catch (error) {
       pushToast(
-        "error",
-        error instanceof Error
-          ? error.message
-          : "Не удалось отправить приглашение",
+        'error',
+        error instanceof Error ? error.message : 'Не удалось отправить приглашение'
       );
     } finally {
       setProcessingId(null);
@@ -90,76 +75,66 @@ function InviteFriendModal({
   return (
     <Modal title={`Пригласить в комнату ${roomCode}`} onClose={onClose}>
       {friends.length === 0 ? (
-        <p className="invite-modal__empty">
-          У тебя пока нет друзей. Добавь кого-нибудь на странице{" "}
-          <strong>«Друзья»</strong>.
+        <p className='invite-modal__empty'>
+          У тебя пока нет друзей. Добавь кого-нибудь на странице <strong>«Друзья»</strong>.
         </p>
       ) : (
         <>
-          <p className="invite-modal__hint">
-            Онлайн сейчас:{" "}
+          <p className='invite-modal__hint'>
+            Онлайн сейчас:{' '}
             <strong>
               {onlineCount} из {friends.length}
             </strong>
           </p>
 
-          <ul className="invite-modal__list">
+          <ul className='invite-modal__list'>
             {sortedFriends.map((friend) => {
               const isInvited = invitedIds.has(friend.userId);
 
               const isProcessing = processingId === friend.userId;
 
               return (
-                <li className="invite-modal__item" key={friend.userId}>
-                  <div className="invite-modal__avatar-wrap">
+                <li className='invite-modal__item' key={friend.userId}>
+                  <div className='invite-modal__avatar-wrap'>
                     {friend.avatar ? (
                       <img
-                        className="invite-modal__avatar"
+                        className='invite-modal__avatar'
                         src={friend.avatar}
                         alt={friend.nickname}
                       />
                     ) : (
-                      <div className="invite-modal__avatar invite-modal__avatar--placeholder">
-                        {friend.nickname[0]?.toUpperCase() ?? "?"}
+                      <div className='invite-modal__avatar invite-modal__avatar--placeholder'>
+                        {friend.nickname[0]?.toUpperCase() ?? '?'}
                       </div>
                     )}
 
                     {friend.isOnline && (
-                      <span
-                        className="invite-modal__online-dot"
-                        title="Онлайн"
-                      />
+                      <span className='invite-modal__online-dot' title='Онлайн' />
                     )}
                   </div>
 
-                  <div className="invite-modal__info">
-                    <strong className="invite-modal__name">
-                      {friend.nickname}
-                    </strong>
+                  <div className='invite-modal__info'>
+                    <strong className='invite-modal__name'>{friend.nickname}</strong>
 
-                    <span className="invite-modal__status">
-                      {friend.isOnline ? "В сети" : "Не в сети"}
+                    <span className='invite-modal__status'>
+                      {friend.isOnline ? 'В сети' : 'Не в сети'}
                     </span>
                   </div>
 
                   <button
                     className={[
-                      "invite-modal__button",
-                      isInvited ? "invite-modal__button--invited" : "",
+                      'invite-modal__button',
+                      isInvited ? 'invite-modal__button--invited' : ''
                     ]
                       .filter(Boolean)
-                      .join(" ")}
-                    type="button"
+                      .join(' ')}
+                    type='button'
                     disabled={isInvited || isProcessing}
                     onClick={() => {
                       void handleInvite(friend.userId);
                     }}
                   >
-                    {isInvited
-                      ? "Приглашён"
-                      : isProcessing
-                        ? "Отправляем…"
-                        : "Пригласить"}
+                    {isInvited ? 'Приглашён' : isProcessing ? 'Отправляем…' : 'Пригласить'}
                   </button>
                 </li>
               );

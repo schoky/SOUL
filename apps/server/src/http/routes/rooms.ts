@@ -1,19 +1,9 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance } from 'fastify';
 
-import { authenticateRequest } from "../authMiddleware.js";
-
-import { roomService, RoomServiceError } from "../../rooms/roomService.js";
-
-import {
-  invitationService,
-  InvitationServiceError,
-} from "../../invitations/invitationService.js";
-
-import {
-  emitLobbyUpdated,
-  emitRoomDeleted,
-  emitRoomUpdated,
-} from "../../socket/roomEvents.js";
+import { invitationService, InvitationServiceError } from '../../invitations/invitationService.js';
+import { roomService, RoomServiceError } from '../../rooms/roomService.js';
+import { emitLobbyUpdated, emitRoomDeleted, emitRoomUpdated } from '../../socket/roomEvents.js';
+import { authenticateRequest } from '../authMiddleware.js';
 
 type CreateRoomBody = {
   maxPlayers?: number;
@@ -24,50 +14,50 @@ export async function roomRoutes(app: FastifyInstance) {
    * Получить список комнат.
    */
   app.get(
-    "/",
+    '/',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       const rooms = await roomService.getWaitingRooms();
 
       return reply.send({
-        rooms,
+        rooms
       });
-    },
+    }
   );
 
   /**
    * Получить активную комнату текущего пользователя.
    */
   app.get(
-    "/current",
+    '/current',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       const room = await roomService.getCurrentRoom(user.id);
 
       return reply.send({
-        room,
+        room
       });
-    },
+    }
   );
 
   /**
@@ -78,16 +68,16 @@ export async function roomRoutes(app: FastifyInstance) {
       id: string;
     };
   }>(
-    "/:id/preview",
+    '/:id/preview',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -96,16 +86,16 @@ export async function roomRoutes(app: FastifyInstance) {
       if (!preview) {
         return reply.code(404).send({
           error: {
-            code: "ROOM_NOT_FOUND",
-            message: "Комната не найдена",
-          },
+            code: 'ROOM_NOT_FOUND',
+            message: 'Комната не найдена'
+          }
         });
       }
 
       return reply.send({
-        room: preview,
+        room: preview
       });
-    },
+    }
   );
 
   /**
@@ -116,16 +106,16 @@ export async function roomRoutes(app: FastifyInstance) {
       id: string;
     };
   }>(
-    "/:id",
+    '/:id',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -133,25 +123,25 @@ export async function roomRoutes(app: FastifyInstance) {
         const room = await roomService.getRoom(request.params.id, user.id);
 
         return reply.send({
-          room,
+          room
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   /**
@@ -160,53 +150,50 @@ export async function roomRoutes(app: FastifyInstance) {
   app.post<{
     Body: CreateRoomBody;
   }>(
-    "/",
+    '/',
     {
       preHandler: authenticateRequest,
       config: {
         rateLimit: {
           max: 10,
-          timeWindow: "1 minute",
-        },
-      },
+          timeWindow: '1 minute'
+        }
+      }
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       try {
-        const room = await roomService.createRoom(
-          user.id,
-          request.body?.maxPlayers,
-        );
+        const room = await roomService.createRoom(user.id, request.body?.maxPlayers);
 
         emitLobbyUpdated();
 
         return reply.code(201).send({
-          room,
+          room
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   /**
@@ -217,16 +204,16 @@ export async function roomRoutes(app: FastifyInstance) {
       id: string;
     };
   }>(
-    "/:id/join",
+    '/:id/join',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -237,25 +224,25 @@ export async function roomRoutes(app: FastifyInstance) {
         emitLobbyUpdated();
 
         return reply.send({
-          room,
+          room
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   /**
@@ -269,61 +256,57 @@ export async function roomRoutes(app: FastifyInstance) {
       isReady: boolean;
     };
   }>(
-    "/:id/ready",
+    '/:id/ready',
     {
       preHandler: authenticateRequest,
 
       schema: {
         body: {
-          type: "object",
-          required: ["isReady"],
+          type: 'object',
+          required: ['isReady'],
           additionalProperties: false,
           properties: {
             isReady: {
-              type: "boolean",
-            },
-          },
-        },
-      },
+              type: 'boolean'
+            }
+          }
+        }
+      }
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
       try {
-        const room = await roomService.setReady(
-          request.params.id,
-          user.id,
-          request.body.isReady,
-        );
+        const room = await roomService.setReady(request.params.id, user.id, request.body.isReady);
 
         emitRoomUpdated(room);
 
         return reply.send({
-          room,
+          room
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   /**
@@ -334,16 +317,16 @@ export async function roomRoutes(app: FastifyInstance) {
       id: string;
     };
   }>(
-    "/:id/leave",
+    '/:id/leave',
     {
-      preHandler: authenticateRequest,
+      preHandler: authenticateRequest
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
         return reply.code(401).send({
-          error: "Not authenticated",
+          error: 'Not authenticated'
         });
       }
 
@@ -359,25 +342,25 @@ export async function roomRoutes(app: FastifyInstance) {
         emitLobbyUpdated();
 
         return reply.send({
-          room,
+          room
         });
       } catch (error) {
         if (error instanceof RoomServiceError) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   /**
@@ -387,33 +370,33 @@ export async function roomRoutes(app: FastifyInstance) {
     Params: { id: string };
     Body: { inviteeId: string };
   }>(
-    "/:id/invitations",
+    '/:id/invitations',
     {
       preHandler: authenticateRequest,
 
       schema: {
         body: {
-          type: "object",
-          required: ["inviteeId"],
+          type: 'object',
+          required: ['inviteeId'],
           additionalProperties: false,
           properties: {
-            inviteeId: { type: "string", minLength: 1 },
-          },
-        },
-      },
+            inviteeId: { type: 'string', minLength: 1 }
+          }
+        }
+      }
     },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
         const result = await invitationService.sendInvitation(
           user.id,
           request.params.id,
-          request.body.inviteeId,
+          request.body.inviteeId
         );
 
         return reply.code(201).send(result);
@@ -422,17 +405,17 @@ export async function roomRoutes(app: FastifyInstance) {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 }

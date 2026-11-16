@@ -1,45 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { useAuthStore } from "../../stores/authStore";
-
-import MainLayout from "../../components/layout/MainLayout";
-
-import SoulLogo from "../../components/branding/SoulLogo";
+import SoulLogo from '../../components/branding/SoulLogo';
+import MainLayout from '../../components/layout/MainLayout';
+import { useAuthStore } from '../../stores/authStore';
 
 function LandingPage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <MainLayout>
-      <section className="landing-page">
-        <div className="landing-page__hero">
-          <div className="landing-page__hero-content">
-            <SoulLogo className="soul-logo--hero" />
+      <section className='landing-page'>
+        <div className='landing-page__hero'>
+          <div className='landing-page__hero-content'>
+            <SoulLogo className='soul-logo--hero' />
 
-            <p className="landing-page__subtitle">Твой ход. Твои правила.</p>
+            <p className='landing-page__subtitle'>Твой ход. Твои правила.</p>
 
-            <p className="landing-page__description">
+            <p className='landing-page__description'>
               Браузерная карточная игра с характером, риском и онлайн-битвами.
             </p>
 
-            <div className="landing-page__actions">
+            <div className='landing-page__actions'>
               <Link
-                className="
-                  landing-page__button
-                  landing-page__button--primary
-                "
-                to={isAuthenticated ? "/lobby" : "/login"}
+                className='landing-page__button landing-page__button--primary'
+                to={isAuthenticated ? '/lobby' : '/login'}
               >
                 Играть
               </Link>
 
-              <Link
-                className="
-                  landing-page__button
-                  landing-page__button--secondary
-                "
-                to="/rules"
-              >
+              <Link className='landing-page__button landing-page__button--secondary' to='/rules'>
                 Узнать больше
               </Link>
             </div>

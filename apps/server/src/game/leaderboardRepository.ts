@@ -1,25 +1,25 @@
-import { database } from "@soul/database";
-import type { LeaderboardEntryDto } from "@soul/shared";
+import { database } from '@soul/database';
+import type { LeaderboardEntryDto } from '@soul/shared';
 
 class LeaderboardRepository {
   async getLeaderboard(limit: number): Promise<LeaderboardEntryDto[]> {
     const groups = await database.gamePlayer.groupBy({
-      by: ["userId"],
+      by: ['userId'],
       where: {
-        game: { status: "FINISHED" },
+        game: { status: 'FINISHED' }
       },
       _count: { _all: true },
       _sum: { finalSoul: true },
-      _max: { finalSoul: true },
+      _max: { finalSoul: true }
     });
 
     const winsGroups = await database.gamePlayer.groupBy({
-      by: ["userId"],
+      by: ['userId'],
       where: {
-        game: { status: "FINISHED" },
-        place: 1,
+        game: { status: 'FINISHED' },
+        place: 1
       },
-      _count: { _all: true },
+      _count: { _all: true }
     });
 
     const winsMap = new Map(winsGroups.map((g) => [g.userId, g._count._all]));
@@ -28,7 +28,7 @@ class LeaderboardRepository {
 
     const users = await database.user.findMany({
       where: { id: { in: userIds } },
-      include: { profile: true },
+      include: { profile: true }
     });
 
     const userMap = new Map(users.map((u) => [u.id, u]));
@@ -42,7 +42,7 @@ class LeaderboardRepository {
         gamesPlayed: g._count._all,
         wins: winsMap.get(g.userId) ?? 0,
         totalSoul: g._sum.finalSoul ?? 0,
-        bestSoul: g._max.finalSoul ?? 0,
+        bestSoul: g._max.finalSoul ?? 0
       };
     });
 

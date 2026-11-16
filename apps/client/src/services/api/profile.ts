@@ -1,6 +1,5 @@
-import { apiRequest } from "./client";
-
-import type { UserProfile } from "./auth";
+import type { UserProfile } from './auth';
+import { apiRequest } from './client';
 
 export type ProfileOverview = {
   totalGames: number;
@@ -26,7 +25,7 @@ export type UpdateProfileInput = {
 };
 
 export async function getProfileStats(): Promise<ProfileOverview> {
-  return apiRequest<ProfileOverview>("/api/profile/stats");
+  return apiRequest<ProfileOverview>('/api/profile/stats');
 }
 
 export async function getRecentGames(limit = 10): Promise<ProfileGameEntry[]> {
@@ -37,14 +36,12 @@ export async function getRecentGames(limit = 10): Promise<ProfileGameEntry[]> {
   return response.games;
 }
 
-export async function updateProfile(
-  input: UpdateProfileInput,
-): Promise<UserProfile> {
+export async function updateProfile(input: UpdateProfileInput): Promise<UserProfile> {
   const response = await apiRequest<{
     profile: UserProfile;
-  }>("/api/profile", {
-    method: "PATCH",
-    body: JSON.stringify(input),
+  }>('/api/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(input)
   });
 
   return response.profile;

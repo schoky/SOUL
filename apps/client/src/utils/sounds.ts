@@ -1,13 +1,13 @@
 type SoundName =
-  | "card-select"
-  | "card-deselect"
-  | "success"
-  | "fail"
-  | "risk-win"
-  | "risk-lose"
-  | "game-over"
-  | "your-turn"
-  | "notification";
+  | 'card-select'
+  | 'card-deselect'
+  | 'success'
+  | 'fail'
+  | 'risk-win'
+  | 'risk-lose'
+  | 'game-over'
+  | 'your-turn'
+  | 'notification';
 
 type Tone = {
   frequency: number;
@@ -23,144 +23,144 @@ type SoundDefinition = {
 };
 
 const SOUND_DEFINITIONS: Record<SoundName, SoundDefinition> = {
-  "card-select": {
-    tones: [{ frequency: 880, duration: 0.06, type: "sine", volume: 1 }],
-    masterVolume: 0.14,
+  'card-select': {
+    tones: [{ frequency: 880, duration: 0.06, type: 'sine', volume: 1 }],
+    masterVolume: 0.14
   },
 
-  "card-deselect": {
-    tones: [{ frequency: 550, duration: 0.06, type: "sine", volume: 1 }],
-    masterVolume: 0.11,
+  'card-deselect': {
+    tones: [{ frequency: 550, duration: 0.06, type: 'sine', volume: 1 }],
+    masterVolume: 0.11
   },
 
   success: {
     tones: [
-      { frequency: 523.25, duration: 0.12, type: "sine", volume: 0.7 },
+      { frequency: 523.25, duration: 0.12, type: 'sine', volume: 0.7 },
       {
         frequency: 783.99,
         duration: 0.18,
-        type: "sine",
+        type: 'sine',
         volume: 0.9,
-        delay: 0.1,
-      },
+        delay: 0.1
+      }
     ],
-    masterVolume: 0.18,
+    masterVolume: 0.18
   },
 
   fail: {
     tones: [
-      { frequency: 392, duration: 0.15, type: "triangle", volume: 0.8 },
+      { frequency: 392, duration: 0.15, type: 'triangle', volume: 0.8 },
       {
         frequency: 196,
         duration: 0.25,
-        type: "triangle",
+        type: 'triangle',
         volume: 0.9,
-        delay: 0.1,
-      },
+        delay: 0.1
+      }
     ],
-    masterVolume: 0.18,
+    masterVolume: 0.18
   },
 
-  "risk-win": {
+  'risk-win': {
     tones: [
-      { frequency: 523.25, duration: 0.08, type: "sine", volume: 0.6 },
+      { frequency: 523.25, duration: 0.08, type: 'sine', volume: 0.6 },
       {
         frequency: 659.25,
         duration: 0.08,
-        type: "sine",
+        type: 'sine',
         volume: 0.7,
-        delay: 0.07,
+        delay: 0.07
       },
       {
         frequency: 783.99,
         duration: 0.08,
-        type: "sine",
+        type: 'sine',
         volume: 0.8,
-        delay: 0.14,
+        delay: 0.14
       },
       {
         frequency: 1046.5,
         duration: 0.25,
-        type: "sine",
+        type: 'sine',
         volume: 1,
-        delay: 0.21,
-      },
+        delay: 0.21
+      }
     ],
-    masterVolume: 0.22,
+    masterVolume: 0.22
   },
 
-  "risk-lose": {
+  'risk-lose': {
     tones: [
-      { frequency: 220, duration: 0.2, type: "sawtooth", volume: 0.55 },
+      { frequency: 220, duration: 0.2, type: 'sawtooth', volume: 0.55 },
       {
         frequency: 180,
         duration: 0.3,
-        type: "sawtooth",
+        type: 'sawtooth',
         volume: 0.75,
-        delay: 0.15,
-      },
+        delay: 0.15
+      }
     ],
-    masterVolume: 0.13,
+    masterVolume: 0.13
   },
 
-  "game-over": {
+  'game-over': {
     tones: [
-      { frequency: 523.25, duration: 0.15, type: "sine", volume: 0.7 },
+      { frequency: 523.25, duration: 0.15, type: 'sine', volume: 0.7 },
       {
         frequency: 659.25,
         duration: 0.15,
-        type: "sine",
+        type: 'sine',
         volume: 0.8,
-        delay: 0.13,
+        delay: 0.13
       },
       {
         frequency: 783.99,
         duration: 0.15,
-        type: "sine",
+        type: 'sine',
         volume: 0.9,
-        delay: 0.26,
+        delay: 0.26
       },
       {
         frequency: 1046.5,
         duration: 0.4,
-        type: "sine",
+        type: 'sine',
         volume: 1,
-        delay: 0.39,
-      },
+        delay: 0.39
+      }
     ],
-    masterVolume: 0.22,
+    masterVolume: 0.22
   },
 
-  "your-turn": {
+  'your-turn': {
     tones: [
-      { frequency: 659.25, duration: 0.12, type: "sine", volume: 0.7 },
+      { frequency: 659.25, duration: 0.12, type: 'sine', volume: 0.7 },
       {
         frequency: 987.77,
         duration: 0.3,
-        type: "sine",
+        type: 'sine',
         volume: 0.9,
-        delay: 0.12,
-      },
+        delay: 0.12
+      }
     ],
-    masterVolume: 0.16,
+    masterVolume: 0.16
   },
 
   notification: {
     tones: [
-      { frequency: 880, duration: 0.08, type: "sine", volume: 0.5 },
+      { frequency: 880, duration: 0.08, type: 'sine', volume: 0.5 },
       {
         frequency: 1174.66,
         duration: 0.14,
-        type: "sine",
+        type: 'sine',
         volume: 0.7,
-        delay: 0.1,
-      },
+        delay: 0.1
+      }
     ],
-    masterVolume: 0.14,
-  },
+    masterVolume: 0.14
+  }
 };
 
-const STORAGE_KEY = "soul:sounds-enabled";
+const STORAGE_KEY = 'soul:sounds-enabled';
 
 let audioContext: AudioContext | null = null;
 
@@ -170,14 +170,14 @@ try {
   const stored = localStorage.getItem(STORAGE_KEY);
 
   if (stored !== null) {
-    enabled = stored === "true";
+    enabled = stored === 'true';
   }
 } catch {
   // localStorage недоступен — оставляем по умолчанию.
 }
 
 function getAudioContext(): AudioContext | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
@@ -228,7 +228,7 @@ export function playSound(name: SoundName): void {
       return;
     }
 
-    if (ctx.state === "suspended") {
+    if (ctx.state === 'suspended') {
       void ctx.resume();
     }
 
@@ -249,7 +249,7 @@ export function playSound(name: SoundName): void {
 
       const osc = ctx.createOscillator();
 
-      osc.type = tone.type ?? "sine";
+      osc.type = tone.type ?? 'sine';
 
       osc.frequency.setValueAtTime(tone.frequency, startAt);
 
@@ -259,10 +259,7 @@ export function playSound(name: SoundName): void {
 
       envelope.gain.setValueAtTime(0.0001, startAt);
 
-      envelope.gain.exponentialRampToValueAtTime(
-        Math.max(0.0001, peak),
-        startAt + 0.02,
-      );
+      envelope.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), startAt + 0.02);
 
       envelope.gain.exponentialRampToValueAtTime(0.0001, endAt);
 
@@ -288,11 +285,11 @@ export function playSound(name: SoundName): void {
 export function preloadSounds(): void {
   const ctx = getAudioContext();
 
-  if (ctx && ctx.state === "suspended") {
+  if (ctx && ctx.state === 'suspended') {
     void ctx.resume();
   }
 }
 
 export function playYourTurnSound(): void {
-  playSound("your-turn");
+  playSound('your-turn');
 }

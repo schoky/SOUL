@@ -1,4 +1,4 @@
-import { useToastStore } from "../../stores/toastStore";
+import { useToastStore } from '../../stores/toastStore';
 
 function Toaster() {
   const toasts = useToastStore((state) => state.toasts);
@@ -10,15 +10,13 @@ function Toaster() {
   }
 
   return (
-    <div className="toaster" aria-live="polite">
+    <div className='toaster' aria-live='polite'>
       {toasts.map((toast) => (
         <div
-          className={["toaster__item", `toaster__item--${toast.kind}`].join(
-            " ",
-          )}
+          className={['toaster__item', `toaster__item--${toast.kind}`].join(' ')}
           key={toast.id}
           onClick={() => dismiss(toast.id)}
-          role="status"
+          role='status'
         >
           {toast.message}
         </div>

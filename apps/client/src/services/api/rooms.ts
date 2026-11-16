@@ -1,19 +1,19 @@
-import { apiRequest } from "./client";
-
 import type {
   CreateRoomRequest,
   RoomDto,
   RoomListResponse,
   RoomPreviewDto,
   RoomResponse
-} from "@soul/shared";
+} from '@soul/shared';
+
+import { apiRequest } from './client';
 
 /**
  * Получает список комнат,
  * доступных для входа.
  */
 export async function getRooms() {
-  const response = await apiRequest<RoomListResponse>("/api/rooms");
+  const response = await apiRequest<RoomListResponse>('/api/rooms');
 
   return response.rooms;
 }
@@ -22,7 +22,7 @@ export async function getRooms() {
  * Получает активную комнату текущего пользователя.
  */
 export async function getCurrentRoom() {
-  const response = await apiRequest<RoomResponse>("/api/rooms/current");
+  const response = await apiRequest<RoomResponse>('/api/rooms/current');
 
   return response.room;
 }
@@ -56,9 +56,9 @@ export async function getRoom(roomId: string) {
 export async function createRoom(data: CreateRoomRequest = {}) {
   const response = await apiRequest<{
     room: RoomDto;
-  }>("/api/rooms", {
-    method: "POST",
-    body: JSON.stringify(data),
+  }>('/api/rooms', {
+    method: 'POST',
+    body: JSON.stringify(data)
   });
 
   return response.room;
@@ -72,7 +72,7 @@ export async function joinRoom(roomId: string) {
   const response = await apiRequest<{
     room: RoomDto;
   }>(`/api/rooms/${roomId}/join`, {
-    method: "POST",
+    method: 'POST'
   });
 
   return response.room;
@@ -86,8 +86,8 @@ export async function setReady(roomId: string, isReady: boolean) {
   const response = await apiRequest<{
     room: RoomDto;
   }>(`/api/rooms/${roomId}/ready`, {
-    method: "PATCH",
-    body: JSON.stringify({ isReady }),
+    method: 'PATCH',
+    body: JSON.stringify({ isReady })
   });
 
   return response.room;
@@ -97,12 +97,9 @@ export async function setReady(roomId: string, isReady: boolean) {
  * Выводит текущего пользователя из комнаты.
  */
 export async function leaveRoom(roomId: string) {
-  const response = await apiRequest<RoomResponse>(
-    `/api/rooms/${roomId}/leave`,
-    {
-      method: "POST",
-    },
-  );
+  const response = await apiRequest<RoomResponse>(`/api/rooms/${roomId}/leave`, {
+    method: 'POST'
+  });
 
   return response.room;
 }

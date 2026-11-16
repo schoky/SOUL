@@ -1,5 +1,5 @@
-import type { GameState, Player } from "@soul/shared";
-import { GAME_RULES } from "@soul/shared";
+import type { GameState, Player } from '@soul/shared';
+import { GAME_RULES } from '@soul/shared';
 
 export type TurnResult = {
   game: GameState;
@@ -8,12 +8,12 @@ export type TurnResult = {
 };
 
 export function startTurn(game: GameState): TurnResult {
-  if (game.status !== "playing") {
-    throw new Error("Cannot start turn: game is not playing");
+  if (game.status !== 'playing') {
+    throw new Error('Cannot start turn: game is not playing');
   }
 
   if (!game.currentPlayerId) {
-    throw new Error("Cannot start turn: current player is not set");
+    throw new Error('Cannot start turn: current player is not set');
   }
 
   const player = game.players.find((item) => item.id === game.currentPlayerId);
@@ -31,13 +31,13 @@ export function startTurn(game: GameState): TurnResult {
       return {
         ...item,
         skipNextTurn: false,
-        status: null,
+        status: null
       };
     });
 
     const updatedGame: GameState = {
       ...game,
-      players: updatedPlayers,
+      players: updatedPlayers
     };
 
     const updatedPlayer = updatedPlayers.find((item) => item.id === player.id)!;
@@ -45,7 +45,7 @@ export function startTurn(game: GameState): TurnResult {
     return {
       game: updatedGame,
       player: updatedPlayer,
-      skipped: true,
+      skipped: true
     };
   }
 
@@ -73,7 +73,7 @@ export function startTurn(game: GameState): TurnResult {
 
   const updatedGame: GameState = {
     ...game,
-    players: updatedPlayers,
+    players: updatedPlayers
   };
 
   const updatedPlayer = updatedPlayers.find((item) => item.id === player.id)!;
@@ -81,6 +81,6 @@ export function startTurn(game: GameState): TurnResult {
   return {
     game: updatedGame,
     player: updatedPlayer,
-    skipped: false,
+    skipped: false
   };
 }

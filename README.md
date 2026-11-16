@@ -31,7 +31,7 @@
 ## Стек
 
 | Слой                | Технологии                                           |
-|---------------------|------------------------------------------------------|
+| ------------------- | ---------------------------------------------------- |
 | **Frontend**        | React, Vite, TypeScript, Zustand, React Router, SCSS |
 | **Backend**         | Node.js, Fastify, Socket.IO, Prisma, PostgreSQL      |
 | **Монорепозиторий** | pnpm workspaces                                      |
@@ -120,7 +120,7 @@ pnpm --filter @soul/client dev
 ## 🛠 Скрипты
 
 | Команда                                   | Описание                  |
-|-------------------------------------------|---------------------------|
+| ----------------------------------------- | ------------------------- |
 | `pnpm --filter @soul/client dev`          | Запуск клиента            |
 | `pnpm --filter @soul/server dev`          | Запуск сервера            |
 | `pnpm --filter @soul/client build`        | Сборка клиента            |
@@ -129,7 +129,7 @@ pnpm --filter @soul/client dev
 | `pnpm --filter @soul/server typecheck`    | Проверка типов сервера    |
 | `pnpm --filter @soul/client typecheck`    | Проверка типов клиента    |
 | `pnpm --filter @soul/database db:migrate` | Миграции Prisma           |
-| `pnpm --filter @soul/database db:seed`    | Загрузка начальных данных |                         |
+| `pnpm --filter @soul/database db:seed`    | Загрузка начальных данных |     |
 
 ---
 

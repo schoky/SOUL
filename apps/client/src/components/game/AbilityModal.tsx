@@ -1,6 +1,5 @@
-import { useEffect } from "react";
-
-import type { Character } from "@soul/shared";
+import type { Character } from '@soul/shared';
+import { useEffect } from 'react';
 
 type AbilityModalProps = {
   isOpen: boolean;
@@ -15,7 +14,7 @@ function AbilityModal({
   onClose,
   title,
   characters,
-  highlightId = null,
+  highlightId = null
 }: AbilityModalProps) {
   useEffect(() => {
     if (!isOpen) {
@@ -23,15 +22,15 @@ function AbilityModal({
     }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         onClose();
       }
     }
 
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener('keydown', onKeyDown);
     };
   }, [isOpen, onClose]);
 
@@ -42,34 +41,27 @@ function AbilityModal({
   const withAbility = characters.filter((item) => item.ability);
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="presentation">
+    <div className='modal-backdrop' onClick={onClose} role='presentation'>
       <div
-        className="modal modal--abilities"
+        className='modal modal--abilities'
         onClick={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
+        role='dialog'
+        aria-modal='true'
         aria-label={title}
       >
-        <div className="modal__header">
-          <h2 className="modal__title">{title}</h2>
+        <div className='modal__header'>
+          <h2 className='modal__title'>{title}</h2>
 
-          <button
-            className="modal__close"
-            type="button"
-            onClick={onClose}
-            aria-label="Закрыть"
-          >
+          <button className='modal__close' type='button' onClick={onClose} aria-label='Закрыть'>
             ×
           </button>
         </div>
 
-        <div className="modal__body">
+        <div className='modal__body'>
           {withAbility.length === 0 ? (
-            <p className="ability-modal__empty">
-              У твоих персонажей нет способностей.
-            </p>
+            <p className='ability-modal__empty'>У твоих персонажей нет способностей.</p>
           ) : (
-            <ul className="ability-modal__list">
+            <ul className='ability-modal__list'>
               {withAbility.map((character) => {
                 const isHighlighted = character.id === highlightId;
 
@@ -77,25 +69,19 @@ function AbilityModal({
                   <li
                     key={character.id}
                     className={[
-                      "ability-modal__item",
-                      isHighlighted ? "ability-modal__item--highlight" : "",
+                      'ability-modal__item',
+                      isHighlighted ? 'ability-modal__item--highlight' : ''
                     ]
                       .filter(Boolean)
-                      .join(" ")}
+                      .join(' ')}
                   >
-                    <div className="ability-modal__header">
-                      <strong className="ability-modal__character">
-                        {character.name}
-                      </strong>
+                    <div className='ability-modal__header'>
+                      <strong className='ability-modal__character'>{character.name}</strong>
 
-                      <span className="ability-modal__name">
-                        {character.ability!.name}
-                      </span>
+                      <span className='ability-modal__name'>{character.ability!.name}</span>
                     </div>
 
-                    <p className="ability-modal__description">
-                      {character.ability!.description}
-                    </p>
+                    <p className='ability-modal__description'>{character.ability!.description}</p>
                   </li>
                 );
               })}

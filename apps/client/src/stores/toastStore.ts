@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-export type ToastKind = "success" | "error" | "info" | "warning";
+export type ToastKind = 'success' | 'error' | 'info' | 'warning';
 
 export type Toast = {
   id: string;
@@ -27,7 +27,7 @@ export const useToastStore = create<ToastStore>((set, get) => ({
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
     set((state) => ({
-      toasts: [...state.toasts, { id, kind, message }],
+      toasts: [...state.toasts, { id, kind, message }]
     }));
 
     setTimeout(() => {
@@ -37,13 +37,13 @@ export const useToastStore = create<ToastStore>((set, get) => ({
 
   dismiss(id) {
     set((state) => ({
-      toasts: state.toasts.filter((t) => t.id !== id),
+      toasts: state.toasts.filter((t) => t.id !== id)
     }));
   },
 
   clear() {
     set({
-      toasts: [],
+      toasts: []
     });
-  },
+  }
 }));

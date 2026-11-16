@@ -1,6 +1,6 @@
-import type {EventCard} from './event.js';
+import type { EventCard } from './event.js';
 
 export type EventDeck = {
-	drawPile: EventCard[];
-	discardPile: EventCard[];
+  drawPile: EventCard[];
+  discardPile: EventCard[];
 };

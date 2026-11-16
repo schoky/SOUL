@@ -1,16 +1,13 @@
-import type { FormEvent } from "react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { SOCKET_EVENTS } from '@soul/shared';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { SOCKET_EVENTS } from "@soul/shared";
-
-import MainLayout from "../../components/layout/MainLayout";
-import Skeleton from "../../components/ui/Skeleton";
-
-import { socket } from "../../services/socket";
-
-import { useAuthStore } from "../../stores/authStore";
-import { useRoomStore } from "../../stores/roomStore";
+import MainLayout from '../../components/layout/MainLayout';
+import Skeleton from '../../components/ui/Skeleton';
+import { socket } from '../../services/socket';
+import { useAuthStore } from '../../stores/authStore';
+import { useRoomStore } from '../../stores/roomStore';
 
 function getRoomCountLabel(count: number) {
   const lastDigit = count % 10;
@@ -20,11 +17,7 @@ function getRoomCountLabel(count: number) {
     return `${count} комната`;
   }
 
-  if (
-    lastDigit >= 2 &&
-    lastDigit <= 4 &&
-    !(lastTwoDigits >= 12 && lastTwoDigits <= 14)
-  ) {
+  if (lastDigit >= 2 && lastDigit <= 4 && !(lastTwoDigits >= 12 && lastTwoDigits <= 14)) {
     return `${count} комнаты`;
   }
 
@@ -47,7 +40,7 @@ function LobbyPage() {
   const joinRoom = useRoomStore((state) => state.joinRoom);
   const leaveRoom = useRoomStore((state) => state.leaveRoom);
 
-  const [roomCode, setRoomCode] = useState("");
+  const [roomCode, setRoomCode] = useState('');
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   /**
@@ -81,11 +74,11 @@ function LobbyPage() {
       handleConnect();
     }
 
-    socket.on("connect", handleConnect);
+    socket.on('connect', handleConnect);
     socket.on(SOCKET_EVENTS.LOBBY_UPDATED, handleLobbyUpdated);
 
     return () => {
-      socket.off("connect", handleConnect);
+      socket.off('connect', handleConnect);
       socket.off(SOCKET_EVENTS.LOBBY_UPDATED, handleLobbyUpdated);
 
       socket.emit(SOCKET_EVENTS.LOBBY_UNSUBSCRIBE);
@@ -128,7 +121,7 @@ function LobbyPage() {
     const room = rooms.find((item) => item.code === normalizedCode);
 
     if (!room) {
-      setActionMessage("Комната с таким кодом не найдена");
+      setActionMessage('Комната с таким кодом не найдена');
       return;
     }
 
@@ -138,7 +131,7 @@ function LobbyPage() {
       return;
     }
 
-    setRoomCode("");
+    setRoomCode('');
     navigate(`/room/${joinedRoom.id}`);
   }
 
@@ -162,7 +155,7 @@ function LobbyPage() {
       return;
     }
 
-    setActionMessage("Ты покинул комнату");
+    setActionMessage('Ты покинул комнату');
   }
 
   function handleEnterCurrentRoom() {
@@ -170,7 +163,7 @@ function LobbyPage() {
       return;
     }
 
-    if (currentRoom.status === "PLAYING") {
+    if (currentRoom.status === 'PLAYING') {
       navigate(`/game/${currentRoom.id}`);
       return;
     }
@@ -181,8 +174,8 @@ function LobbyPage() {
   if (isLoading) {
     return (
       <MainLayout>
-        <main className="lobby-page">
-          <section className="skeleton-lobby__hero">
+        <main className='lobby-page'>
+          <section className='skeleton-lobby__hero'>
             <div>
               <Skeleton width={140} height={12} />
 
@@ -195,41 +188,41 @@ function LobbyPage() {
               </div>
             </div>
 
-            <Skeleton width={190} height={68} radius="6px" />
+            <Skeleton width={190} height={68} radius='6px' />
           </section>
 
-          <section className="skeleton-lobby__actions">
-            <div className="skeleton-lobby__action">
+          <section className='skeleton-lobby__actions'>
+            <div className='skeleton-lobby__action'>
               <Skeleton width={36} height={16} />
 
               <Skeleton width={200} height={26} />
 
               <Skeleton width={260} height={12} />
 
-              <div style={{ marginTop: "auto" }}>
-                <Skeleton width={180} height={44} radius="4px" />
+              <div style={{ marginTop: 'auto' }}>
+                <Skeleton width={180} height={44} radius='4px' />
               </div>
             </div>
 
-            <div className="skeleton-lobby__action">
+            <div className='skeleton-lobby__action'>
               <Skeleton width={36} height={16} />
 
               <Skeleton width={180} height={26} />
 
               <Skeleton width={240} height={12} />
 
-              <div style={{ marginTop: "auto" }}>
-                <Skeleton width="100%" height={44} radius="4px" />
+              <div style={{ marginTop: 'auto' }}>
+                <Skeleton width='100%' height={44} radius='4px' />
               </div>
             </div>
           </section>
 
-          <section className="skeleton-lobby__rooms">
+          <section className='skeleton-lobby__rooms'>
             <Skeleton width={220} height={22} />
 
-            <div className="skeleton-lobby__rooms-list">
+            <div className='skeleton-lobby__rooms-list'>
               {[1, 2, 3].map((i) => (
-                <div className="skeleton-lobby__room-row" key={i}>
+                <div className='skeleton-lobby__room-row' key={i}>
                   <div>
                     <Skeleton width={100} height={18} />
 
@@ -238,7 +231,7 @@ function LobbyPage() {
                     </div>
                   </div>
 
-                  <Skeleton width={90} height={36} radius="4px" />
+                  <Skeleton width={90} height={36} radius='4px' />
                 </div>
               ))}
             </div>
@@ -250,141 +243,116 @@ function LobbyPage() {
 
   return (
     <MainLayout>
-      <main className="lobby-page">
-        <section className="lobby-page__hero">
+      <main className='lobby-page'>
+        <section className='lobby-page__hero'>
           <div>
-            <p className="lobby-page__eyebrow">ИГРОВОЕ ЛОББИ</p>
+            <p className='lobby-page__eyebrow'>ИГРОВОЕ ЛОББИ</p>
 
-            <h1 className="lobby-page__title">Найди свою игру</h1>
+            <h1 className='lobby-page__title'>Найди свою игру</h1>
 
-            <p className="lobby-page__description">
+            <p className='lobby-page__description'>
               Создай комнату или присоединись к уже существующей.
             </p>
           </div>
 
-          <div className="lobby-page__player">
-            <span className="lobby-page__player-label">ТЫ ИГРАЕШЬ КАК</span>
+          <div className='lobby-page__player'>
+            <span className='lobby-page__player-label'>ТЫ ИГРАЕШЬ КАК</span>
 
-            <strong className="lobby-page__player-name">
-              {user?.profile.nickname}
-            </strong>
+            <strong className='lobby-page__player-name'>{user?.profile.nickname}</strong>
           </div>
         </section>
 
         {currentRoom && (
-          <section className="lobby-page__active-room">
-            <div className="lobby-page__active-room-info">
-              <p className="lobby-page__eyebrow">ТЫ УЖЕ В КОМНАТЕ</p>
+          <section className='lobby-page__active-room'>
+            <div className='lobby-page__active-room-info'>
+              <p className='lobby-page__eyebrow'>ТЫ УЖЕ В КОМНАТЕ</p>
 
-              <h2 className="lobby-page__active-room-code">
-                {currentRoom.code}
-              </h2>
+              <h2 className='lobby-page__active-room-code'>{currentRoom.code}</h2>
 
-              <p className="lobby-page__active-room-status">
-                {currentRoom.status === "WAITING"
-                  ? "Ожидание игроков"
-                  : currentRoom.status === "PLAYING"
-                    ? "Игра идёт"
-                    : "Игра завершена"}
-                {" · "}
+              <p className='lobby-page__active-room-status'>
+                {currentRoom.status === 'WAITING'
+                  ? 'Ожидание игроков'
+                  : currentRoom.status === 'PLAYING'
+                    ? 'Игра идёт'
+                    : 'Игра завершена'}
+                {' · '}
                 {currentRoom.members.length} / {currentRoom.maxPlayers} игроков
               </p>
             </div>
 
-            <div className="lobby-page__active-room-actions">
+            <div className='lobby-page__active-room-actions'>
               <button
-                className="
-                  lobby-page__action-button
-                "
-                type="button"
+                className='lobby-page__action-button'
+                type='button'
                 onClick={handleEnterCurrentRoom}
                 disabled={isMutating}
               >
-                {currentRoom.status === "PLAYING"
-                  ? "Вернуться в игру"
-                  : "Вернуться в комнату"}
+                {currentRoom.status === 'PLAYING' ? 'Вернуться в игру' : 'Вернуться в комнату'}
               </button>
 
               <button
-                className="
-                  lobby-page__action-button
-                  lobby-page__action-button--secondary
-                "
-                type="button"
+                className='lobby-page__action-button lobby-page__action-button--secondary'
+                type='button'
                 onClick={handleLeaveRoom}
                 disabled={isMutating}
               >
-                {isMutating ? "Выходим..." : "Покинуть комнату"}
+                {isMutating ? 'Выходим...' : 'Покинуть комнату'}
               </button>
             </div>
           </section>
         )}
 
-        <section className="lobby-page__actions">
-          <article
-            className="
-              lobby-page__action
-              lobby-page__action--primary
-            "
-          >
-            <div className="lobby-page__action-number">01</div>
+        <section className='lobby-page__actions'>
+          <article className='lobby-page__action lobby-page__action--primary'>
+            <div className='lobby-page__action-number'>01</div>
 
-            <div className="lobby-page__action-content">
-              <h2 className="lobby-page__action-title">Создать комнату</h2>
+            <div className='lobby-page__action-content'>
+              <h2 className='lobby-page__action-title'>Создать комнату</h2>
 
-              <p className="lobby-page__action-description">
+              <p className='lobby-page__action-description'>
                 Создай новую игру и пригласи других игроков.
               </p>
 
               <button
-                className="lobby-page__action-button"
-                type="button"
+                className='lobby-page__action-button'
+                type='button'
                 onClick={handleCreateRoom}
                 disabled={isMutating || currentRoom !== null}
               >
-                {isMutating ? "Создание..." : "Создать комнату"}
+                {isMutating ? 'Создание...' : 'Создать комнату'}
               </button>
             </div>
           </article>
 
-          <article className="lobby-page__action">
-            <div className="lobby-page__action-number">02</div>
+          <article className='lobby-page__action'>
+            <div className='lobby-page__action-number'>02</div>
 
-            <div className="lobby-page__action-content">
-              <h2 className="lobby-page__action-title">Войти по коду</h2>
+            <div className='lobby-page__action-content'>
+              <h2 className='lobby-page__action-title'>Войти по коду</h2>
 
-              <p className="lobby-page__action-description">
+              <p className='lobby-page__action-description'>
                 Введи код комнаты, который передал тебе хост.
               </p>
 
-              <form className="lobby-page__join-form" onSubmit={handleJoinRoom}>
+              <form className='lobby-page__join-form' onSubmit={handleJoinRoom}>
                 <input
-                  className="lobby-page__join-input"
-                  type="text"
+                  className='lobby-page__join-input'
+                  type='text'
                   value={roomCode}
                   onChange={(event) =>
-                    setRoomCode(
-                      event.target.value
-                        .toUpperCase()
-                        .replace(/[^A-Z0-9]/g, ""),
-                    )
+                    setRoomCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))
                   }
-                  placeholder="КОД КОМНАТЫ"
+                  placeholder='КОД КОМНАТЫ'
                   maxLength={6}
-                  autoComplete="off"
+                  autoComplete='off'
                   spellCheck={false}
                   disabled={currentRoom !== null}
                 />
 
                 <button
-                  className="
-                    lobby-page__action-button
-                    lobby-page__action-button--secondary
-                  "
-                  type="submit"
-                  disabled={
-                    roomCode.length !== 6 || isMutating || currentRoom !== null
-                  }
+                  className='lobby-page__action-button lobby-page__action-button--secondary'
+                  type='submit'
+                  disabled={roomCode.length !== 6 || isMutating || currentRoom !== null}
                 >
                   Войти
                 </button>
@@ -394,62 +362,53 @@ function LobbyPage() {
         </section>
 
         {(storeError || actionMessage) && (
-          <div className="lobby-page__message">
-            {storeError || actionMessage}
-          </div>
+          <div className='lobby-page__message'>{storeError || actionMessage}</div>
         )}
 
-        <section className="lobby-page__rooms">
-          <div className="lobby-page__rooms-header">
+        <section className='lobby-page__rooms'>
+          <div className='lobby-page__rooms-header'>
             <div>
-              <p className="lobby-page__eyebrow">ОТКРЫТЫЕ ИГРЫ</p>
+              <p className='lobby-page__eyebrow'>ОТКРЫТЫЕ ИГРЫ</p>
 
-              <h2 className="lobby-page__section-title">Доступные комнаты</h2>
+              <h2 className='lobby-page__section-title'>Доступные комнаты</h2>
             </div>
 
-            <span className="lobby-page__rooms-count">
-              {getRoomCountLabel(rooms.length)}
-            </span>
+            <span className='lobby-page__rooms-count'>{getRoomCountLabel(rooms.length)}</span>
           </div>
 
           {rooms.length === 0 ? (
-            <div className="lobby-page__rooms-empty">
-              <div className="lobby-page__rooms-empty-icon">+</div>
+            <div className='lobby-page__rooms-empty'>
+              <div className='lobby-page__rooms-empty-icon'>+</div>
 
-              <h3 className="lobby-page__rooms-empty-title">
-                Пока нет открытых комнат
-              </h3>
+              <h3 className='lobby-page__rooms-empty-title'>Пока нет открытых комнат</h3>
 
-              <p className="lobby-page__rooms-empty-description">
+              <p className='lobby-page__rooms-empty-description'>
                 Создай первую комнату и начни игру.
               </p>
             </div>
           ) : (
-            <div className="lobby-page__rooms-list">
+            <div className='lobby-page__rooms-list'>
               {rooms.map((room) => (
-                <article className="lobby-page__room-card" key={room.id}>
-                  <div className="lobby-page__room-info">
-                    <div className="lobby-page__room-main">
-                      <span className="lobby-page__room-code">{room.code}</span>
+                <article className='lobby-page__room-card' key={room.id}>
+                  <div className='lobby-page__room-info'>
+                    <div className='lobby-page__room-main'>
+                      <span className='lobby-page__room-code'>{room.code}</span>
 
-                      <span className="lobby-page__room-host">
+                      <span className='lobby-page__room-host'>
                         Хост: {room.host.profile.nickname}
                       </span>
                     </div>
 
-                    <div className="lobby-page__room-players">
+                    <div className='lobby-page__room-players'>
                       {room.members.length}
-                      {" / "}
+                      {' / '}
                       {room.maxPlayers}
                     </div>
                   </div>
 
                   <button
-                    className="
-                      lobby-page__action-button
-                      lobby-page__action-button--secondary
-                    "
-                    type="button"
+                    className='lobby-page__action-button lobby-page__action-button--secondary'
+                    type='button'
                     onClick={() => handleJoinRoomById(room.id)}
                     disabled={isMutating || currentRoom !== null}
                   >

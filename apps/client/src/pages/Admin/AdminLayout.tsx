@@ -1,38 +1,35 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from 'react-router-dom';
 
-import MainHeader from "../../components/navigation/MainHeader";
+import MainHeader from '../../components/navigation/MainHeader';
 
 const links = [
-  { to: "/admin", end: true, label: "Обзор" },
-  { to: "/admin/users", label: "Пользователи" },
-  { to: "/admin/characters", label: "Персонажи" },
-  { to: "/admin/events", label: "События" },
-  { to: "/admin/rooms", label: "Комнаты" },
-  { to: "/admin/active-games", label: "Активные партии" },
-  { to: "/admin/games", label: "Игры" },
-  { to: "/admin/logs", label: "Логи" },
-  { to: "/admin/news", label: "Новости" },
+  { to: '/admin', end: true, label: 'Обзор' },
+  { to: '/admin/users', label: 'Пользователи' },
+  { to: '/admin/characters', label: 'Персонажи' },
+  { to: '/admin/events', label: 'События' },
+  { to: '/admin/rooms', label: 'Комнаты' },
+  { to: '/admin/active-games', label: 'Активные партии' },
+  { to: '/admin/games', label: 'Игры' },
+  { to: '/admin/logs', label: 'Логи' },
+  { to: '/admin/news', label: 'Новости' }
 ];
 
 function AdminLayout() {
   return (
-    <div className="admin-layout">
+    <div className='admin-layout'>
       <MainHeader />
 
-      <div className="admin-layout__body">
-        <aside className="admin-sidebar">
-          <p className="admin-sidebar__eyebrow">АДМИН-ПАНЕЛЬ</p>
+      <div className='admin-layout__body'>
+        <aside className='admin-sidebar'>
+          <p className='admin-sidebar__eyebrow'>АДМИН-ПАНЕЛЬ</p>
 
-          <nav className="admin-sidebar__nav">
+          <nav className='admin-sidebar__nav'>
             {links.map((link) => (
               <NavLink
                 className={({ isActive }) =>
-                  [
-                    "admin-sidebar__link",
-                    isActive ? "admin-sidebar__link--active" : "",
-                  ]
+                  ['admin-sidebar__link', isActive ? 'admin-sidebar__link--active' : '']
                     .filter(Boolean)
-                    .join(" ")
+                    .join(' ')
                 }
                 end={link.end}
                 key={link.to}
@@ -43,12 +40,12 @@ function AdminLayout() {
             ))}
           </nav>
 
-          <NavLink className="admin-sidebar__back" to="/lobby">
+          <NavLink className='admin-sidebar__back' to='/lobby'>
             ← В игру
           </NavLink>
         </aside>
 
-        <main className="admin-content">
+        <main className='admin-content'>
           <Outlet />
         </main>
       </div>

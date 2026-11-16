@@ -1,4 +1,4 @@
-export type FriendshipStatus = "PENDING" | "ACCEPTED" | "DECLINED";
+export type FriendshipStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED';
 
 export type FriendDto = {
   userId: string;

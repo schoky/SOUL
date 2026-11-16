@@ -1,4 +1,4 @@
-import type { CharacterStats, StatType } from "./stats.js";
+import type { CharacterStats, StatType } from './stats.js';
 
 export type EventCard = {
   id: string;

@@ -1,23 +1,23 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 class FriendRepository {
   async findUserByNickname(nickname: string) {
     return database.user.findFirst({
       where: {
         profile: {
-          nickname,
-        },
+          nickname
+        }
       },
       include: {
-        profile: true,
-      },
+        profile: true
+      }
     });
   }
 
   async findUserById(userId: string) {
     return database.user.findUnique({
       where: { id: userId },
-      include: { profile: true },
+      include: { profile: true }
     });
   }
 
@@ -26,9 +26,9 @@ class FriendRepository {
       where: {
         OR: [
           { requesterId: userAId, addresseeId: userBId },
-          { requesterId: userBId, addresseeId: userAId },
-        ],
-      },
+          { requesterId: userBId, addresseeId: userAId }
+        ]
+      }
     });
   }
 
@@ -37,8 +37,8 @@ class FriendRepository {
       where: { id },
       include: {
         requester: { include: { profile: true } },
-        addressee: { include: { profile: true } },
-      },
+        addressee: { include: { profile: true } }
+      }
     });
   }
 
@@ -46,8 +46,8 @@ class FriendRepository {
     return database.friendship.count({
       where: {
         requesterId: userId,
-        status: "PENDING",
-      },
+        status: 'PENDING'
+      }
     });
   }
 
@@ -55,8 +55,8 @@ class FriendRepository {
     return database.friendship.count({
       where: {
         requesterId: userId,
-        createdAt: { gte: since },
-      },
+        createdAt: { gte: since }
+      }
     });
   }
 
@@ -64,9 +64,9 @@ class FriendRepository {
     return database.friendship.count({
       where: {
         addresseeId: userId,
-        status: "PENDING",
-        readAt: null,
-      },
+        status: 'PENDING',
+        readAt: null
+      }
     });
   }
 
@@ -74,12 +74,12 @@ class FriendRepository {
     return database.friendship.updateMany({
       where: {
         addresseeId: userId,
-        status: "PENDING",
-        readAt: null,
+        status: 'PENDING',
+        readAt: null
       },
       data: {
-        readAt: new Date(),
-      },
+        readAt: new Date()
+      }
     });
   }
 
@@ -88,18 +88,18 @@ class FriendRepository {
       data: {
         requesterId,
         addresseeId,
-        status: "PENDING",
-      },
+        status: 'PENDING'
+      }
     });
   }
 
-  async updateStatus(id: string, status: "ACCEPTED" | "DECLINED") {
+  async updateStatus(id: string, status: 'ACCEPTED' | 'DECLINED') {
     return database.friendship.update({
       where: { id },
       data: {
         status,
-        respondedAt: new Date(),
-      },
+        respondedAt: new Date()
+      }
     });
   }
 
@@ -110,16 +110,16 @@ class FriendRepository {
   async listFriends(userId: string) {
     return database.friendship.findMany({
       where: {
-        status: "ACCEPTED",
-        OR: [{ requesterId: userId }, { addresseeId: userId }],
+        status: 'ACCEPTED',
+        OR: [{ requesterId: userId }, { addresseeId: userId }]
       },
       include: {
         requester: { include: { profile: true } },
-        addressee: { include: { profile: true } },
+        addressee: { include: { profile: true } }
       },
       orderBy: {
-        respondedAt: "desc",
-      },
+        respondedAt: 'desc'
+      }
     });
   }
 
@@ -127,14 +127,14 @@ class FriendRepository {
     return database.friendship.findMany({
       where: {
         addresseeId: userId,
-        status: "PENDING",
+        status: 'PENDING'
       },
       include: {
-        requester: { include: { profile: true } },
+        requester: { include: { profile: true } }
       },
       orderBy: {
-        createdAt: "desc",
-      },
+        createdAt: 'desc'
+      }
     });
   }
 
@@ -142,14 +142,14 @@ class FriendRepository {
     return database.friendship.findMany({
       where: {
         requesterId: userId,
-        status: "PENDING",
+        status: 'PENDING'
       },
       include: {
-        addressee: { include: { profile: true } },
+        addressee: { include: { profile: true } }
       },
       orderBy: {
-        createdAt: "desc",
-      },
+        createdAt: 'desc'
+      }
     });
   }
 }

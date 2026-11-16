@@ -1,13 +1,10 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { useAuthStore } from "../stores/authStore";
-import { useFriendsStore } from "../stores/friendsStore";
-
-import { useFriendNotifications } from "../hooks/useFriendNotifications";
-
-import AppRouter from "../router/AppRouter";
-
-import Toaster from "../components/ui/Toaster";
+import Toaster from '../components/ui/Toaster';
+import { useFriendNotifications } from '../hooks/useFriendNotifications';
+import AppRouter from '../router/AppRouter';
+import { useAuthStore } from '../stores/authStore';
+import { useFriendsStore } from '../stores/friendsStore';
 
 function App() {
   const isLoading = useAuthStore((state) => state.isLoading);
@@ -45,7 +42,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <main className="app">
+      <main className='app'>
         <h1>SOUL</h1>
 
         <p>Проверяем авторизацию...</p>

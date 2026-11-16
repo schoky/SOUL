@@ -1,5 +1,5 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -7,19 +7,19 @@ export default defineConfig({
 
   // Читаем .env из корня монорепо,
   // чтобы держать все переменные в одном месте.
-  envDir: "../../",
+  envDir: '../../',
 
   server: {
     proxy: {
-      "/api": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
       },
-      "/socket.io": {
-        target: "http://localhost:3000",
+      '/socket.io': {
+        target: 'http://localhost:3000',
         ws: true,
-        changeOrigin: true,
-      },
-    },
-  },
+        changeOrigin: true
+      }
+    }
+  }
 });

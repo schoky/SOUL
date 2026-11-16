@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
-import { useAuthStore } from "../../stores/authStore";
-
-import SoulLogo from "../branding/SoulLogo";
-
-import NotificationBell from "../notifications/NotificationBell";
+import { useAuthStore } from '../../stores/authStore';
+import SoulLogo from '../branding/SoulLogo';
+import NotificationBell from '../notifications/NotificationBell';
 
 function MainHeader() {
   const location = useLocation();
@@ -29,7 +27,7 @@ function MainHeader() {
 
     const previous = document.body.style.overflow;
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.body.style.overflow = previous;
@@ -48,65 +46,58 @@ function MainHeader() {
 
   return (
     <>
-      <header className="main-header">
-        <div className="main-header__inner">
-          <Link className="main-header__logo-link" to="/" onClick={closeMenu}>
-            <SoulLogo className="soul-logo--header" />
+      <header className='main-header'>
+        <div className='main-header__inner'>
+          <Link className='main-header__logo-link' to='/' onClick={closeMenu}>
+            <SoulLogo className='soul-logo--header' />
           </Link>
 
-          <nav className="main-header__nav" aria-label="Основная навигация">
-            <NavLink
-              className="main-header__nav-link"
-              to={isAuthenticated ? "/lobby" : "/"}
-            >
+          <nav className='main-header__nav' aria-label='Основная навигация'>
+            <NavLink className='main-header__nav-link' to={isAuthenticated ? '/lobby' : '/'}>
               Игра
             </NavLink>
 
-            <NavLink className="main-header__nav-link" to="/collection">
+            <NavLink className='main-header__nav-link' to='/collection'>
               Карты
             </NavLink>
 
-            <NavLink className="main-header__nav-link" to="/leaderboard">
+            <NavLink className='main-header__nav-link' to='/leaderboard'>
               Лидеры
             </NavLink>
 
             {isAuthenticated && (
-              <NavLink className="main-header__nav-link" to="/friends">
+              <NavLink className='main-header__nav-link' to='/friends'>
                 Друзья
               </NavLink>
             )}
 
-            <NavLink className="main-header__nav-link" to="/rules">
+            <NavLink className='main-header__nav-link' to='/rules'>
               Правила
             </NavLink>
 
-            <NavLink className="main-header__nav-link" to="/news">
+            <NavLink className='main-header__nav-link' to='/news'>
               Новости
             </NavLink>
           </nav>
 
-          <div className="main-header__actions">
+          <div className='main-header__actions'>
             {isAuthenticated ? (
               <>
-                {user?.role === "ADMIN" && (
-                  <NavLink
-                    className="main-header__auth-button"
-                    to="/admin"
-                    title="Админ-панель"
-                  >
+                {user?.role === 'ADMIN' && (
+                  <NavLink className='main-header__auth-button' to='/admin' title='Админ-панель'>
                     Админка
                   </NavLink>
                 )}
 
                 <NotificationBell />
 
-                <NavLink className="main-header__user" to="/profile">
+                <NavLink className='main-header__user' to='/profile'>
                   {user?.profile.nickname}
                 </NavLink>
 
                 <button
-                  className="main-header__auth-button"
-                  type="button"
+                  className='main-header__auth-button'
+                  type='button'
                   onClick={() => {
                     void handleLogout();
                   }}
@@ -116,16 +107,13 @@ function MainHeader() {
               </>
             ) : (
               <>
-                <Link className="main-header__auth-button" to="/login">
+                <Link className='main-header__auth-button' to='/login'>
                   Войти
                 </Link>
 
                 <Link
-                  className="
-										main-header__auth-button
-										main-header__auth-button--primary
-									"
-                  to="/register"
+                  className='main-header__auth-button main-header__auth-button--primary'
+                  to='/register'
                 >
                   Регистрация
                 </Link>
@@ -134,14 +122,11 @@ function MainHeader() {
           </div>
 
           <button
-            className={[
-              "main-header__burger",
-              isMenuOpen ? "main-header__burger--open" : "",
-            ]
+            className={['main-header__burger', isMenuOpen ? 'main-header__burger--open' : '']
               .filter(Boolean)
-              .join(" ")}
-            type="button"
-            aria-label={isMenuOpen ? "Закрыть меню" : "Открыть меню"}
+              .join(' ')}
+            type='button'
+            aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((open) => !open)}
           >
@@ -153,74 +138,46 @@ function MainHeader() {
       </header>
 
       {isMenuOpen && (
-        <div className="main-header__mobile-menu" role="dialog">
-          <nav className="main-header__mobile-nav">
+        <div className='main-header__mobile-menu' role='dialog'>
+          <nav className='main-header__mobile-nav'>
             <NavLink
-              className="main-header__mobile-link"
-              to={isAuthenticated ? "/lobby" : "/"}
+              className='main-header__mobile-link'
+              to={isAuthenticated ? '/lobby' : '/'}
               onClick={closeMenu}
             >
               Игра
             </NavLink>
 
-            <NavLink
-              className="main-header__mobile-link"
-              to="/collection"
-              onClick={closeMenu}
-            >
+            <NavLink className='main-header__mobile-link' to='/collection' onClick={closeMenu}>
               Карты
             </NavLink>
 
-            <NavLink
-              className="main-header__mobile-link"
-              to="/leaderboard"
-              onClick={closeMenu}
-            >
+            <NavLink className='main-header__mobile-link' to='/leaderboard' onClick={closeMenu}>
               Лидеры
             </NavLink>
 
             {isAuthenticated && (
-              <NavLink
-                className="main-header__mobile-link"
-                to="/friends"
-                onClick={closeMenu}
-              >
+              <NavLink className='main-header__mobile-link' to='/friends' onClick={closeMenu}>
                 Друзья
               </NavLink>
             )}
 
-            <NavLink
-              className="main-header__mobile-link"
-              to="/rules"
-              onClick={closeMenu}
-            >
+            <NavLink className='main-header__mobile-link' to='/rules' onClick={closeMenu}>
               Правила
             </NavLink>
 
-            <NavLink
-              className="main-header__mobile-link"
-              to="/news"
-              onClick={closeMenu}
-            >
+            <NavLink className='main-header__mobile-link' to='/news' onClick={closeMenu}>
               Новости
             </NavLink>
 
             {isAuthenticated && (
               <>
-                <NavLink
-                  className="main-header__mobile-link"
-                  to="/profile"
-                  onClick={closeMenu}
-                >
+                <NavLink className='main-header__mobile-link' to='/profile' onClick={closeMenu}>
                   Профиль
                 </NavLink>
 
-                {user?.role === "ADMIN" && (
-                  <NavLink
-                    className="main-header__mobile-link"
-                    to="/admin"
-                    onClick={closeMenu}
-                  >
+                {user?.role === 'ADMIN' && (
+                  <NavLink className='main-header__mobile-link' to='/admin' onClick={closeMenu}>
                     Админ-панель
                   </NavLink>
                 )}
@@ -228,18 +185,18 @@ function MainHeader() {
             )}
           </nav>
 
-          <div className="main-header__mobile-actions">
+          <div className='main-header__mobile-actions'>
             {isAuthenticated ? (
               <>
-                <div className="main-header__mobile-user">
+                <div className='main-header__mobile-user'>
                   <span>Ты играешь как</span>
 
                   <strong>{user?.profile.nickname}</strong>
                 </div>
 
                 <button
-                  className="main-header__mobile-button"
-                  type="button"
+                  className='main-header__mobile-button'
+                  type='button'
                   onClick={() => {
                     void handleLogout();
                   }}
@@ -249,20 +206,13 @@ function MainHeader() {
               </>
             ) : (
               <>
-                <Link
-                  className="main-header__mobile-button"
-                  to="/login"
-                  onClick={closeMenu}
-                >
+                <Link className='main-header__mobile-button' to='/login' onClick={closeMenu}>
                   Войти
                 </Link>
 
                 <Link
-                  className="
-										main-header__mobile-button
-										main-header__mobile-button--primary
-									"
-                  to="/register"
+                  className='main-header__mobile-button main-header__mobile-button--primary'
+                  to='/register'
                   onClick={closeMenu}
                 >
                   Регистрация

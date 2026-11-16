@@ -1,28 +1,15 @@
-import {
-	Navigate,
-	Outlet
-} from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-import {
-	useAuthStore
-} from '../stores/authStore';
+import { useAuthStore } from '../stores/authStore';
 
 function PublicRoute() {
-	const isAuthenticated =
-		useAuthStore(
-			(state) => state.isAuthenticated
-		);
-	
-	if (isAuthenticated) {
-		return (
-			<Navigate
-				to="/"
-				replace
-			/>
-		);
-	}
-	
-	return <Outlet />;
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  if (isAuthenticated) {
+    return <Navigate to='/' replace />;
+  }
+
+  return <Outlet />;
 }
 
 export default PublicRoute;

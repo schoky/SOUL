@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
-import { resolveRisk } from "../../src/rules/resolveRisk";
+import { resolveRisk } from '../../src/rules/resolveRisk';
 
-describe("resolveRisk", () => {
-  it("при выполненной базе шанс 50%", () => {
+describe('resolveRisk', () => {
+  it('при выполненной базе шанс 50%', () => {
     // 0.49 < 0.5 → успех
     expect(resolveRisk(true, () => 0.49)).toBe(true);
 
@@ -13,7 +13,7 @@ describe("resolveRisk", () => {
     expect(resolveRisk(true, () => 0.99)).toBe(false);
   });
 
-  it("при невыполненной базе шанс 25%", () => {
+  it('при невыполненной базе шанс 25%', () => {
     // 0.24 < 0.25 → успех
     expect(resolveRisk(false, () => 0.24)).toBe(true);
 

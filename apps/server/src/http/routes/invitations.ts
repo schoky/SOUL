@@ -1,18 +1,14 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { FastifyPluginAsync } from 'fastify';
 
-import { authenticateRequest } from "../authMiddleware.js";
-
-import {
-  invitationService,
-  InvitationServiceError,
-} from "../../invitations/invitationService.js";
+import { invitationService, InvitationServiceError } from '../../invitations/invitationService.js';
+import { authenticateRequest } from '../authMiddleware.js';
 
 const invitationsRoutes: FastifyPluginAsync = async (app) => {
-  app.get("/", { preHandler: authenticateRequest }, async (request, reply) => {
+  app.get('/', { preHandler: authenticateRequest }, async (request, reply) => {
     const user = request.user;
 
     if (!user) {
-      return reply.code(401).send({ error: "Not authenticated" });
+      return reply.code(401).send({ error: 'Not authenticated' });
     }
 
     const data = await invitationService.listForUser(user.id);
@@ -21,20 +17,17 @@ const invitationsRoutes: FastifyPluginAsync = async (app) => {
   });
 
   app.post<{ Params: { id: string } }>(
-    "/:id/accept",
+    '/:id/accept',
     { preHandler: authenticateRequest },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
-        const result = await invitationService.acceptInvitation(
-          user.id,
-          request.params.id,
-        );
+        const result = await invitationService.acceptInvitation(user.id, request.params.id);
 
         return reply.send(result);
       } catch (error) {
@@ -42,28 +35,28 @@ const invitationsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 
   app.post<{ Params: { id: string } }>(
-    "/:id/decline",
+    '/:id/decline',
     { preHandler: authenticateRequest },
     async (request, reply) => {
       const user = request.user;
 
       if (!user) {
-        return reply.code(401).send({ error: "Not authenticated" });
+        return reply.code(401).send({ error: 'Not authenticated' });
       }
 
       try {
@@ -75,18 +68,18 @@ const invitationsRoutes: FastifyPluginAsync = async (app) => {
           return reply.code(400).send({
             error: {
               code: error.code,
-              message: error.message,
-            },
+              message: error.message
+            }
           });
         }
 
         request.log.error(error);
 
         return reply.code(500).send({
-          error: "Internal server error",
+          error: 'Internal server error'
         });
       }
-    },
+    }
   );
 };
 

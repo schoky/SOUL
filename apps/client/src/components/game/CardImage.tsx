@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 type CardImageProps = {
   src: string | undefined;
@@ -8,13 +8,7 @@ type CardImageProps = {
   placeholderLabel?: string;
 };
 
-function CardImage({
-  src,
-  fallbackSrc,
-  alt,
-  className,
-  placeholderLabel,
-}: CardImageProps) {
+function CardImage({ src, fallbackSrc, alt, className, placeholderLabel }: CardImageProps) {
   const [failed, setFailed] = useState(false);
 
   const resolvedSrc = src ?? fallbackSrc;
@@ -22,24 +16,20 @@ function CardImage({
   if (failed) {
     return (
       <div
-        className={[className, "card-image", "card-image--placeholder"]
-          .filter(Boolean)
-          .join(" ")}
+        className={[className, 'card-image', 'card-image--placeholder'].filter(Boolean).join(' ')}
         aria-label={alt}
       >
-        <span className="card-image__placeholder-label">
-          {placeholderLabel ?? alt}
-        </span>
+        <span className='card-image__placeholder-label'>{placeholderLabel ?? alt}</span>
       </div>
     );
   }
 
   return (
     <img
-      className={[className, "card-image"].filter(Boolean).join(" ")}
+      className={[className, 'card-image'].filter(Boolean).join(' ')}
       src={resolvedSrc}
       alt={alt}
-      loading="lazy"
+      loading='lazy'
       onError={() => setFailed(true)}
     />
   );

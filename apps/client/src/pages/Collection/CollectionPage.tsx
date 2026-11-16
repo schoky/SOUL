@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+import type { Character, EventCard } from '@soul/shared';
+import { useEffect, useState } from 'react';
 
-import type { Character, EventCard } from "@soul/shared";
+import CardImage from '../../components/game/CardImage';
+import MainLayout from '../../components/layout/MainLayout';
+import { getCards } from '../../services/api/cards';
 
-import CardImage from "../../components/game/CardImage";
-
-import MainLayout from "../../components/layout/MainLayout";
-
-import { getCards } from "../../services/api/cards";
-
-type TabId = "characters" | "events";
+type TabId = 'characters' | 'events';
 
 function CollectionPage() {
-  const [tab, setTab] = useState<TabId>("characters");
+  const [tab, setTab] = useState<TabId>('characters');
 
   const [characters, setCharacters] = useState<Character[]>([]);
 
@@ -42,11 +39,7 @@ function CollectionPage() {
           return;
         }
 
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Не удалось загрузить карточки",
-        );
+        setError(error instanceof Error ? error.message : 'Не удалось загрузить карточки');
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -63,70 +56,66 @@ function CollectionPage() {
 
   return (
     <MainLayout>
-      <main className="collection-page">
-        <section className="collection-page__header">
+      <main className='collection-page'>
+        <section className='collection-page__header'>
           <div>
-            <p className="collection-page__eyebrow">КОЛЛЕКЦИЯ</p>
+            <p className='collection-page__eyebrow'>КОЛЛЕКЦИЯ</p>
 
-            <h1 className="collection-page__title">Все карточки SOUL</h1>
+            <h1 className='collection-page__title'>Все карточки SOUL</h1>
 
-            <p className="collection-page__description">
+            <p className='collection-page__description'>
               Полный список персонажей и событий, доступных в игре.
             </p>
           </div>
         </section>
 
-        <section className="collection-page__tabs">
+        <section className='collection-page__tabs'>
           <button
             className={[
-              "collection-page__tab",
-              tab === "characters" ? "collection-page__tab--active" : "",
+              'collection-page__tab',
+              tab === 'characters' ? 'collection-page__tab--active' : ''
             ]
               .filter(Boolean)
-              .join(" ")}
-            type="button"
-            onClick={() => setTab("characters")}
+              .join(' ')}
+            type='button'
+            onClick={() => setTab('characters')}
           >
             Персонажи
-            <span className="collection-page__tab-count">
-              {characters.length}
-            </span>
+            <span className='collection-page__tab-count'>{characters.length}</span>
           </button>
 
           <button
             className={[
-              "collection-page__tab",
-              tab === "events" ? "collection-page__tab--active" : "",
+              'collection-page__tab',
+              tab === 'events' ? 'collection-page__tab--active' : ''
             ]
               .filter(Boolean)
-              .join(" ")}
-            type="button"
-            onClick={() => setTab("events")}
+              .join(' ')}
+            type='button'
+            onClick={() => setTab('events')}
           >
             События
-            <span className="collection-page__tab-count">{events.length}</span>
+            <span className='collection-page__tab-count'>{events.length}</span>
           </button>
         </section>
 
         {isLoading && (
-          <section className="collection-page__empty">
-            <p className="collection-page__empty-title">
-              Загружаем карточки...
-            </p>
+          <section className='collection-page__empty'>
+            <p className='collection-page__empty-title'>Загружаем карточки...</p>
           </section>
         )}
 
         {error && (
-          <section className="collection-page__empty">
-            <p className="collection-page__empty-title">{error}</p>
+          <section className='collection-page__empty'>
+            <p className='collection-page__empty-title'>{error}</p>
           </section>
         )}
 
-        {!isLoading && !error && tab === "characters" && (
-          <section className="collection-page__grid">
+        {!isLoading && !error && tab === 'characters' && (
+          <section className='collection-page__grid'>
             {characters.map((character) => (
-              <article className="collection-page__card" key={character.id}>
-                <div className="collection-page__card-image">
+              <article className='collection-page__card' key={character.id}>
+                <div className='collection-page__card-image'>
                   <CardImage
                     src={character.image}
                     fallbackSrc={`/cards/characters/${character.id}.webp`}
@@ -135,12 +124,10 @@ function CollectionPage() {
                   />
                 </div>
 
-                <div className="collection-page__card-body">
-                  <h2 className="collection-page__card-title">
-                    {character.name}
-                  </h2>
+                <div className='collection-page__card-body'>
+                  <h2 className='collection-page__card-title'>{character.name}</h2>
 
-                  <div className="collection-page__card-stats">
+                  <div className='collection-page__card-stats'>
                     <div>
                       <span>Фармила</span>
                       <strong>{character.stats.farmila}</strong>
@@ -158,7 +145,7 @@ function CollectionPage() {
                   </div>
 
                   {character.ability && (
-                    <div className="collection-page__card-ability">
+                    <div className='collection-page__card-ability'>
                       <span>{character.ability.name}</span>
                       <p>{character.ability.description}</p>
                     </div>
@@ -169,11 +156,11 @@ function CollectionPage() {
           </section>
         )}
 
-        {!isLoading && !error && tab === "events" && (
-          <section className="collection-page__grid">
+        {!isLoading && !error && tab === 'events' && (
+          <section className='collection-page__grid'>
             {events.map((event) => (
-              <article className="collection-page__card" key={event.id}>
-                <div className="collection-page__card-image">
+              <article className='collection-page__card' key={event.id}>
+                <div className='collection-page__card-image'>
                   <CardImage
                     src={event.image}
                     fallbackSrc={`/cards/events/${event.id}.webp`}
@@ -182,14 +169,12 @@ function CollectionPage() {
                   />
                 </div>
 
-                <div className="collection-page__card-body">
-                  <h2 className="collection-page__card-title">{event.name}</h2>
+                <div className='collection-page__card-body'>
+                  <h2 className='collection-page__card-title'>{event.name}</h2>
 
-                  <p className="collection-page__card-description">
-                    {event.description}
-                  </p>
+                  <p className='collection-page__card-description'>{event.description}</p>
 
-                  <div className="collection-page__card-requirements">
+                  <div className='collection-page__card-requirements'>
                     <div>
                       <span>Фармила</span>
                       <strong>{event.requirements.farmila}</strong>
@@ -206,13 +191,13 @@ function CollectionPage() {
                     </div>
                   </div>
 
-                  <div className="collection-page__card-footer">
-                    <div className="collection-page__card-main">
+                  <div className='collection-page__card-footer'>
+                    <div className='collection-page__card-main'>
                       <span>Основная</span>
                       <strong>{event.mainStat}</strong>
                     </div>
 
-                    <div className="collection-page__card-rewards">
+                    <div className='collection-page__card-rewards'>
                       <div>
                         <span>Награда</span>
                         <strong>+{event.reward}</strong>

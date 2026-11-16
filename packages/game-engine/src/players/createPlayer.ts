@@ -1,5 +1,5 @@
-import type { Player } from "@soul/shared";
-import { GAME_RULES } from "@soul/shared";
+import type { Player } from '@soul/shared';
+import { GAME_RULES } from '@soul/shared';
 
 export function createPlayer(id: string, name: string): Player {
   return {
@@ -10,6 +10,6 @@ export function createPlayer(id: string, name: string): Player {
     status: null,
     skipNextTurn: false,
     isReady: false,
-    consecutiveSkips: 0,
+    consecutiveSkips: 0
   };
 }

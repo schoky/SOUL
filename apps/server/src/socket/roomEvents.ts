@@ -1,12 +1,12 @@
-import { SOCKET_EVENTS } from "@soul/shared";
+import { SOCKET_EVENTS } from '@soul/shared';
 
-import { getIO } from "./io.js";
+import { getIO } from './io.js';
 
 const roomChannel = (roomId: string) => `room:${roomId}`;
 
-const LOBBY_CHANNEL = "lobby";
+const LOBBY_CHANNEL = 'lobby';
 
-const ADMIN_CHANNEL = "admin";
+const ADMIN_CHANNEL = 'admin';
 
 export function emitRoomUpdated<T extends { id: string }>(room: T): void {
   const io = getIO();

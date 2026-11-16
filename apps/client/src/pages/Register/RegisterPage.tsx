@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import type { FormEvent } from "react";
-
-import { Link, useNavigate } from "react-router-dom";
-
-import { useAuthStore } from "../../stores/authStore";
-
-import { getOAuthUrl, type OAuthProviderId } from "../../services/api/auth";
-
-import AuthLayout from "../../components/auth/AuthLayout";
+import AuthLayout from '../../components/auth/AuthLayout';
+import { getOAuthUrl, type OAuthProviderId } from '../../services/api/auth';
+import { useAuthStore } from '../../stores/authStore';
 
 function RegisterPage() {
   const navigate = useNavigate();
 
   const register = useAuthStore((state) => state.register);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState('');
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
 
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +26,7 @@ function RegisterPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    const oauthError = params.get("oauthError");
+    const oauthError = params.get('oauthError');
 
     if (!oauthError) {
       return;
@@ -38,15 +34,11 @@ function RegisterPage() {
 
     setError(oauthError);
 
-    params.delete("oauthError");
+    params.delete('oauthError');
 
     const query = params.toString();
 
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + (query ? `?${query}` : ""),
-    );
+    window.history.replaceState(null, '', window.location.pathname + (query ? `?${query}` : ''));
   }, []);
 
   function handleOAuth(provider: OAuthProviderId) {
@@ -61,7 +53,7 @@ function RegisterPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Пароли не совпадают");
+      setError('Пароли не совпадают');
 
       return;
     }
@@ -72,15 +64,15 @@ function RegisterPage() {
       await register({
         email,
         nickname,
-        password,
+        password
       });
 
-      navigate("/");
+      navigate('/');
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError("Не удалось выполнить регистрацию");
+        setError('Не удалось выполнить регистрацию');
       }
     } finally {
       setIsSubmitting(false);
@@ -89,161 +81,148 @@ function RegisterPage() {
 
   return (
     <AuthLayout>
-      <section className="auth-panel">
-        <h1 className="auth-panel__title">Регистрация</h1>
+      <section className='auth-panel'>
+        <h1 className='auth-panel__title'>Регистрация</h1>
 
-        <form className="auth-panel__form" onSubmit={handleSubmit}>
-          <div className="auth-panel__field">
-            <label className="auth-panel__label" htmlFor="email">
+        <form className='auth-panel__form' onSubmit={handleSubmit}>
+          <div className='auth-panel__field'>
+            <label className='auth-panel__label' htmlFor='email'>
               Email
             </label>
 
             <input
-              className="auth-panel__input"
-              id="email"
-              name="email"
-              type="email"
+              className='auth-panel__input'
+              id='email'
+              name='email'
+              type='email'
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email"
+              autoComplete='email'
               required
             />
           </div>
 
-          <div className="auth-panel__field">
-            <label className="auth-panel__label" htmlFor="nickname">
+          <div className='auth-panel__field'>
+            <label className='auth-panel__label' htmlFor='nickname'>
               Никнейм
             </label>
 
             <input
-              className="auth-panel__input"
-              id="nickname"
-              name="nickname"
-              type="text"
+              className='auth-panel__input'
+              id='nickname'
+              name='nickname'
+              type='text'
               value={nickname}
               onChange={(event) => setNickname(event.target.value)}
-              autoComplete="nickname"
+              autoComplete='nickname'
               minLength={3}
               maxLength={20}
               required
             />
           </div>
 
-          <div className="auth-panel__field">
-            <label className="auth-panel__label" htmlFor="password">
+          <div className='auth-panel__field'>
+            <label className='auth-panel__label' htmlFor='password'>
               Пароль
             </label>
 
             <input
-              className="auth-panel__input"
-              id="password"
-              name="password"
-              type="password"
+              className='auth-panel__input'
+              id='password'
+              name='password'
+              type='password'
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              autoComplete="new-password"
+              autoComplete='new-password'
               minLength={8}
               required
             />
           </div>
 
-          <div className="auth-panel__field">
-            <label className="auth-panel__label" htmlFor="confirm-password">
+          <div className='auth-panel__field'>
+            <label className='auth-panel__label' htmlFor='confirm-password'>
               Повторите пароль
             </label>
 
             <input
-              className="auth-panel__input"
-              id="confirm-password"
-              name="confirm-password"
-              type="password"
+              className='auth-panel__input'
+              id='confirm-password'
+              name='confirm-password'
+              type='password'
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
-              autoComplete="new-password"
+              autoComplete='new-password'
               required
             />
           </div>
 
-          {error && <p className="auth-panel__error">{error}</p>}
+          {error && <p className='auth-panel__error'>{error}</p>}
 
-          <button
-            className="auth-panel__submit"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Регистрируем..." : "Зарегистрироваться"}
+          <button className='auth-panel__submit' type='submit' disabled={isSubmitting}>
+            {isSubmitting ? 'Регистрируем...' : 'Зарегистрироваться'}
           </button>
         </form>
 
-        <div className="auth-panel__divider">
+        <div className='auth-panel__divider'>
           <span>Или войдите через</span>
         </div>
 
-        <div className="auth-panel__socials">
+        <div className='auth-panel__socials'>
           <button
-            className="auth-panel__social"
-            type="button"
-            aria-label="Войти через Discord"
-            onClick={() => handleOAuth("discord")}
+            className='auth-panel__social'
+            type='button'
+            aria-label='Войти через Discord'
+            onClick={() => handleOAuth('discord')}
           >
             <span
-              className="
-								auth-panel__social-icon
-								auth-panel__social-icon--discord
-							"
-              aria-hidden="true"
+              className='auth-panel__social-icon auth-panel__social-icon--discord'
+              aria-hidden='true'
             />
 
             <span>Discord</span>
           </button>
 
           <button
-            className="auth-panel__social"
-            type="button"
-            aria-label="Войти через Google"
-            onClick={() => handleOAuth("google")}
+            className='auth-panel__social'
+            type='button'
+            aria-label='Войти через Google'
+            onClick={() => handleOAuth('google')}
           >
             <span
-              className="
-								auth-panel__social-icon
-								auth-panel__social-icon--google
-							"
-              aria-hidden="true"
+              className='auth-panel__social-icon auth-panel__social-icon--google'
+              aria-hidden='true'
             />
 
             <span>Google</span>
           </button>
 
           <button
-            className="auth-panel__social"
-            type="button"
-            aria-label="Войти через Twitch"
-            onClick={() => handleOAuth("twitch")}
+            className='auth-panel__social'
+            type='button'
+            aria-label='Войти через Twitch'
+            onClick={() => handleOAuth('twitch')}
           >
             <span
-              className="
-								auth-panel__social-icon
-								auth-panel__social-icon--twitch
-							"
-              aria-hidden="true"
+              className='auth-panel__social-icon auth-panel__social-icon--twitch'
+              aria-hidden='true'
             />
 
             <span>Twitch</span>
           </button>
         </div>
 
-        <p className="auth-panel__footer">
-          Уже есть аккаунт?{" "}
+        <p className='auth-panel__footer'>
+          Уже есть аккаунт?{' '}
           <button
-            className="auth-panel__footer-link"
-            type="button"
-            onClick={() => navigate("/login")}
+            className='auth-panel__footer-link'
+            type='button'
+            onClick={() => navigate('/login')}
           >
             Войти
           </button>
         </p>
 
-        <Link className="auth-panel__home-link" to="/">
+        <Link className='auth-panel__home-link' to='/'>
           ← На главную
         </Link>
       </section>

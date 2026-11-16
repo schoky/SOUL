@@ -1,6 +1,6 @@
-import type { GameState } from "@soul/shared";
+import type { GameState } from '@soul/shared';
 
-import { gameRepository } from "./gameRepository.js";
+import { gameRepository } from './gameRepository.js';
 
 class GameManager {
   private games = new Map<string, GameState>();

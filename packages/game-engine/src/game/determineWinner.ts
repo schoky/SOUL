@@ -1,11 +1,8 @@
-import type { Player } from "@soul/shared";
+import type { Player } from '@soul/shared';
 
-export function determineWinner(
-  players: Player[],
-  finalRoundStartedBy: string | null,
-): string {
+export function determineWinner(players: Player[], finalRoundStartedBy: string | null): string {
   if (players.length === 0) {
-    throw new Error("Cannot determine winner: no players");
+    throw new Error('Cannot determine winner: no players');
   }
 
   const maxSoul = Math.max(...players.map((p) => p.soul));
@@ -18,10 +15,7 @@ export function determineWinner(
 
   // При равенстве Soul преимущество у того,
   // кто первым запустил финальный раунд.
-  if (
-    finalRoundStartedBy &&
-    leaders.some((p) => p.id === finalRoundStartedBy)
-  ) {
+  if (finalRoundStartedBy && leaders.some((p) => p.id === finalRoundStartedBy)) {
     return finalRoundStartedBy;
   }
 

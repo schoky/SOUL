@@ -1,6 +1,5 @@
-import { endTurn, startTurn } from "@soul/game-engine";
-
-import type { GameState } from "@soul/shared";
+import { endTurn, startTurn } from '@soul/game-engine';
+import type { GameState } from '@soul/shared';
 
 const MAX_TURN_ITERATIONS_FACTOR = 3;
 
@@ -15,7 +14,7 @@ export function advanceTurnLoop(game: GameState): GameState {
 
   let iterations = 0;
 
-  while (current.status === "playing" && iterations < maxIterations) {
+  while (current.status === 'playing' && iterations < maxIterations) {
     iterations += 1;
 
     const turn = startTurn(current);

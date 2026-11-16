@@ -1,10 +1,5 @@
-import type {
-  Character,
-  CharacterStats,
-  Player,
-  PlayerCharacter,
-} from "@soul/shared";
-import { GAME_RULES } from "@soul/shared";
+import type { Character, CharacterStats, Player, PlayerCharacter } from '@soul/shared';
+import { GAME_RULES } from '@soul/shared';
 
 export type ResolvedCharacters = {
   cards: PlayerCharacter[];
@@ -15,22 +10,20 @@ export type ResolvedCharacters = {
 export function resolveCharacters(
   player: Player,
   characterCardIds: string[],
-  characters: Character[],
+  characters: Character[]
 ): ResolvedCharacters {
   if (characterCardIds.length === 0) {
-    throw new Error("At least one character card must be selected");
+    throw new Error('At least one character card must be selected');
   }
 
   // CHARACTERS_PER_PLAYER одновременно ограничивает
   // и размер руки, и максимальное число карт в одной связке.
   if (characterCardIds.length > GAME_RULES.CHARACTERS_PER_PLAYER) {
-    throw new Error(
-      `Cannot select more than ${GAME_RULES.CHARACTERS_PER_PLAYER} character cards`,
-    );
+    throw new Error(`Cannot select more than ${GAME_RULES.CHARACTERS_PER_PLAYER} character cards`);
   }
 
   if (new Set(characterCardIds).size !== characterCardIds.length) {
-    throw new Error("Character cards must be unique");
+    throw new Error('Character cards must be unique');
   }
 
   const cards = characterCardIds.map((cardId) => {
@@ -60,7 +53,7 @@ export function resolveCharacters(
   const stats: CharacterStats = {
     farmila: 0,
     perekup: 0,
-    tuller: 0,
+    tuller: 0
   };
 
   for (const character of resolvedCharacters) {
@@ -74,6 +67,6 @@ export function resolveCharacters(
   return {
     cards,
     characters: resolvedCharacters,
-    stats,
+    stats
   };
 }

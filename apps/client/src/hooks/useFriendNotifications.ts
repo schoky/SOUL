@@ -1,16 +1,14 @@
-import { useEffect } from "react";
-
 import type {
   FriendRequestAcceptedPayload,
   FriendRequestReceivedPayload,
   RoomInvitationReceivedPayload
-} from "@soul/shared";
-import { SOCKET_EVENTS } from "@soul/shared";
+} from '@soul/shared';
+import { SOCKET_EVENTS } from '@soul/shared';
+import { useEffect } from 'react';
 
-import { socket } from "../services/socket";
-import { useToastStore } from "../stores/toastStore";
-
-import { playSound } from "../utils/sounds";
+import { socket } from '../services/socket';
+import { useToastStore } from '../stores/toastStore';
+import { playSound } from '../utils/sounds';
 
 /**
  * Показывает всплывающие уведомления на события
@@ -22,29 +20,23 @@ export function useFriendNotifications() {
 
   useEffect(() => {
     function onFriendRequestReceived(payload: FriendRequestReceivedPayload) {
-      playSound("notification");
+      playSound('notification');
 
-      pushToast(
-        "info",
-        `${payload.request.from.nickname} хочет добавить тебя в друзья`,
-      );
+      pushToast('info', `${payload.request.from.nickname} хочет добавить тебя в друзья`);
     }
 
     function onFriendRequestAccepted(payload: FriendRequestAcceptedPayload) {
-      playSound("notification");
+      playSound('notification');
 
-      pushToast(
-        "success",
-        `${payload.friend.nickname} принял твою заявку в друзья`,
-      );
+      pushToast('success', `${payload.friend.nickname} принял твою заявку в друзья`);
     }
 
     function onRoomInvitationReceived(payload: RoomInvitationReceivedPayload) {
-      playSound("notification");
+      playSound('notification');
 
       pushToast(
-        "info",
-        `${payload.invitation.inviter.nickname} приглашает в комнату ${payload.invitation.roomCode}`,
+        'info',
+        `${payload.invitation.inviter.nickname} приглашает в комнату ${payload.invitation.roomCode}`
       );
     }
 
@@ -55,20 +47,11 @@ export function useFriendNotifications() {
     socket.on(SOCKET_EVENTS.ROOM_INVITATION_RECEIVED, onRoomInvitationReceived);
 
     return () => {
-      socket.off(
-        SOCKET_EVENTS.FRIEND_REQUEST_RECEIVED,
-        onFriendRequestReceived,
-      );
+      socket.off(SOCKET_EVENTS.FRIEND_REQUEST_RECEIVED, onFriendRequestReceived);
 
-      socket.off(
-        SOCKET_EVENTS.FRIEND_REQUEST_ACCEPTED,
-        onFriendRequestAccepted,
-      );
+      socket.off(SOCKET_EVENTS.FRIEND_REQUEST_ACCEPTED, onFriendRequestAccepted);
 
-      socket.off(
-        SOCKET_EVENTS.ROOM_INVITATION_RECEIVED,
-        onRoomInvitationReceived,
-      );
+      socket.off(SOCKET_EVENTS.ROOM_INVITATION_RECEIVED, onRoomInvitationReceived);
     };
   }, [pushToast]);
 }

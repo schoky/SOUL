@@ -1,19 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Link, useNavigate } from "react-router-dom";
-
-import { useFriendsStore } from "../../stores/friendsStore";
-import { useToastStore } from "../../stores/toastStore";
-
-import {
-  acceptFriendRequest,
-  declineFriendRequest,
-} from "../../services/api/friends";
-
-import {
-  acceptRoomInvitation,
-  declineRoomInvitation,
-} from "../../services/api/invitations";
+import { acceptFriendRequest, declineFriendRequest } from '../../services/api/friends';
+import { acceptRoomInvitation, declineRoomInvitation } from '../../services/api/invitations';
+import { useFriendsStore } from '../../stores/friendsStore';
+import { useToastStore } from '../../stores/toastStore';
 
 function NotificationBell() {
   const navigate = useNavigate();
@@ -57,17 +48,17 @@ function NotificationBell() {
     }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
 
     return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [isOpen]);
 
@@ -94,14 +85,11 @@ function NotificationBell() {
     try {
       await acceptFriendRequest(requestId);
 
-      pushToast("success", "Заявка принята");
+      pushToast('success', 'Заявка принята');
 
       await load();
     } catch (error) {
-      pushToast(
-        "error",
-        error instanceof Error ? error.message : "Не удалось принять заявку",
-      );
+      pushToast('error', error instanceof Error ? error.message : 'Не удалось принять заявку');
     } finally {
       setProcessingId(null);
     }
@@ -115,10 +103,7 @@ function NotificationBell() {
 
       await load();
     } catch (error) {
-      pushToast(
-        "error",
-        error instanceof Error ? error.message : "Не удалось отклонить",
-      );
+      pushToast('error', error instanceof Error ? error.message : 'Не удалось отклонить');
     } finally {
       setProcessingId(null);
     }
@@ -130,18 +115,13 @@ function NotificationBell() {
     try {
       const roomId = await acceptRoomInvitation(invitationId);
 
-      pushToast("success", "Ты присоединился к комнате");
+      pushToast('success', 'Ты присоединился к комнате');
 
       setIsOpen(false);
 
       navigate(`/room/${roomId}`);
     } catch (error) {
-      pushToast(
-        "error",
-        error instanceof Error
-          ? error.message
-          : "Не удалось принять приглашение",
-      );
+      pushToast('error', error instanceof Error ? error.message : 'Не удалось принять приглашение');
 
       await load();
     } finally {
@@ -157,117 +137,112 @@ function NotificationBell() {
 
       await load();
     } catch (error) {
-      pushToast(
-        "error",
-        error instanceof Error ? error.message : "Не удалось отклонить",
-      );
+      pushToast('error', error instanceof Error ? error.message : 'Не удалось отклонить');
     } finally {
       setProcessingId(null);
     }
   }
 
   return (
-    <div className="notification-bell" ref={rootRef}>
+    <div className='notification-bell' ref={rootRef}>
       <button
         className={[
-          "notification-bell__button",
-          unread.total > 0 ? "notification-bell__button--has-items" : "",
-          isOpen ? "notification-bell__button--open" : "",
+          'notification-bell__button',
+          unread.total > 0 ? 'notification-bell__button--has-items' : '',
+          isOpen ? 'notification-bell__button--open' : ''
         ]
           .filter(Boolean)
-          .join(" ")}
-        type="button"
-        aria-label="Уведомления"
+          .join(' ')}
+        type='button'
+        aria-label='Уведомления'
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <svg
-          className="notification-bell__icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+          className='notification-bell__icon'
+          viewBox='0 0 24 24'
+          fill='none'
+          xmlns='http://www.w3.org/2000/svg'
+          aria-hidden='true'
         >
           <path
-            d="M12 3a5 5 0 0 0-5 5v3.2c0 .8-.3 1.6-.9 2.2L5 14.5V16h14v-1.5l-1.1-1.1a3 3 0 0 1-.9-2.2V8a5 5 0 0 0-5-5Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
+            d='M12 3a5 5 0 0 0-5 5v3.2c0 .8-.3 1.6-.9 2.2L5 14.5V16h14v-1.5l-1.1-1.1a3 3 0 0 1-.9-2.2V8a5 5 0 0 0-5-5Z'
+            stroke='currentColor'
+            strokeWidth='1.6'
+            strokeLinejoin='round'
           />
           <path
-            d="M9.5 18.5a2.5 2.5 0 0 0 5 0"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
+            d='M9.5 18.5a2.5 2.5 0 0 0 5 0'
+            stroke='currentColor'
+            strokeWidth='1.6'
+            strokeLinecap='round'
           />
         </svg>
 
         {unread.total > 0 && (
-          <span className="notification-bell__badge">
-            {unread.total > 99 ? "99+" : unread.total}
+          <span className='notification-bell__badge'>
+            {unread.total > 99 ? '99+' : unread.total}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="notification-bell__dropdown" role="dialog">
-          <header className="notification-bell__header">
+        <div className='notification-bell__dropdown' role='dialog'>
+          <header className='notification-bell__header'>
             <strong>Уведомления</strong>
           </header>
 
           {totalItems === 0 ? (
-            <p className="notification-bell__empty">
+            <p className='notification-bell__empty'>
               Пока ничего нового.
               <br />
               Заявки в друзья и приглашения в игру появятся здесь.
             </p>
           ) : (
-            <div className="notification-bell__scroll">
+            <div className='notification-bell__scroll'>
               {incoming.length > 0 && (
-                <section className="notification-bell__section">
-                  <p className="notification-bell__section-title">
-                    Заявки в друзья
-                  </p>
+                <section className='notification-bell__section'>
+                  <p className='notification-bell__section-title'>Заявки в друзья</p>
 
-                  <ul className="notification-bell__list">
+                  <ul className='notification-bell__list'>
                     {incoming.map((request) => (
                       <li
                         className={[
-                          "notification-item",
-                          !request.isRead ? "notification-item--unread" : "",
+                          'notification-item',
+                          !request.isRead ? 'notification-item--unread' : ''
                         ]
                           .filter(Boolean)
-                          .join(" ")}
+                          .join(' ')}
                         key={request.id}
                       >
-                        <div className="notification-item__avatar-wrap">
+                        <div className='notification-item__avatar-wrap'>
                           {request.from.avatar ? (
                             <img
-                              className="notification-item__avatar"
+                              className='notification-item__avatar'
                               src={request.from.avatar}
                               alt={request.from.nickname}
                             />
                           ) : (
-                            <div className="notification-item__avatar notification-item__avatar--placeholder">
-                              {request.from.nickname[0]?.toUpperCase() ?? "?"}
+                            <div className='notification-item__avatar notification-item__avatar--placeholder'>
+                              {request.from.nickname[0]?.toUpperCase() ?? '?'}
                             </div>
                           )}
                         </div>
 
-                        <div className="notification-item__info">
-                          <strong className="notification-item__title">
+                        <div className='notification-item__info'>
+                          <strong className='notification-item__title'>
                             {request.from.nickname}
                           </strong>
 
-                          <span className="notification-item__subtitle">
+                          <span className='notification-item__subtitle'>
                             Хочет добавить тебя в друзья
                           </span>
                         </div>
 
-                        <div className="notification-item__actions">
+                        <div className='notification-item__actions'>
                           <button
-                            className="notification-item__button notification-item__button--primary"
-                            type="button"
+                            className='notification-item__button notification-item__button--primary'
+                            type='button'
                             disabled={processingId === request.id}
                             onClick={() => {
                               void handleAcceptRequest(request.id);
@@ -277,8 +252,8 @@ function NotificationBell() {
                           </button>
 
                           <button
-                            className="notification-item__button"
-                            type="button"
+                            className='notification-item__button'
+                            type='button'
                             disabled={processingId === request.id}
                             onClick={() => {
                               void handleDeclineRequest(request.id);
@@ -294,53 +269,49 @@ function NotificationBell() {
               )}
 
               {invitations.length > 0 && (
-                <section className="notification-bell__section">
-                  <p className="notification-bell__section-title">
-                    Приглашения в игру
-                  </p>
+                <section className='notification-bell__section'>
+                  <p className='notification-bell__section-title'>Приглашения в игру</p>
 
-                  <ul className="notification-bell__list">
+                  <ul className='notification-bell__list'>
                     {invitations.map((invitation) => (
                       <li
                         className={[
-                          "notification-item",
-                          !invitation.isRead ? "notification-item--unread" : "",
+                          'notification-item',
+                          !invitation.isRead ? 'notification-item--unread' : ''
                         ]
                           .filter(Boolean)
-                          .join(" ")}
+                          .join(' ')}
                         key={invitation.id}
                       >
-                        <div className="notification-item__avatar-wrap">
+                        <div className='notification-item__avatar-wrap'>
                           {invitation.inviter.avatar ? (
                             <img
-                              className="notification-item__avatar"
+                              className='notification-item__avatar'
                               src={invitation.inviter.avatar}
                               alt={invitation.inviter.nickname}
                             />
                           ) : (
-                            <div className="notification-item__avatar notification-item__avatar--placeholder">
-                              {invitation.inviter.nickname[0]?.toUpperCase() ??
-                                "?"}
+                            <div className='notification-item__avatar notification-item__avatar--placeholder'>
+                              {invitation.inviter.nickname[0]?.toUpperCase() ?? '?'}
                             </div>
                           )}
                         </div>
 
-                        <div className="notification-item__info">
-                          <strong className="notification-item__title">
+                        <div className='notification-item__info'>
+                          <strong className='notification-item__title'>
                             {invitation.inviter.nickname}
                           </strong>
 
-                          <span className="notification-item__subtitle">
-                            Приглашает в комнату{" "}
-                            <code>{invitation.roomCode}</code> ·{" "}
+                          <span className='notification-item__subtitle'>
+                            Приглашает в комнату <code>{invitation.roomCode}</code> ·{' '}
                             {invitation.membersCount} / {invitation.maxPlayers}
                           </span>
                         </div>
 
-                        <div className="notification-item__actions">
+                        <div className='notification-item__actions'>
                           <button
-                            className="notification-item__button notification-item__button--primary"
-                            type="button"
+                            className='notification-item__button notification-item__button--primary'
+                            type='button'
                             disabled={processingId === invitation.id}
                             onClick={() => {
                               void handleAcceptInvitation(invitation.id);
@@ -350,8 +321,8 @@ function NotificationBell() {
                           </button>
 
                           <button
-                            className="notification-item__button"
-                            type="button"
+                            className='notification-item__button'
+                            type='button'
                             disabled={processingId === invitation.id}
                             onClick={() => {
                               void handleDeclineInvitation(invitation.id);
@@ -368,10 +339,10 @@ function NotificationBell() {
             </div>
           )}
 
-          <footer className="notification-bell__footer">
+          <footer className='notification-bell__footer'>
             <Link
-              className="notification-bell__footer-link"
-              to="/friends"
+              className='notification-bell__footer-link'
+              to='/friends'
               onClick={() => setIsOpen(false)}
             >
               Открыть страницу друзей →

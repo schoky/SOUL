@@ -1,31 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 import {
   getAdminUsers,
   setUserBlocked,
   setUserRole,
-  type AdminUser,
-} from "../../services/api/admin";
-
-import { useAuthStore } from "../../stores/authStore";
+  type AdminUser
+} from '../../services/api/admin';
+import { useAuthStore } from '../../stores/authStore';
 
 function formatDate(value: string | null): string {
   if (!value) {
-    return "—";
+    return '—';
   }
 
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "—";
+    return '—';
   }
 
-  return date.toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   });
 }
 
@@ -34,7 +33,7 @@ function AdminUsers() {
 
   const [users, setUsers] = useState<AdminUser[]>([]);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,23 +46,19 @@ function AdminUsers() {
     try {
       const data = await getAdminUsers({
         search: query || undefined,
-        limit: 50,
+        limit: 50
       });
 
       setUsers(data.users);
     } catch (error) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Не удалось загрузить пользователей",
-      );
+      setError(error instanceof Error ? error.message : 'Не удалось загрузить пользователей');
     } finally {
       setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    void load("");
+    void load('');
   }, []);
 
   async function handleToggleBlocked(user: AdminUser) {
@@ -71,67 +66,59 @@ function AdminUsers() {
       await setUserBlocked(user.id, !user.isBlocked);
 
       setUsers((prev) =>
-        prev.map((u) =>
-          u.id === user.id ? { ...u, isBlocked: !u.isBlocked } : u,
-        ),
+        prev.map((u) => (u.id === user.id ? { ...u, isBlocked: !u.isBlocked } : u))
       );
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Ошибка");
+      alert(error instanceof Error ? error.message : 'Ошибка');
     }
   }
 
   async function handleToggleRole(user: AdminUser) {
-    const nextRole = user.role === "ADMIN" ? "USER" : "ADMIN";
+    const nextRole = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
 
-    if (user.id === currentUser?.id && nextRole === "USER") {
-      alert("Нельзя снять роль ADMIN с себя");
+    if (user.id === currentUser?.id && nextRole === 'USER') {
+      alert('Нельзя снять роль ADMIN с себя');
       return;
     }
 
     try {
       await setUserRole(user.id, nextRole);
 
-      setUsers((prev) =>
-        prev.map((u) => (u.id === user.id ? { ...u, role: nextRole } : u)),
-      );
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, role: nextRole } : u)));
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Ошибка");
+      alert(error instanceof Error ? error.message : 'Ошибка');
     }
   }
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
-        <p className="admin-page__eyebrow">ПОЛЬЗОВАТЕЛИ</p>
+    <div className='admin-page'>
+      <header className='admin-page__header'>
+        <p className='admin-page__eyebrow'>ПОЛЬЗОВАТЕЛИ</p>
 
-        <h1 className="admin-page__title">Управление аккаунтами</h1>
+        <h1 className='admin-page__title'>Управление аккаунтами</h1>
       </header>
 
-      <div className="admin-toolbar">
+      <div className='admin-toolbar'>
         <input
-          className="admin-input"
-          type="text"
-          placeholder="Поиск по email или нику"
+          className='admin-input'
+          type='text'
+          placeholder='Поиск по email или нику'
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
 
-        <button
-          className="admin-button"
-          type="button"
-          onClick={() => void load(search)}
-        >
+        <button className='admin-button' type='button' onClick={() => void load(search)}>
           Найти
         </button>
       </div>
 
-      {isLoading && <p className="admin-loading">Загружаем…</p>}
+      {isLoading && <p className='admin-loading'>Загружаем…</p>}
 
-      {error && <p className="admin-error">{error}</p>}
+      {error && <p className='admin-error'>{error}</p>}
 
       {!isLoading && !error && (
-        <div className="admin-table-wrapper">
-          <table className="admin-table">
+        <div className='admin-table-wrapper'>
+          <table className='admin-table'>
             <thead>
               <tr>
                 <th>Ник</th>
@@ -147,65 +134,56 @@ function AdminUsers() {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
-                  <td data-label="Ник">{user.profile?.nickname ?? "—"}</td>
+                  <td data-label='Ник'>{user.profile?.nickname ?? '—'}</td>
 
-                  <td data-label="Email">{user.email}</td>
+                  <td data-label='Email'>{user.email}</td>
 
-                  <td data-label="Роль">
+                  <td data-label='Роль'>
                     <span
-                      className={[
-                        "admin-badge",
-                        user.role === "ADMIN" ? "admin-badge--admin" : "",
-                      ]
+                      className={['admin-badge', user.role === 'ADMIN' ? 'admin-badge--admin' : '']
                         .filter(Boolean)
-                        .join(" ")}
+                        .join(' ')}
                     >
                       {user.role}
                     </span>
                   </td>
 
-                  <td data-label="Статус">
+                  <td data-label='Статус'>
                     <span
                       className={[
-                        "admin-badge",
-                        user.isBlocked
-                          ? "admin-badge--danger"
-                          : "admin-badge--success",
-                      ].join(" ")}
+                        'admin-badge',
+                        user.isBlocked ? 'admin-badge--danger' : 'admin-badge--success'
+                      ].join(' ')}
                     >
-                      {user.isBlocked ? "Заблокирован" : "Активен"}
+                      {user.isBlocked ? 'Заблокирован' : 'Активен'}
                     </span>
                   </td>
 
-                  <td data-label="Регистрация">{formatDate(user.createdAt)}</td>
+                  <td data-label='Регистрация'>{formatDate(user.createdAt)}</td>
 
-                  <td data-label="Последний вход">
-                    {formatDate(user.lastLoginAt)}
-                  </td>
+                  <td data-label='Последний вход'>{formatDate(user.lastLoginAt)}</td>
 
-                  <td className="admin-table__actions">
+                  <td className='admin-table__actions'>
                     <button
-                      className="admin-button admin-button--small"
-                      type="button"
+                      className='admin-button admin-button--small'
+                      type='button'
                       onClick={() => void handleToggleRole(user)}
                     >
-                      {user.role === "ADMIN"
-                        ? "Снять админа"
-                        : "Сделать админом"}
+                      {user.role === 'ADMIN' ? 'Снять админа' : 'Сделать админом'}
                     </button>
 
                     <button
                       className={[
-                        "admin-button",
-                        "admin-button--small",
-                        user.isBlocked ? "" : "admin-button--danger",
+                        'admin-button',
+                        'admin-button--small',
+                        user.isBlocked ? '' : 'admin-button--danger'
                       ]
                         .filter(Boolean)
-                        .join(" ")}
-                      type="button"
+                        .join(' ')}
+                      type='button'
                       onClick={() => void handleToggleBlocked(user)}
                     >
-                      {user.isBlocked ? "Разблокировать" : "Заблокировать"}
+                      {user.isBlocked ? 'Разблокировать' : 'Заблокировать'}
                     </button>
                   </td>
                 </tr>

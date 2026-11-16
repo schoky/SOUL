@@ -1,6 +1,5 @@
-import { database } from "@soul/database";
-
-import type { GameResultDto, GameResultPlayerDto } from "@soul/shared";
+import { database } from '@soul/database';
+import type { GameResultDto, GameResultPlayerDto } from '@soul/shared';
 
 class GameResultRepository {
   /**
@@ -12,11 +11,11 @@ class GameResultRepository {
   async findByRoomId(roomId: string): Promise<GameResultDto | null> {
     const game = await database.game.findFirst({
       where: {
-        roomId,
+        roomId
       },
 
       orderBy: {
-        startedAt: "desc",
+        startedAt: 'desc'
       },
 
       include: {
@@ -24,19 +23,19 @@ class GameResultRepository {
           include: {
             user: {
               include: {
-                profile: true,
-              },
-            },
-          },
-        },
-      },
+                profile: true
+              }
+            }
+          }
+        }
+      }
     });
 
     if (!game) {
       return null;
     }
 
-    if (game.status !== "FINISHED") {
+    if (game.status !== 'FINISHED') {
       return null;
     }
 
@@ -47,7 +46,7 @@ class GameResultRepository {
         userId: p.userId,
         name: p.user.profile?.nickname ?? `Игрок ${p.userId.slice(0, 4)}`,
         place: p.place ?? 0,
-        finalSoul: p.finalSoul ?? 0,
+        finalSoul: p.finalSoul ?? 0
       }));
 
     const state = game.state as { turnNumber?: number } | null;
@@ -59,7 +58,7 @@ class GameResultRepository {
       finishedAt: game.finishedAt?.toISOString() ?? null,
       turns: state?.turnNumber ?? 0,
       winnerId: game.winnerId,
-      players,
+      players
     };
   }
 }

@@ -1,7 +1,7 @@
-import { create } from "zustand";
+import type { CreateRoomRequest, RoomDto } from '@soul/shared';
+import { create } from 'zustand';
 
-import { ApiError } from "../services/api/client";
-
+import { ApiError } from '../services/api/client';
 import {
   createRoom as createRoomRequest,
   getCurrentRoom as getCurrentRoomRequest,
@@ -9,10 +9,8 @@ import {
   getRooms,
   joinRoom as joinRoomRequest,
   leaveRoom as leaveRoomRequest,
-  setReady as setReadyRequest,
-} from "../services/api/rooms";
-
-import type { CreateRoomRequest, RoomDto } from "@soul/shared";
+  setReady as setReadyRequest
+} from '../services/api/rooms';
 
 type RoomStore = {
   rooms: RoomDto[];
@@ -63,7 +61,7 @@ const getErrorMessage = (error: unknown) => {
     return error.message;
   }
 
-  return "Произошла неизвестная ошибка";
+  return 'Произошла неизвестная ошибка';
 };
 
 const getErrorCode = (error: unknown): string | null => {
@@ -101,7 +99,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set({
       isLoading: true,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
 
     try {
@@ -111,16 +109,16 @@ export const useRoomStore = create<RoomStore>((set) => ({
 
       set({
         rooms,
-        currentRoom,
+        currentRoom
       });
     } catch (error) {
       set({
         error: getErrorMessage(error),
-        errorCode: getErrorCode(error),
+        errorCode: getErrorCode(error)
       });
     } finally {
       set({
-        isLoading: false,
+        isLoading: false
       });
     }
   },
@@ -130,7 +128,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
       isLoading: true,
       error: null,
       errorCode: null,
-      currentRoom: null,
+      currentRoom: null
     });
 
     try {
@@ -139,17 +137,17 @@ export const useRoomStore = create<RoomStore>((set) => ({
       set((state) => ({
         currentRoom: room,
 
-        rooms: upsertRoom(state.rooms, room),
+        rooms: upsertRoom(state.rooms, room)
       }));
     } catch (error) {
       set({
         error: getErrorMessage(error),
         errorCode: getErrorCode(error),
-        currentRoom: null,
+        currentRoom: null
       });
     } finally {
       set({
-        isLoading: false,
+        isLoading: false
       });
     }
   },
@@ -158,7 +156,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set({
       isMutating: true,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
 
     try {
@@ -167,20 +165,20 @@ export const useRoomStore = create<RoomStore>((set) => ({
       set((state) => ({
         currentRoom: room,
 
-        rooms: upsertRoom(state.rooms, room),
+        rooms: upsertRoom(state.rooms, room)
       }));
 
       return room;
     } catch (error) {
       set({
         error: getErrorMessage(error),
-        errorCode: getErrorCode(error),
+        errorCode: getErrorCode(error)
       });
 
       return null;
     } finally {
       set({
-        isMutating: false,
+        isMutating: false
       });
     }
   },
@@ -189,7 +187,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set({
       isMutating: true,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
 
     try {
@@ -198,20 +196,20 @@ export const useRoomStore = create<RoomStore>((set) => ({
       set((state) => ({
         currentRoom: room,
 
-        rooms: upsertRoom(state.rooms, room),
+        rooms: upsertRoom(state.rooms, room)
       }));
 
       return room;
     } catch (error) {
       set({
         error: getErrorMessage(error),
-        errorCode: getErrorCode(error),
+        errorCode: getErrorCode(error)
       });
 
       return null;
     } finally {
       set({
-        isMutating: false,
+        isMutating: false
       });
     }
   },
@@ -220,7 +218,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set({
       isMutating: true,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
 
     try {
@@ -229,20 +227,20 @@ export const useRoomStore = create<RoomStore>((set) => ({
       set((state) => ({
         currentRoom: room,
 
-        rooms: upsertRoom(state.rooms, room),
+        rooms: upsertRoom(state.rooms, room)
       }));
 
       return room;
     } catch (error) {
       set({
         error: getErrorMessage(error),
-        errorCode: getErrorCode(error),
+        errorCode: getErrorCode(error)
       });
 
       return null;
     } finally {
       set({
-        isMutating: false,
+        isMutating: false
       });
     }
   },
@@ -251,7 +249,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set({
       isMutating: true,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
 
     try {
@@ -262,20 +260,20 @@ export const useRoomStore = create<RoomStore>((set) => ({
 
         rooms: room
           ? upsertRoom(state.rooms, room)
-          : state.rooms.filter((item) => item.id !== roomId),
+          : state.rooms.filter((item) => item.id !== roomId)
       }));
 
       return room;
     } catch (error) {
       set({
         error: getErrorMessage(error),
-        errorCode: getErrorCode(error),
+        errorCode: getErrorCode(error)
       });
 
       return null;
     } finally {
       set({
-        isMutating: false,
+        isMutating: false
       });
     }
   },
@@ -284,20 +282,20 @@ export const useRoomStore = create<RoomStore>((set) => ({
     set((state) => ({
       currentRoom: state.currentRoom?.id === room.id ? room : state.currentRoom,
 
-      rooms: upsertRoom(state.rooms, room),
+      rooms: upsertRoom(state.rooms, room)
     }));
   },
 
   clearCurrentRoom() {
     set({
-      currentRoom: null,
+      currentRoom: null
     });
   },
 
   clearError() {
     set({
       error: null,
-      errorCode: null,
+      errorCode: null
     });
   },
 
@@ -308,7 +306,7 @@ export const useRoomStore = create<RoomStore>((set) => ({
       isLoading: false,
       isMutating: false,
       error: null,
-      errorCode: null,
+      errorCode: null
     });
-  },
+  }
 }));

@@ -1,4 +1,4 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 export type ProfileOverview = {
   totalGames: number;
@@ -22,19 +22,19 @@ class StatsRepository {
   async getOverview(userId: string): Promise<ProfileOverview> {
     const [totalGames, wins, agg] = await Promise.all([
       database.gamePlayer.count({
-        where: { userId },
+        where: { userId }
       }),
 
       database.gameResult.count({
-        where: { winnerId: userId },
+        where: { winnerId: userId }
       }),
 
       database.gamePlayer.aggregate({
         where: { userId },
 
         _avg: { finalSoul: true },
-        _max: { finalSoul: true },
-      }),
+        _max: { finalSoul: true }
+      })
     ]);
 
     return {
@@ -43,21 +43,18 @@ class StatsRepository {
       losses: Math.max(0, totalGames - wins),
       winRate: totalGames > 0 ? wins / totalGames : 0,
       averageSoul: agg._avg.finalSoul ?? 0,
-      bestSoul: agg._max.finalSoul ?? 0,
+      bestSoul: agg._max.finalSoul ?? 0
     };
   }
 
-  async getRecentGames(
-    userId: string,
-    limit = 10,
-  ): Promise<ProfileGameEntry[]> {
+  async getRecentGames(userId: string, limit = 10): Promise<ProfileGameEntry[]> {
     const rows = await database.gamePlayer.findMany({
       where: { userId },
 
       orderBy: {
         game: {
-          finishedAt: "desc",
-        },
+          finishedAt: 'desc'
+        }
       },
 
       take: limit,
@@ -71,12 +68,12 @@ class StatsRepository {
               select: {
                 userId: true,
                 place: true,
-                finalSoul: true,
-              },
-            },
-          },
-        },
-      },
+                finalSoul: true
+              }
+            }
+          }
+        }
+      }
     });
 
     return rows.map((row) => ({
@@ -85,7 +82,7 @@ class StatsRepository {
       soul: row.finalSoul,
       place: row.place,
       won: row.game.gameResult?.winnerId === userId,
-      playersCount: row.game.players.length,
+      playersCount: row.game.players.length
     }));
   }
 }

@@ -1,4 +1,4 @@
-export type RoomStatus = "WAITING" | "PLAYING" | "FINISHED";
+export type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 export type RoomProfileDto = {
   id: string;

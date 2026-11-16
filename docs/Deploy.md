@@ -54,7 +54,7 @@ LobbyPage
 ## 🧩 Основные состояния
 
 | Состояние       | Для чего используется                              |
-|-----------------|----------------------------------------------------|
+| --------------- | -------------------------------------------------- |
 | `user`          | Получаем текущего авторизованного пользователя     |
 | `rooms`         | Получаем список доступных комнат                   |
 | `currentRoom`   | Проверяем, находится ли пользователь уже в комнате |
@@ -77,7 +77,7 @@ LobbyPage
 ### 0.1. Пополнение баланса Selectel
 
 | Статья                              | Ориентировочная стоимость |
-|-------------------------------------|--------------------------:|
+| ----------------------------------- | ------------------------: |
 | Домен `playsoul.ru`                 |                 120 ₽/год |
 | VPS: 2 vCPU / 4 GB RAM / 40 GB NVMe |             750–900 ₽/мес |
 | SSL-сертификат Let's Encrypt        |                       0 ₽ |
@@ -145,7 +145,7 @@ Get-Content $env:USERPROFILE\.ssh\soul_vps.pub
 записи:
 
 | Тип | Имя   | Значение | TTL |
-|-----|-------|----------|----:|
+| --- | ----- | -------- | --: |
 | A   | `@`   | `<IP>`   | 300 |
 | A   | `www` | `<IP>`   | 300 |
 
@@ -403,23 +403,23 @@ TWITCH_CLIENT_SECRET=
 
 ```js
 module.exports = {
-	apps: [
-		{
-			name: "soul-server",
-			script: "apps/server/dist/index.js",
-			cwd: "/var/www/soul",
-			env_file: ".env.production",
-			instances: 1,
-			exec_mode: "fork",
-			max_memory_restart: "512M",
-			autorestart: true,
-			watch: false,
-			kill_timeout: 5000,
-			listen_timeout: 10000,
-			merge_logs: true,
-			time: true,
-		},
-	],
+  apps: [
+    {
+      name: 'soul-server',
+      script: 'apps/server/dist/index.js',
+      cwd: '/var/www/soul',
+      env_file: '.env.production',
+      instances: 1,
+      exec_mode: 'fork',
+      max_memory_restart: '512M',
+      autorestart: true,
+      watch: false,
+      kill_timeout: 5000,
+      listen_timeout: 10000,
+      merge_logs: true,
+      time: true
+    }
+  ]
 };
 ```
 
@@ -534,7 +534,7 @@ cd soul
 Локальные и продакшен-настройки хранятся отдельно:
 
 | Среда     | Где находится | Файл              | Кто использует       |
-|-----------|---------------|-------------------|----------------------|
+| --------- | ------------- | ----------------- | -------------------- |
 | Локальная | Windows       | `.env`            | Node.js, Prisma, tsx |
 | Продакшен | VPS           | `.env.production` | PM2, Node.js, Prisma |
 

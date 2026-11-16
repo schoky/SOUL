@@ -1,3 +1,1 @@
-export {
-	database
-} from '@soul/database';
+export { database } from '@soul/database';

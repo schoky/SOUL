@@ -1,7 +1,7 @@
-import type { GameState } from "@soul/shared";
-import { GAME_RULES } from "@soul/shared";
+import type { GameState } from '@soul/shared';
+import { GAME_RULES } from '@soul/shared';
 
-import { changeSoul } from "../rules/changeSoul.js";
+import { changeSoul } from '../rules/changeSoul.js';
 
 /**
  * Добровольный пропуск хода.
@@ -14,17 +14,15 @@ import { changeSoul } from "../rules/changeSoul.js";
  * сохранить их на будущий ход.
  */
 export function skipTurn(game: GameState): GameState {
-  if (game.status !== "playing") {
-    throw new Error("Cannot skip turn: game is not playing");
+  if (game.status !== 'playing') {
+    throw new Error('Cannot skip turn: game is not playing');
   }
 
   if (!game.currentPlayerId) {
-    throw new Error("Cannot skip turn: current player is not set");
+    throw new Error('Cannot skip turn: current player is not set');
   }
 
-  const playerIndex = game.players.findIndex(
-    (player) => player.id === game.currentPlayerId,
-  );
+  const playerIndex = game.players.findIndex((player) => player.id === game.currentPlayerId);
 
   if (playerIndex === -1) {
     throw new Error(`Current player "${game.currentPlayerId}" not found`);
@@ -34,14 +32,14 @@ export function skipTurn(game: GameState): GameState {
 
   if (player.consecutiveSkips >= GAME_RULES.MAX_CONSECUTIVE_SKIPS) {
     throw new Error(
-      `Cannot skip: limit of ${GAME_RULES.MAX_CONSECUTIVE_SKIPS} consecutive skips reached`,
+      `Cannot skip: limit of ${GAME_RULES.MAX_CONSECUTIVE_SKIPS} consecutive skips reached`
     );
   }
 
   const updatedPlayer = {
     ...player,
     soul: changeSoul(player.soul, -GAME_RULES.SKIP_PENALTY),
-    consecutiveSkips: player.consecutiveSkips + 1,
+    consecutiveSkips: player.consecutiveSkips + 1
   };
 
   const updatedPlayers = [...game.players];
@@ -50,6 +48,6 @@ export function skipTurn(game: GameState): GameState {
 
   return {
     ...game,
-    players: updatedPlayers,
+    players: updatedPlayers
   };
 }

@@ -1,6 +1,5 @@
-import { database } from "@soul/database";
-
-import type { GameState } from "@soul/shared";
+import { database } from '@soul/database';
+import type { GameState } from '@soul/shared';
 
 class GameRepository {
   /**
@@ -10,38 +9,38 @@ class GameRepository {
   async save(roomId: string, state: GameState) {
     const existing = await database.game.findFirst({
       where: {
-        roomId,
+        roomId
       },
 
       orderBy: {
-        startedAt: "desc",
-      },
+        startedAt: 'desc'
+      }
     });
 
     if (!existing) {
       return database.game.create({
         data: {
           roomId,
-          status: "PLAYING",
-          state: state as unknown as object,
-        },
+          status: 'PLAYING',
+          state: state as unknown as object
+        }
       });
     }
 
     return database.game.update({
       where: {
-        id: existing.id,
+        id: existing.id
       },
 
       data: {
-        status: state.status === "finished" ? "FINISHED" : "PLAYING",
+        status: state.status === 'finished' ? 'FINISHED' : 'PLAYING',
 
         winnerId: state.winnerId,
 
-        finishedAt: state.status === "finished" ? new Date() : null,
+        finishedAt: state.status === 'finished' ? new Date() : null,
 
-        state: state as unknown as object,
-      },
+        state: state as unknown as object
+      }
     });
   }
 
@@ -51,12 +50,12 @@ class GameRepository {
   async findByRoomId(roomId: string) {
     return database.game.findFirst({
       where: {
-        roomId,
+        roomId
       },
 
       orderBy: {
-        startedAt: "desc",
-      },
+        startedAt: 'desc'
+      }
     });
   }
 
@@ -83,7 +82,7 @@ class GameRepository {
    * как game.status === 'finished'.
    */
   async saveFinish(roomId: string, state: GameState): Promise<void> {
-    if (state.status !== "finished") {
+    if (state.status !== 'finished') {
       return;
     }
 
@@ -98,8 +97,8 @@ class GameRepository {
     // поэтому проверка через него.
     const existingResult = await database.gameResult.findUnique({
       where: {
-        gameId: game.id,
-      },
+        gameId: game.id
+      }
     });
 
     if (existingResult) {
@@ -139,16 +138,16 @@ class GameRepository {
             gameId: game.id,
             userId: player.id,
             finalSoul: player.soul,
-            place: index + 1,
-          },
+            place: index + 1
+          }
         });
       }
 
       await tx.gameResult.create({
         data: {
           gameId: game.id,
-          winnerId: state.winnerId,
-        },
+          winnerId: state.winnerId
+        }
       });
     });
   }
@@ -159,8 +158,8 @@ class GameRepository {
   async deleteByRoomId(roomId: string) {
     return database.game.deleteMany({
       where: {
-        roomId,
-      },
+        roomId
+      }
     });
   }
 }

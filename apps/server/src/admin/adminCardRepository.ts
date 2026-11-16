@@ -1,4 +1,4 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 type CharacterInput = {
   slug: string;
@@ -30,7 +30,7 @@ class AdminCardRepository {
 
   async listCharacters() {
     return database.character.findMany({
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: 'asc' }
     });
   }
 
@@ -45,21 +45,21 @@ class AdminCardRepository {
         tuller: data.tuller,
         abilityId: data.abilityId ?? null,
         abilityName: data.abilityName ?? null,
-        abilityDescription: data.abilityDescription ?? null,
-      },
+        abilityDescription: data.abilityDescription ?? null
+      }
     });
   }
 
   async updateCharacter(id: string, data: Partial<CharacterInput>) {
     return database.character.update({
       where: { id },
-      data,
+      data
     });
   }
 
   async deleteCharacter(id: string) {
     return database.character.delete({
-      where: { id },
+      where: { id }
     });
   }
 
@@ -67,7 +67,7 @@ class AdminCardRepository {
 
   async listEvents() {
     return database.eventCard.findMany({
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: 'asc' }
     });
   }
 
@@ -78,13 +78,13 @@ class AdminCardRepository {
   async updateEvent(id: string, data: Partial<EventInput>) {
     return database.eventCard.update({
       where: { id },
-      data,
+      data
     });
   }
 
   async deleteEvent(id: string) {
     return database.eventCard.delete({
-      where: { id },
+      where: { id }
     });
   }
 }

@@ -1,24 +1,20 @@
-import { gameManager } from "../game/gameManager.js";
-import { advanceTurnLoop } from "../game/turnLoop.js";
-
-import { connectionTracker } from "./connectionTracker.js";
-import { emitStateUpdate } from "./stateEmitter.js";
+import { gameManager } from '../game/gameManager.js';
+import { advanceTurnLoop } from '../game/turnLoop.js';
+import { connectionTracker } from './connectionTracker.js';
+import { emitStateUpdate } from './stateEmitter.js';
 
 /**
  * Запускает автопас, если отключившийся игрок —
  * текущий активный игрок в незавершённой партии.
  */
-export async function handlePlayerDisconnect(
-  roomId: string,
-  userId: string,
-): Promise<void> {
+export async function handlePlayerDisconnect(roomId: string, userId: string): Promise<void> {
   const game = await gameManager.resolve(roomId);
 
   if (!game) {
     return;
   }
 
-  if (game.status !== "playing") {
+  if (game.status !== 'playing') {
     return;
   }
 
@@ -38,7 +34,7 @@ export async function handlePlayerDisconnect(
       return;
     }
 
-    if (currentGame.status !== "playing") {
+    if (currentGame.status !== 'playing') {
       return;
     }
 
@@ -55,7 +51,7 @@ export async function handlePlayerDisconnect(
     // Если следующий игрок тоже отключён —
     // запускаем цепочку дальше.
     if (
-      nextGame.status === "playing" &&
+      nextGame.status === 'playing' &&
       nextGame.currentPlayerId &&
       !connectionTracker.isConnected(nextGame.currentPlayerId)
     ) {

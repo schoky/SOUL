@@ -1,8 +1,8 @@
-import { randomInt } from "node:crypto";
+import { randomInt } from 'node:crypto';
 
-import { ROOM_RULES } from "@soul/shared";
+import { ROOM_RULES } from '@soul/shared';
 
-import { roomRepository } from "./roomRepository.js";
+import { roomRepository } from './roomRepository.js';
 
 const MIN_PLAYERS = ROOM_RULES.MIN_PLAYERS;
 
@@ -12,29 +12,29 @@ const DEFAULT_MAX_PLAYERS = ROOM_RULES.MAX_PLAYERS;
 
 const ROOM_CODE_LENGTH = ROOM_RULES.ROOM_CODE_LENGTH;
 
-const ROOM_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const ROOM_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
 export type RoomServiceErrorCode =
-  | "INVALID_MAX_PLAYERS"
-  | "ROOM_NOT_FOUND"
-  | "ROOM_NOT_WAITING"
-  | "USER_ALREADY_IN_ROOM"
-  | "ROOM_FULL"
-  | "NOT_ROOM_MEMBER"
-  | "INVALID_READY_STATE"
-  | "NOT_ROOM_HOST"
-  | "NOT_ENOUGH_PLAYERS"
-  | "PLAYERS_NOT_READY"
-  | "ROOM_CODE_GENERATION_FAILED";
+  | 'INVALID_MAX_PLAYERS'
+  | 'ROOM_NOT_FOUND'
+  | 'ROOM_NOT_WAITING'
+  | 'USER_ALREADY_IN_ROOM'
+  | 'ROOM_FULL'
+  | 'NOT_ROOM_MEMBER'
+  | 'INVALID_READY_STATE'
+  | 'NOT_ROOM_HOST'
+  | 'NOT_ENOUGH_PLAYERS'
+  | 'PLAYERS_NOT_READY'
+  | 'ROOM_CODE_GENERATION_FAILED';
 
 export class RoomServiceError extends Error {
   constructor(
     public readonly code: RoomServiceErrorCode,
-    message: string,
+    message: string
   ) {
     super(message);
 
-    this.name = "RoomServiceError";
+    this.name = 'RoomServiceError';
   }
 }
 
@@ -48,10 +48,7 @@ class RoomService {
     const existingMember = await roomRepository.findMemberByUserId(userId);
 
     if (existingMember) {
-      throw new RoomServiceError(
-        "USER_ALREADY_IN_ROOM",
-        "Пользователь уже находится в комнате",
-      );
+      throw new RoomServiceError('USER_ALREADY_IN_ROOM', 'Пользователь уже находится в комнате');
     }
 
     const code = await this.generateUniqueRoomCode();
@@ -59,16 +56,13 @@ class RoomService {
     const room = await roomRepository.createWithHost({
       code,
       hostUserId: userId,
-      maxPlayers,
+      maxPlayers
     });
 
     const createdRoom = await roomRepository.findById(room.id);
 
     if (!createdRoom) {
-      throw new RoomServiceError(
-        "ROOM_NOT_FOUND",
-        "Созданная комната не найдена",
-      );
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Созданная комната не найдена');
     }
 
     return createdRoom;
@@ -81,29 +75,23 @@ class RoomService {
     const room = await roomRepository.findById(roomId);
 
     if (!room) {
-      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена');
     }
 
-    if (room.status !== "WAITING") {
-      throw new RoomServiceError(
-        "ROOM_NOT_WAITING",
-        "Комната уже запущена или завершена",
-      );
+    if (room.status !== 'WAITING') {
+      throw new RoomServiceError('ROOM_NOT_WAITING', 'Комната уже запущена или завершена');
     }
 
     const existingMember = await roomRepository.findMemberByUserId(userId);
 
     if (existingMember) {
-      throw new RoomServiceError(
-        "USER_ALREADY_IN_ROOM",
-        "Пользователь уже находится в комнате",
-      );
+      throw new RoomServiceError('USER_ALREADY_IN_ROOM', 'Пользователь уже находится в комнате');
     }
 
     const membersCount = await roomRepository.countMembers(room.id);
 
     if (membersCount >= room.maxPlayers) {
-      throw new RoomServiceError("ROOM_FULL", "Комната заполнена");
+      throw new RoomServiceError('ROOM_FULL', 'Комната заполнена');
     }
 
     await roomRepository.addMember(room.id, userId);
@@ -111,10 +99,7 @@ class RoomService {
     const updatedRoom = await roomRepository.findById(room.id);
 
     if (!updatedRoom) {
-      throw new RoomServiceError(
-        "ROOM_NOT_FOUND",
-        "Комната не найдена после присоединения",
-      );
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена после присоединения');
     }
 
     return updatedRoom;
@@ -137,16 +122,13 @@ class RoomService {
     const room = await roomRepository.findById(roomId);
 
     if (!room) {
-      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена');
     }
 
     const member = room.members.find((item) => item.userId === userId);
 
     if (!member) {
-      throw new RoomServiceError(
-        "NOT_ROOM_MEMBER",
-        "Пользователь не является участником комнаты",
-      );
+      throw new RoomServiceError('NOT_ROOM_MEMBER', 'Пользователь не является участником комнаты');
     }
 
     const otherMembers = room.members.filter((item) => item.userId !== userId);
@@ -167,7 +149,7 @@ class RoomService {
     // Игрок последний. Если комната завершена —
     // оставляем её как архив, чтобы не потерять
     // Game, GamePlayer и GameResult.
-    if (room.status === "FINISHED") {
+    if (room.status === 'FINISHED') {
       await roomRepository.removeMember(roomId, userId);
 
       return null;
@@ -183,33 +165,24 @@ class RoomService {
    * Меняет готовность участника комнаты.
    */
   async setReady(roomId: string, userId: string, isReady: boolean) {
-    if (typeof isReady !== "boolean") {
-      throw new RoomServiceError(
-        "INVALID_READY_STATE",
-        "Некорректное значение готовности",
-      );
+    if (typeof isReady !== 'boolean') {
+      throw new RoomServiceError('INVALID_READY_STATE', 'Некорректное значение готовности');
     }
 
     const room = await roomRepository.findById(roomId);
 
     if (!room) {
-      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена');
     }
 
-    if (room.status !== "WAITING") {
-      throw new RoomServiceError(
-        "ROOM_NOT_WAITING",
-        "Комната уже запущена или завершена",
-      );
+    if (room.status !== 'WAITING') {
+      throw new RoomServiceError('ROOM_NOT_WAITING', 'Комната уже запущена или завершена');
     }
 
     const member = room.members.find((item) => item.userId === userId);
 
     if (!member) {
-      throw new RoomServiceError(
-        "NOT_ROOM_MEMBER",
-        "Пользователь не является участником комнаты",
-      );
+      throw new RoomServiceError('NOT_ROOM_MEMBER', 'Пользователь не является участником комнаты');
     }
 
     await roomRepository.setMemberReady(roomId, userId, isReady);
@@ -217,10 +190,7 @@ class RoomService {
     const updatedRoom = await roomRepository.findById(roomId);
 
     if (!updatedRoom) {
-      throw new RoomServiceError(
-        "ROOM_NOT_FOUND",
-        "Комната не найдена после обновления",
-      );
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена после обновления');
     }
 
     return updatedRoom;
@@ -233,45 +203,36 @@ class RoomService {
     const room = await roomRepository.findById(roomId);
 
     if (!room) {
-      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена');
     }
 
-    if (room.status !== "WAITING") {
-      throw new RoomServiceError(
-        "ROOM_NOT_WAITING",
-        "Комната уже запущена или завершена",
-      );
+    if (room.status !== 'WAITING') {
+      throw new RoomServiceError('ROOM_NOT_WAITING', 'Комната уже запущена или завершена');
     }
 
     if (room.hostUserId !== hostId) {
-      throw new RoomServiceError(
-        "NOT_ROOM_HOST",
-        "Только хост может запустить игру",
-      );
+      throw new RoomServiceError('NOT_ROOM_HOST', 'Только хост может запустить игру');
     }
 
     if (room.members.length < MIN_PLAYERS) {
       throw new RoomServiceError(
-        "NOT_ENOUGH_PLAYERS",
-        `Для старта необходимо минимум ${MIN_PLAYERS} игрока`,
+        'NOT_ENOUGH_PLAYERS',
+        `Для старта необходимо минимум ${MIN_PLAYERS} игрока`
       );
     }
 
     const everyoneReady = room.members.every((member) => member.isReady);
 
     if (!everyoneReady) {
-      throw new RoomServiceError("PLAYERS_NOT_READY", "Не все игроки готовы");
+      throw new RoomServiceError('PLAYERS_NOT_READY', 'Не все игроки готовы');
     }
 
-    await roomRepository.updateStatus(roomId, "PLAYING");
+    await roomRepository.updateStatus(roomId, 'PLAYING');
 
     const updatedRoom = await roomRepository.findById(roomId);
 
     if (!updatedRoom) {
-      throw new RoomServiceError(
-        "ROOM_NOT_FOUND",
-        "Комната не найдена после обновления",
-      );
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена после обновления');
     }
 
     return updatedRoom;
@@ -297,7 +258,7 @@ class RoomService {
       status: room.status,
       maxPlayers: room.maxPlayers,
       membersCount: room.members.length,
-      hostNickname: room.host.profile?.nickname ?? "Игрок",
+      hostNickname: room.host.profile?.nickname ?? 'Игрок'
     };
   }
 
@@ -317,16 +278,13 @@ class RoomService {
     const room = await roomRepository.findById(roomId);
 
     if (!room) {
-      throw new RoomServiceError("ROOM_NOT_FOUND", "Комната не найдена");
+      throw new RoomServiceError('ROOM_NOT_FOUND', 'Комната не найдена');
     }
 
     const isMember = room.members.some((member) => member.userId === userId);
 
     if (!isMember) {
-      throw new RoomServiceError(
-        "NOT_ROOM_MEMBER",
-        "Пользователь не является участником комнаты",
-      );
+      throw new RoomServiceError('NOT_ROOM_MEMBER', 'Пользователь не является участником комнаты');
     }
 
     return room;
@@ -344,14 +302,10 @@ class RoomService {
    * Проверяет допустимое количество игроков.
    */
   private validateMaxPlayers(maxPlayers: number) {
-    if (
-      !Number.isInteger(maxPlayers) ||
-      maxPlayers < MIN_PLAYERS ||
-      maxPlayers > MAX_PLAYERS
-    ) {
+    if (!Number.isInteger(maxPlayers) || maxPlayers < MIN_PLAYERS || maxPlayers > MAX_PLAYERS) {
       throw new RoomServiceError(
-        "INVALID_MAX_PLAYERS",
-        `Количество игроков должно быть от ${MIN_PLAYERS} до ${MAX_PLAYERS}`,
+        'INVALID_MAX_PLAYERS',
+        `Количество игроков должно быть от ${MIN_PLAYERS} до ${MAX_PLAYERS}`
       );
     }
   }
@@ -360,7 +314,7 @@ class RoomService {
    * Генерирует случайный код комнаты.
    */
   private generateRoomCode() {
-    let code = "";
+    let code = '';
 
     for (let index = 0; index < ROOM_CODE_LENGTH; index += 1) {
       const characterIndex = randomInt(0, ROOM_CODE_ALPHABET.length);
@@ -389,8 +343,8 @@ class RoomService {
     }
 
     throw new RoomServiceError(
-      "ROOM_CODE_GENERATION_FAILED",
-      "Не удалось сгенерировать уникальный код комнаты",
+      'ROOM_CODE_GENERATION_FAILED',
+      'Не удалось сгенерировать уникальный код комнаты'
     );
   }
 }

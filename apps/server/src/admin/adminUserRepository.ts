@@ -1,4 +1,4 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 class AdminUserRepository {
   async findMany(params: { search?: string; limit: number; offset: number }) {
@@ -8,18 +8,18 @@ class AdminUserRepository {
             {
               email: {
                 contains: params.search,
-                mode: "insensitive" as const,
-              },
+                mode: 'insensitive' as const
+              }
             },
             {
               profile: {
                 nickname: {
                   contains: params.search,
-                  mode: "insensitive" as const,
-                },
-              },
-            },
-          ],
+                  mode: 'insensitive' as const
+                }
+              }
+            }
+          ]
         }
       : {};
 
@@ -27,15 +27,15 @@ class AdminUserRepository {
       database.user.findMany({
         where,
         include: {
-          profile: true,
+          profile: true
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc'
         },
         take: params.limit,
-        skip: params.offset,
+        skip: params.offset
       }),
-      database.user.count({ where }),
+      database.user.count({ where })
     ]);
 
     return {
@@ -51,24 +51,24 @@ class AdminUserRepository {
           ? {
               id: user.profile.id,
               nickname: user.profile.nickname,
-              avatar: user.profile.avatar,
+              avatar: user.profile.avatar
             }
-          : null,
-      })),
+          : null
+      }))
     };
   }
 
   async setBlocked(userId: string, isBlocked: boolean) {
     return database.user.update({
       where: { id: userId },
-      data: { isBlocked },
+      data: { isBlocked }
     });
   }
 
-  async setRole(userId: string, role: "USER" | "ADMIN") {
+  async setRole(userId: string, role: 'USER' | 'ADMIN') {
     return database.user.update({
       where: { id: userId },
-      data: { role },
+      data: { role }
     });
   }
 }

@@ -1,12 +1,7 @@
-import type {
-  Character,
-  EventCard,
-  Player,
-  PlayerCharacter,
-} from "@soul/shared";
-import { GAME_RULES } from "@soul/shared";
+import type { Character, EventCard, Player, PlayerCharacter } from '@soul/shared';
+import { GAME_RULES } from '@soul/shared';
 
-import { changeSoul } from "../rules/changeSoul.js";
+import { changeSoul } from '../rules/changeSoul.js';
 
 export type CharacterAbilityResult = {
   soul: number;
@@ -37,7 +32,7 @@ export function resolveCharacterAbilities({
   risk,
   riskWon,
   baseSuccess,
-  cardCount,
+  cardCount
 }: ResolveCharacterAbilitiesParams): CharacterAbilityResult {
   let soul = currentSoul;
   let cancelFailure = false;
@@ -52,8 +47,8 @@ export function resolveCharacterAbilities({
     }
 
     switch (character.ability.id) {
-      case "cold-blooded": {
-        if (!success && event.mainStat === "tuller" && !card.abilityUsed) {
+      case 'cold-blooded': {
+        if (!success && event.mainStat === 'tuller' && !card.abilityUsed) {
           soul = player.soul;
 
           abilityUsedCardIds.push(card.cardId);
@@ -62,23 +57,23 @@ export function resolveCharacterAbilities({
         break;
       }
 
-      case "profitable-deal": {
-        if (success && event.mainStat === "perekup") {
+      case 'profitable-deal': {
+        if (success && event.mainStat === 'perekup') {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
       }
 
-      case "work-to-exhaustion": {
-        if (success && event.mainStat === "farmila") {
+      case 'work-to-exhaustion': {
+        if (success && event.mainStat === 'farmila') {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
       }
 
-      case "precise-shot": {
+      case 'precise-shot': {
         if (risk && riskWon === true) {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
@@ -86,15 +81,15 @@ export function resolveCharacterAbilities({
         break;
       }
 
-      case "agility": {
-        if (!success && event.mainStat === "farmila") {
+      case 'agility': {
+        if (!success && event.mainStat === 'farmila') {
           cancelFailure = true;
         }
 
         break;
       }
 
-      case "lone-wolf": {
+      case 'lone-wolf': {
         if (success && cardCount === 1) {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
@@ -102,7 +97,7 @@ export function resolveCharacterAbilities({
         break;
       }
 
-      case "connections": {
+      case 'connections': {
         if (success && cardCount === 2) {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
@@ -110,15 +105,15 @@ export function resolveCharacterAbilities({
         break;
       }
 
-      case "first-aid": {
-        if (success && event.mainStat === "tuller") {
+      case 'first-aid': {
+        if (success && event.mainStat === 'tuller') {
           soul = changeSoul(soul, GAME_RULES.ABILITY_BONUS);
         }
 
         break;
       }
 
-      case "hunch": {
+      case 'hunch': {
         if (!success && risk && baseSuccess && !card.abilityUsed) {
           cancelFailure = true;
 
@@ -135,6 +130,6 @@ export function resolveCharacterAbilities({
   return {
     soul,
     abilityUsedCardIds,
-    cancelFailure,
+    cancelFailure
   };
 }

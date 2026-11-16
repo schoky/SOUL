@@ -1,5 +1,3 @@
-import { create } from "zustand";
-
 import type {
   FriendDto,
   FriendRemovedPayload,
@@ -12,20 +10,15 @@ import type {
   RoomInvitationDeclinedPayload,
   RoomInvitationDto,
   RoomInvitationReceivedPayload,
-  UnreadCountDto,
-} from "@soul/shared";
-import { SOCKET_EVENTS } from "@soul/shared";
+  UnreadCountDto
+} from '@soul/shared';
+import { SOCKET_EVENTS } from '@soul/shared';
+import { create } from 'zustand';
 
-import { socket } from "../services/socket";
-
-import { getFriendRequests, getFriends } from "../services/api/friends";
-
-import { getMyInvitations } from "../services/api/invitations";
-
-import {
-  getUnreadCount,
-  markNotificationsAsRead,
-} from "../services/api/notifications";
+import { getFriendRequests, getFriends } from '../services/api/friends';
+import { getMyInvitations } from '../services/api/invitations';
+import { getUnreadCount, markNotificationsAsRead } from '../services/api/notifications';
+import { socket } from '../services/socket';
 
 type FriendsState = {
   friends: FriendDto[];
@@ -51,7 +44,7 @@ type FriendsState = {
 const EMPTY_UNREAD: UnreadCountDto = {
   friendRequests: 0,
   invitations: 0,
-  total: 0,
+  total: 0
 };
 
 export const useFriendsStore = create<FriendsState>((set) => ({
@@ -81,26 +74,26 @@ export const useFriendsStore = create<FriendsState>((set) => ({
           getFriends(),
           getFriendRequests(),
           getMyInvitations(),
-          getUnreadCount(),
+          getUnreadCount()
         ]);
 
       set((state) => {
         const next: Partial<FriendsState> = { hasLoaded: true };
 
-        if (friendsResult.status === "fulfilled") {
+        if (friendsResult.status === 'fulfilled') {
           next.friends = friendsResult.value;
         }
 
-        if (requestsResult.status === "fulfilled") {
+        if (requestsResult.status === 'fulfilled') {
           next.incoming = requestsResult.value.incoming;
           next.outgoing = requestsResult.value.outgoing;
         }
 
-        if (invitationsResult.status === "fulfilled") {
+        if (invitationsResult.status === 'fulfilled') {
           next.invitations = invitationsResult.value;
         }
 
-        if (unreadResult.status === "fulfilled") {
+        if (unreadResult.status === 'fulfilled') {
           next.unread = unreadResult.value;
         } else {
           // Если счётчик не подтянулся — считаем локально
@@ -115,7 +108,7 @@ export const useFriendsStore = create<FriendsState>((set) => ({
           next.unread = {
             friendRequests,
             invitations: invitationsUnread,
-            total: friendRequests + invitationsUnread,
+            total: friendRequests + invitationsUnread
           };
         }
 
@@ -133,7 +126,7 @@ export const useFriendsStore = create<FriendsState>((set) => ({
       outgoing: [],
       invitations: [],
       unread: EMPTY_UNREAD,
-      hasLoaded: false,
+      hasLoaded: false
     });
   },
 
@@ -143,7 +136,7 @@ export const useFriendsStore = create<FriendsState>((set) => ({
     set((state) => ({
       unread: EMPTY_UNREAD,
       incoming: state.incoming.map((r) => ({ ...r, isRead: true })),
-      invitations: state.invitations.map((i) => ({ ...i, isRead: true })),
+      invitations: state.invitations.map((i) => ({ ...i, isRead: true }))
     }));
   },
 
@@ -162,9 +155,9 @@ export const useFriendsStore = create<FriendsState>((set) => ({
             ? {
                 ...state.unread,
                 friendRequests: state.unread.friendRequests + 1,
-                total: state.unread.total + 1,
+                total: state.unread.total + 1
               }
-            : state.unread,
+            : state.unread
         };
       });
     }
@@ -173,26 +166,22 @@ export const useFriendsStore = create<FriendsState>((set) => ({
       set((state) => ({
         friends: [
           payload.friend,
-          ...state.friends.filter((f) => f.userId !== payload.friend.userId),
+          ...state.friends.filter((f) => f.userId !== payload.friend.userId)
         ],
-        incoming: state.incoming.filter(
-          (r) => r.from.userId !== payload.friend.userId,
-        ),
-        outgoing: state.outgoing.filter(
-          (r) => r.to.userId !== payload.friend.userId,
-        ),
+        incoming: state.incoming.filter((r) => r.from.userId !== payload.friend.userId),
+        outgoing: state.outgoing.filter((r) => r.to.userId !== payload.friend.userId)
       }));
     }
 
     function onFriendRequestDeclined(payload: FriendRequestDeclinedPayload) {
       set((state) => ({
-        outgoing: state.outgoing.filter((r) => r.id !== payload.requestId),
+        outgoing: state.outgoing.filter((r) => r.id !== payload.requestId)
       }));
     }
 
     function onFriendRemoved(payload: FriendRemovedPayload) {
       set((state) => ({
-        friends: state.friends.filter((f) => f.userId !== payload.userId),
+        friends: state.friends.filter((f) => f.userId !== payload.userId)
       }));
     }
 
@@ -210,26 +199,22 @@ export const useFriendsStore = create<FriendsState>((set) => ({
             ? {
                 ...state.unread,
                 invitations: state.unread.invitations + 1,
-                total: state.unread.total + 1,
+                total: state.unread.total + 1
               }
-            : state.unread,
+            : state.unread
         };
       });
     }
 
     function onRoomInvitationAccepted(payload: RoomInvitationAcceptedPayload) {
       set((state) => ({
-        invitations: state.invitations.filter(
-          (i) => i.id !== payload.invitationId,
-        ),
+        invitations: state.invitations.filter((i) => i.id !== payload.invitationId)
       }));
     }
 
     function onRoomInvitationDeclined(payload: RoomInvitationDeclinedPayload) {
       set((state) => ({
-        invitations: state.invitations.filter(
-          (i) => i.id !== payload.invitationId,
-        ),
+        invitations: state.invitations.filter((i) => i.id !== payload.invitationId)
       }));
     }
 
@@ -248,37 +233,19 @@ export const useFriendsStore = create<FriendsState>((set) => ({
     socket.on(SOCKET_EVENTS.ROOM_INVITATION_DECLINED, onRoomInvitationDeclined);
 
     return () => {
-      socket.off(
-        SOCKET_EVENTS.FRIEND_REQUEST_RECEIVED,
-        onFriendRequestReceived,
-      );
+      socket.off(SOCKET_EVENTS.FRIEND_REQUEST_RECEIVED, onFriendRequestReceived);
 
-      socket.off(
-        SOCKET_EVENTS.FRIEND_REQUEST_ACCEPTED,
-        onFriendRequestAccepted,
-      );
+      socket.off(SOCKET_EVENTS.FRIEND_REQUEST_ACCEPTED, onFriendRequestAccepted);
 
-      socket.off(
-        SOCKET_EVENTS.FRIEND_REQUEST_DECLINED,
-        onFriendRequestDeclined,
-      );
+      socket.off(SOCKET_EVENTS.FRIEND_REQUEST_DECLINED, onFriendRequestDeclined);
 
       socket.off(SOCKET_EVENTS.FRIEND_REMOVED, onFriendRemoved);
 
-      socket.off(
-        SOCKET_EVENTS.ROOM_INVITATION_RECEIVED,
-        onRoomInvitationReceived,
-      );
+      socket.off(SOCKET_EVENTS.ROOM_INVITATION_RECEIVED, onRoomInvitationReceived);
 
-      socket.off(
-        SOCKET_EVENTS.ROOM_INVITATION_ACCEPTED,
-        onRoomInvitationAccepted,
-      );
+      socket.off(SOCKET_EVENTS.ROOM_INVITATION_ACCEPTED, onRoomInvitationAccepted);
 
-      socket.off(
-        SOCKET_EVENTS.ROOM_INVITATION_DECLINED,
-        onRoomInvitationDeclined,
-      );
+      socket.off(SOCKET_EVENTS.ROOM_INVITATION_DECLINED, onRoomInvitationDeclined);
     };
-  },
+  }
 }));

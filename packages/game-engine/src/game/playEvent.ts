@@ -1,8 +1,8 @@
-import { GAME_RULES, type GameState } from "@soul/shared";
+import { GAME_RULES, type GameState } from '@soul/shared';
 
-import { resolveEvent } from "../events/resolveEvent.js";
-import { exhaustCharacters } from "../players/exhaustCharacters.js";
-import { startFinalRound } from "./startFinalRound.js";
+import { resolveEvent } from '../events/resolveEvent.js';
+import { exhaustCharacters } from '../players/exhaustCharacters.js';
+import { startFinalRound } from './startFinalRound.js';
 
 export type PlayEventResult = {
   game: GameState;
@@ -15,23 +15,21 @@ export function playEvent(
   game: GameState,
   characterCardIds: string[],
   risk = false,
-  random: () => number = Math.random,
+  random: () => number = Math.random
 ): PlayEventResult {
-  if (game.status !== "playing") {
-    throw new Error("Cannot play event: game is not playing");
+  if (game.status !== 'playing') {
+    throw new Error('Cannot play event: game is not playing');
   }
 
   if (!game.currentPlayerId) {
-    throw new Error("Cannot play event: current player is not set");
+    throw new Error('Cannot play event: current player is not set');
   }
 
   if (!game.currentEvent) {
-    throw new Error("Cannot play event: current event is not set");
+    throw new Error('Cannot play event: current event is not set');
   }
 
-  const playerIndex = game.players.findIndex(
-    (player) => player.id === game.currentPlayerId,
-  );
+  const playerIndex = game.players.findIndex((player) => player.id === game.currentPlayerId);
 
   if (playerIndex === -1) {
     throw new Error(`Current player "${game.currentPlayerId}" not found`);
@@ -45,7 +43,7 @@ export function playEvent(
     game.currentEvent,
     game.characters,
     risk,
-    random,
+    random
   );
 
   const abilityUpdatedPlayer = {
@@ -62,9 +60,9 @@ export function playEvent(
 
       return {
         ...character,
-        abilityUsed: true,
+        abilityUsed: true
       };
-    }),
+    })
   };
 
   let updatedPlayer = exhaustCharacters(abilityUpdatedPlayer, characterCardIds);
@@ -75,19 +73,15 @@ export function playEvent(
 
   if (characterCardIds.length === 2) {
     for (const cardId of characterCardIds) {
-      const card = updatedPlayer.characters.find(
-        (character) => character.cardId === cardId,
-      );
+      const card = updatedPlayer.characters.find((character) => character.cardId === cardId);
 
       if (!card) {
         continue;
       }
 
-      const character = game.characters.find(
-        (item) => item.id === card.characterId,
-      );
+      const character = game.characters.find((item) => item.id === card.characterId);
 
-      if (character?.ability?.id === "resilience") {
+      if (character?.ability?.id === 'resilience') {
         resilientCardIds.push(cardId);
       }
     }
@@ -99,8 +93,8 @@ export function playEvent(
     updatedPlayer = {
       ...updatedPlayer,
       characters: updatedPlayer.characters.map((card) =>
-        resilientSet.has(card.cardId) ? { ...card, exhausted: false } : card,
-      ),
+        resilientSet.has(card.cardId) ? { ...card, exhausted: false } : card
+      )
     };
   }
 
@@ -110,13 +104,10 @@ export function playEvent(
 
   let updatedGame: GameState = {
     ...game,
-    players: updatedPlayers,
+    players: updatedPlayers
   };
 
-  if (
-    !updatedGame.finalRoundStartedBy &&
-    updatedPlayer.soul >= GAME_RULES.WINNING_SOUL
-  ) {
+  if (!updatedGame.finalRoundStartedBy && updatedPlayer.soul >= GAME_RULES.WINNING_SOUL) {
     updatedGame = startFinalRound(updatedGame, updatedPlayer.id);
   }
 
@@ -124,6 +115,6 @@ export function playEvent(
     game: updatedGame,
     success: result.success,
     gambleWon: result.gambleWon,
-    riskWon: result.riskWon,
+    riskWon: result.riskWon
   };
 }

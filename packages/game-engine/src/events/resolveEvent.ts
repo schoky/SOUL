@@ -1,16 +1,16 @@
-import type { Character, EventCard, Player } from "@soul/shared";
+import type { Character, EventCard, Player } from '@soul/shared';
 
-import { resolveCharacterAbilities } from "../players/resolveCharacterAbilities.js";
-import { resolveCharacters } from "../players/resolveCharacters.js";
-import { checkRequirements } from "../rules/checkRequirements.js";
-import { changeSoul } from "../rules/changeSoul.js";
-import { resolveFailure } from "../rules/resolveFailure.js";
-import { resolveRisk } from "../rules/resolveRisk.js";
+import { resolveCharacterAbilities } from '../players/resolveCharacterAbilities.js';
+import { resolveCharacters } from '../players/resolveCharacters.js';
+import { changeSoul } from '../rules/changeSoul.js';
+import { checkRequirements } from '../rules/checkRequirements.js';
+import { resolveFailure } from '../rules/resolveFailure.js';
+import { resolveRisk } from '../rules/resolveRisk.js';
 
 export type EventResult = {
   success: boolean;
   soul: number;
-  status: Player["status"];
+  status: Player['status'];
   skipNextTurn: boolean;
   gambleWon: boolean | null;
   riskWon: boolean | null;
@@ -23,13 +23,9 @@ export function resolveEvent(
   event: EventCard,
   characters: Character[],
   risk = false,
-  random: () => number = Math.random,
+  random: () => number = Math.random
 ): EventResult {
-  const resolvedCharacters = resolveCharacters(
-    player,
-    characterCardIds,
-    characters,
-  );
+  const resolvedCharacters = resolveCharacters(player, characterCardIds, characters);
 
   const baseSuccess = checkRequirements(resolvedCharacters.stats, event);
 
@@ -53,7 +49,7 @@ export function resolveEvent(
         risk: false,
         riskWon: null,
         baseSuccess,
-        cardCount,
+        cardCount
       });
 
       const cancelled = abilityResult.cancelFailure;
@@ -65,7 +61,7 @@ export function resolveEvent(
         skipNextTurn: cancelled ? false : failure.skipNextTurn,
         gambleWon: cancelled ? null : failure.gambleWon,
         riskWon: null,
-        abilityUsedCardIds: abilityResult.abilityUsedCardIds,
+        abilityUsedCardIds: abilityResult.abilityUsedCardIds
       };
     }
 
@@ -81,7 +77,7 @@ export function resolveEvent(
       risk: false,
       riskWon: null,
       baseSuccess,
-      cardCount,
+      cardCount
     });
 
     return {
@@ -91,7 +87,7 @@ export function resolveEvent(
       skipNextTurn: false,
       gambleWon: null,
       riskWon: null,
-      abilityUsedCardIds: abilityResult.abilityUsedCardIds,
+      abilityUsedCardIds: abilityResult.abilityUsedCardIds
     };
   }
 
@@ -114,7 +110,7 @@ export function resolveEvent(
       risk: true,
       riskWon: true,
       baseSuccess,
-      cardCount,
+      cardCount
     });
 
     return {
@@ -124,7 +120,7 @@ export function resolveEvent(
       skipNextTurn: false,
       gambleWon: null,
       riskWon: true,
-      abilityUsedCardIds: abilityResult.abilityUsedCardIds,
+      abilityUsedCardIds: abilityResult.abilityUsedCardIds
     };
   }
 
@@ -140,7 +136,7 @@ export function resolveEvent(
     risk: true,
     riskWon: false,
     baseSuccess,
-    cardCount,
+    cardCount
   });
 
   const cancelled = abilityResult.cancelFailure;
@@ -152,6 +148,6 @@ export function resolveEvent(
     skipNextTurn: cancelled ? false : failure.skipNextTurn,
     gambleWon: cancelled ? null : failure.gambleWon,
     riskWon: false,
-    abilityUsedCardIds: abilityResult.abilityUsedCardIds,
+    abilityUsedCardIds: abilityResult.abilityUsedCardIds
   };
 }

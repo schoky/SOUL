@@ -1,7 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
-
-import { useNavigate, useParams } from "react-router-dom";
-
 import {
   type Character,
   GAME_RULES,
@@ -17,36 +13,29 @@ import {
   RISK_CHANCES,
   SOCKET_EVENTS,
   type SocketErrorPayload,
-  type StatType,
-} from "@soul/shared";
+  type StatType
+} from '@soul/shared';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import AbilityModal from "../../components/game/AbilityModal";
-import CardImage from "../../components/game/CardImage";
-import GameResult from "../../components/game/GameResult";
-
-import MainLayout from "../../components/layout/MainLayout";
-
-import Tooltip from "../../components/ui/Tooltip";
-
-import { socket } from "../../services/socket";
-
-import { useYourTurnNotification } from "../../hooks/useYourTurnNotification";
-
-import { playSound, playYourTurnSound } from "../../utils/sounds";
-
-import { useAuthStore } from "../../stores/authStore";
-import { useGameStore } from "../../stores/gameStore";
-import { useToastStore } from "../../stores/toastStore";
+import AbilityModal from '../../components/game/AbilityModal';
+import CardImage from '../../components/game/CardImage';
+import GameResult from '../../components/game/GameResult';
+import MainLayout from '../../components/layout/MainLayout';
+import Tooltip from '../../components/ui/Tooltip';
+import { useYourTurnNotification } from '../../hooks/useYourTurnNotification';
+import { socket } from '../../services/socket';
+import { useAuthStore } from '../../stores/authStore';
+import { useGameStore } from '../../stores/gameStore';
+import { useToastStore } from '../../stores/toastStore';
+import { playSound, playYourTurnSound } from '../../utils/sounds';
 
 // Не хардкодим — берём из общих правил игры.
 const MAX_CARDS_PER_ACTION = GAME_RULES.CHARACTERS_PER_PLAYER;
 const WINNING_SOUL = GAME_RULES.WINNING_SOUL;
 const RISK_FAILURE_PERCENT = Math.round(RISK_CHANCES.FAILURE * 100);
 
-function findCharacter(
-  characters: Character[],
-  characterId: string,
-): Character | undefined {
+function findCharacter(characters: Character[], characterId: string): Character | undefined {
   return characters.find((item) => item.id === characterId);
 }
 
@@ -56,7 +45,7 @@ function checkRequirements(
     farmila: number;
     perekup: number;
     tuller: number;
-  },
+  }
 ): boolean {
   return (
     stats.farmila >= requirements.farmila &&
@@ -88,13 +77,9 @@ function GamePage() {
 
   const clearHistory = useGameStore((state) => state.clearHistory);
 
-  const setPlayerConnection = useGameStore(
-    (state) => state.setPlayerConnection,
-  );
+  const setPlayerConnection = useGameStore((state) => state.setPlayerConnection);
 
-  const setPlayersConnection = useGameStore(
-    (state) => state.setPlayersConnection,
-  );
+  const setPlayersConnection = useGameStore((state) => state.setPlayersConnection);
 
   const pushToast = useToastStore((state) => state.push);
 
@@ -102,22 +87,18 @@ function GamePage() {
 
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const [finalRoundStartTurn, setFinalRoundStartTurn] = useState<number | null>(
-    null,
-  );
+  const [finalRoundStartTurn, setFinalRoundStartTurn] = useState<number | null>(null);
 
   const [isAbilityModalOpen, setIsAbilityModalOpen] = useState(false);
 
-  const [highlightedCharacterId, setHighlightedCharacterId] = useState<
-    string | null
-  >(null);
+  const [highlightedCharacterId, setHighlightedCharacterId] = useState<string | null>(null);
 
   const [isConfirmingSkip, setIsConfirmingSkip] = useState(false);
 
   useEffect(() => {
     if (!roomId) {
-      navigate("/lobby", {
-        replace: true,
+      navigate('/lobby', {
+        replace: true
       });
 
       return;
@@ -125,7 +106,7 @@ function GamePage() {
 
     const handleConnect = () => {
       socket.emit(SOCKET_EVENTS.ROOM_SUBSCRIBE, {
-        roomId,
+        roomId
       });
     };
 
@@ -150,13 +131,13 @@ function GamePage() {
     const handleSocketError = (payload: SocketErrorPayload) => {
       setActionError(payload.message);
 
-      pushToast("error", payload.message);
+      pushToast('error', payload.message);
     };
 
     const handleEventResolved = (payload: GameEventResolvedPayload) => {
       const isSelf = payload.playerId === user?.id;
 
-      const prefix = isSelf ? "Ты" : payload.playerName;
+      const prefix = isSelf ? 'Ты' : payload.playerName;
 
       const soulDelta = payload.soulAfter - payload.soulBefore;
 
@@ -165,15 +146,15 @@ function GamePage() {
           ? `+${soulDelta} Soul`
           : soulDelta < 0
             ? `${soulDelta} Soul`
-            : "без изменений Soul";
+            : 'без изменений Soul';
 
       // Звук играем только для себя — иначе будет
       // какофония, когда все ходят по кругу.
       if (isSelf) {
         if (!payload.risk) {
-          playSound(payload.success ? "success" : "fail");
+          playSound(payload.success ? 'success' : 'fail');
         } else {
-          playSound(payload.riskWon ? "risk-win" : "risk-lose");
+          playSound(payload.riskWon ? 'risk-win' : 'risk-lose');
         }
       }
 
@@ -183,29 +164,29 @@ function GamePage() {
         turnNumber: currentGameState?.turnNumber ?? 0,
         playerId: payload.playerId,
         playerName: payload.playerName,
-        eventName: currentGameState?.currentEvent?.name ?? "Событие",
+        eventName: currentGameState?.currentEvent?.name ?? 'Событие',
         success: payload.success,
         risk: payload.risk,
         riskWon: payload.riskWon,
-        soulDelta,
+        soulDelta
       });
 
       if (!payload.risk) {
         if (payload.success) {
-          pushToast("success", `${prefix}: успех! ${soulText}`);
+          pushToast('success', `${prefix}: успех! ${soulText}`);
         } else {
-          pushToast("error", `${prefix}: провал. ${soulText}`);
+          pushToast('error', `${prefix}: провал. ${soulText}`);
         }
 
         return;
       }
 
       if (payload.riskWon) {
-        pushToast("success", `${prefix}: риск сработал! ${soulText}`);
+        pushToast('success', `${prefix}: риск сработал! ${soulText}`);
         return;
       }
 
-      pushToast("error", `${prefix}: риск не сработал. ${soulText}`);
+      pushToast('error', `${prefix}: риск не сработал. ${soulText}`);
     };
 
     const handlePlayerConnection = (payload: PlayerConnectionPayload) => {
@@ -220,7 +201,7 @@ function GamePage() {
       handleConnect();
     }
 
-    socket.on("connect", handleConnect);
+    socket.on('connect', handleConnect);
     socket.on(SOCKET_EVENTS.GAME_STATE, handleGameState);
     socket.on(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
     socket.on(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
@@ -230,7 +211,7 @@ function GamePage() {
     socket.on(SOCKET_EVENTS.ERROR, handleSocketError);
 
     return () => {
-      socket.off("connect", handleConnect);
+      socket.off('connect', handleConnect);
       socket.off(SOCKET_EVENTS.GAME_STATE, handleGameState);
       socket.off(SOCKET_EVENTS.GAME_STARTED, handleGameStarted);
       socket.off(SOCKET_EVENTS.GAME_STATE_UPDATED, handleGameStateUpdated);
@@ -248,7 +229,7 @@ function GamePage() {
     clearHistory,
     setPlayerConnection,
     setPlayersConnection,
-    user?.id,
+    user?.id
   ]);
 
   useEffect(() => {
@@ -272,8 +253,8 @@ function GamePage() {
 
   // Звук завершения игры — один раз при переходе в finished.
   useEffect(() => {
-    if (gameState?.status === "finished") {
-      playSound("game-over");
+    if (gameState?.status === 'finished') {
+      playSound('game-over');
     }
   }, [gameState?.status]);
 
@@ -285,11 +266,10 @@ function GamePage() {
     return gameState.players.find((player) => player.id === user.id);
   }, [gameState, user]);
 
-  const isMyTurn =
-    !!gameState && !!user && gameState.currentPlayerId === user.id;
+  const isMyTurn = !!gameState && !!user && gameState.currentPlayerId === user.id;
 
   const currentPlayer = gameState?.players.find(
-    (player) => player.id === gameState.currentPlayerId,
+    (player) => player.id === gameState.currentPlayerId
   );
 
   const selectedCharacters = useMemo(() => {
@@ -301,7 +281,7 @@ function GamePage() {
       .filter((card) => selectedCardIds.includes(card.cardId))
       .map((card) => ({
         card,
-        character: findCharacter(characters, card.characterId),
+        character: findCharacter(characters, card.characterId)
       }));
   }, [self, selectedCardIds, characters]);
 
@@ -309,7 +289,7 @@ function GamePage() {
     const result: Record<StatType, number> = {
       farmila: 0,
       perekup: 0,
-      tuller: 0,
+      tuller: 0
     };
 
     for (const item of selectedCharacters) {
@@ -350,10 +330,7 @@ function GamePage() {
 
   // Пропуски хода: сколько уже сделано подряд и сколько осталось.
   const skipsUsed = self?.consecutiveSkips ?? 0;
-  const skipsRemaining = Math.max(
-    0,
-    GAME_RULES.MAX_CONSECUTIVE_SKIPS - skipsUsed,
-  );
+  const skipsRemaining = Math.max(0, GAME_RULES.MAX_CONSECUTIVE_SKIPS - skipsUsed);
   const canSkip = skipsRemaining > 0;
 
   const riskChance = canSatisfy ? RISK_CHANCES.SUCCESS : RISK_CHANCES.FAILURE;
@@ -366,8 +343,8 @@ function GamePage() {
     onYourTurn: () => {
       playYourTurnSound();
 
-      pushToast("info", "Твой ход");
-    },
+      pushToast('info', 'Твой ход');
+    }
   });
 
   function toggleCard(cardId: string) {
@@ -385,7 +362,7 @@ function GamePage() {
 
     setSelectedCardIds((previous) => {
       if (previous.includes(cardId)) {
-        playSound("card-deselect");
+        playSound('card-deselect');
         return previous.filter((id) => id !== cardId);
       }
 
@@ -393,7 +370,7 @@ function GamePage() {
         return previous;
       }
 
-      playSound("card-select");
+      playSound('card-select');
       return [...previous, cardId];
     });
   }
@@ -418,7 +395,7 @@ function GamePage() {
     const payload: GamePlayEventPayload = {
       roomId: gameState.id,
       characterCardIds: selectedCardIds,
-      risk,
+      risk
     };
 
     socket.emit(SOCKET_EVENTS.GAME_PLAY_EVENT, payload);
@@ -433,7 +410,7 @@ function GamePage() {
     setIsConfirmingSkip(false);
 
     const payload: GameEndTurnPayload = {
-      roomId: gameState.id,
+      roomId: gameState.id
     };
 
     socket.emit(SOCKET_EVENTS.GAME_END_TURN, payload);
@@ -442,20 +419,20 @@ function GamePage() {
   if (!gameState) {
     return (
       <MainLayout>
-        <main className="game-page">
-          <section className="game-page__empty">
-            <p className="game-page__eyebrow">ИГРА</p>
+        <main className='game-page'>
+          <section className='game-page__empty'>
+            <p className='game-page__eyebrow'>ИГРА</p>
 
-            <h1 className="game-page__title">Подключаемся...</h1>
+            <h1 className='game-page__title'>Подключаемся...</h1>
 
-            <p className="game-page__description">Загружаем состояние игры.</p>
+            <p className='game-page__description'>Загружаем состояние игры.</p>
           </section>
         </main>
       </MainLayout>
     );
   }
 
-  if (gameState.status === "finished") {
+  if (gameState.status === 'finished') {
     return (
       <MainLayout>
         <GameResult gameState={gameState} />
@@ -469,63 +446,50 @@ function GamePage() {
     ? {
         farmila: event.requirements.farmila,
         perekup: event.requirements.perekup,
-        tuller: event.requirements.tuller,
+        tuller: event.requirements.tuller
       }
     : null;
 
   const finalRoundInitiator = gameState.finalRoundStartedBy
-    ? gameState.players.find(
-        (player) => player.id === gameState.finalRoundStartedBy,
-      )
+    ? gameState.players.find((player) => player.id === gameState.finalRoundStartedBy)
     : null;
 
   const isFinalRound = finalRoundInitiator !== null;
 
-  const isSelfFinalRoundInitiator =
-    !!user && gameState.finalRoundStartedBy === user.id;
+  const isSelfFinalRoundInitiator = !!user && gameState.finalRoundStartedBy === user.id;
 
-  const maxSoul = gameState.players.reduce(
-    (acc, player) => Math.max(acc, player.soul),
-    0,
-  );
+  const maxSoul = gameState.players.reduce((acc, player) => Math.max(acc, player.soul), 0);
 
   const soulToFinal = Math.max(0, WINNING_SOUL - maxSoul);
 
-  const soulProgressPercent = Math.min(
-    100,
-    Math.round((maxSoul / WINNING_SOUL) * 100),
-  );
+  const soulProgressPercent = Math.min(100, Math.round((maxSoul / WINNING_SOUL) * 100));
 
   const finalRoundTurnsRemaining =
     isFinalRound && finalRoundStartTurn !== null
-      ? Math.max(
-          0,
-          gameState.players.length -
-            (gameState.turnNumber - finalRoundStartTurn),
-        )
+      ? Math.max(0, gameState.players.length - (gameState.turnNumber - finalRoundStartTurn))
       : null;
 
   return (
     <MainLayout>
-      <main className="game-page">
+      <main className='game-page'>
         {!isFinalRound && (
-          <section className="game-page__progress">
-            <div className="game-page__progress-header">
-              <span className="game-page__progress-label">До финала</span>
+          <section className='game-page__progress'>
+            <div className='game-page__progress-header'>
+              <span className='game-page__progress-label'>До финала</span>
 
-              <span className="game-page__progress-value">
-                {soulToFinal > 0 ? `${soulToFinal} Soul` : "готово"}
+              <span className='game-page__progress-value'>
+                {soulToFinal > 0 ? `${soulToFinal} Soul` : 'готово'}
               </span>
             </div>
 
-            <div className="game-page__progress-bar">
+            <div className='game-page__progress-bar'>
               <div
-                className="game-page__progress-fill"
+                className='game-page__progress-fill'
                 style={{ width: `${soulProgressPercent}%` }}
               />
             </div>
 
-            <p className="game-page__progress-hint">
+            <p className='game-page__progress-hint'>
               Лидер: {maxSoul} / {WINNING_SOUL} Soul
             </p>
           </section>
@@ -534,69 +498,64 @@ function GamePage() {
         {finalRoundInitiator && (
           <section
             className={[
-              "game-page__final-banner",
-              isSelfFinalRoundInitiator
-                ? "game-page__final-banner--initiator"
-                : "",
-              isMyTurn ? "game-page__final-banner--active" : "",
+              'game-page__final-banner',
+              isSelfFinalRoundInitiator ? 'game-page__final-banner--initiator' : '',
+              isMyTurn ? 'game-page__final-banner--active' : ''
             ]
               .filter(Boolean)
-              .join(" ")}
+              .join(' ')}
           >
-            <p className="game-page__final-banner-eyebrow">ФИНАЛЬНЫЙ РАУНД</p>
+            <p className='game-page__final-banner-eyebrow'>ФИНАЛЬНЫЙ РАУНД</p>
 
             {isSelfFinalRoundInitiator ? (
-              <h2 className="game-page__final-banner-title">
-                Ты запустил финальный раунд
-              </h2>
+              <h2 className='game-page__final-banner-title'>Ты запустил финальный раунд</h2>
             ) : (
-              <h2 className="game-page__final-banner-title">
-                {finalRoundInitiator.name} достиг {finalRoundInitiator.soul}{" "}
-                Soul
+              <h2 className='game-page__final-banner-title'>
+                {finalRoundInitiator.name} достиг {finalRoundInitiator.soul} Soul
               </h2>
             )}
 
-            <p className="game-page__final-banner-description">
+            <p className='game-page__final-banner-description'>
               {isSelfFinalRoundInitiator
-                ? "Остальные игроки делают по одному последнему ходу. Кто наберёт больше Soul — победит."
+                ? 'Остальные игроки делают по одному последнему ходу. Кто наберёт больше Soul — победит.'
                 : isMyTurn
-                  ? "У тебя последний ход. Постарайся набрать больше Soul, чем лидер."
-                  : "Все игроки доигрывают свои последние ходы. Победит тот, у кого больше Soul."}
+                  ? 'У тебя последний ход. Постарайся набрать больше Soul, чем лидер.'
+                  : 'Все игроки доигрывают свои последние ходы. Победит тот, у кого больше Soul.'}
             </p>
 
             {finalRoundTurnsRemaining !== null && (
-              <p className="game-page__final-banner-turns">
+              <p className='game-page__final-banner-turns'>
                 Осталось ходов: {finalRoundTurnsRemaining}
               </p>
             )}
           </section>
         )}
 
-        <section className="game-page__header">
+        <section className='game-page__header'>
           <div>
-            <p className="game-page__eyebrow">ИГРА</p>
+            <p className='game-page__eyebrow'>ИГРА</p>
 
-            <h1 className="game-page__title">Ход {gameState.turnNumber}</h1>
+            <h1 className='game-page__title'>Ход {gameState.turnNumber}</h1>
 
-            <p className="game-page__description">
-              Сейчас ходит: <strong>{currentPlayer?.name ?? "—"}</strong>
+            <p className='game-page__description'>
+              Сейчас ходит: <strong>{currentPlayer?.name ?? '—'}</strong>
             </p>
           </div>
 
-          <div className="game-page__meta">
+          <div className='game-page__meta'>
             <span>Статус</span>
 
             <strong>{gameState.status}</strong>
           </div>
         </section>
 
-        <section className="game-page__content">
-          <div className="game-page__event">
-            <p className="game-page__eyebrow">СОБЫТИЕ</p>
+        <section className='game-page__content'>
+          <div className='game-page__event'>
+            <p className='game-page__eyebrow'>СОБЫТИЕ</p>
 
             {event ? (
               <>
-                <div className="game-page__event-image">
+                <div className='game-page__event-image'>
                   <CardImage
                     src={event.image}
                     fallbackSrc={`/cards/events/${event.id}.webp`}
@@ -605,46 +564,44 @@ function GamePage() {
                   />
                 </div>
 
-                <h2 className="game-page__event-title">{event.name}</h2>
+                <h2 className='game-page__event-title'>{event.name}</h2>
 
-                <p className="game-page__event-description">
-                  {event.description}
-                </p>
+                <p className='game-page__event-description'>{event.description}</p>
 
-                <div className="game-page__requirements">
-                  <div className="game-page__requirement">
+                <div className='game-page__requirements'>
+                  <div className='game-page__requirement'>
                     <span>Фармила</span>
 
                     <strong>{event.requirements.farmila}</strong>
                   </div>
 
-                  <div className="game-page__requirement">
+                  <div className='game-page__requirement'>
                     <span>Перекуп</span>
 
                     <strong>{event.requirements.perekup}</strong>
                   </div>
 
-                  <div className="game-page__requirement">
+                  <div className='game-page__requirement'>
                     <span>Туллер</span>
 
                     <strong>{event.requirements.tuller}</strong>
                   </div>
                 </div>
 
-                <div className="game-page__event-main">
+                <div className='game-page__event-main'>
                   <span>Основная характеристика</span>
 
                   <strong>{event.mainStat}</strong>
                 </div>
 
-                <div className="game-page__rewards">
-                  <div className="game-page__reward">
+                <div className='game-page__rewards'>
+                  <div className='game-page__reward'>
                     <span>Награда</span>
 
                     <strong>+{event.reward} Soul</strong>
                   </div>
 
-                  <div className="game-page__reward">
+                  <div className='game-page__reward'>
                     <span>Риск</span>
 
                     <strong>+{event.riskReward} Soul</strong>
@@ -652,57 +609,56 @@ function GamePage() {
                 </div>
               </>
             ) : (
-              <p className="game-page__description">Событие не задано.</p>
+              <p className='game-page__description'>Событие не задано.</p>
             )}
           </div>
 
-          <aside className="game-page__players">
-            <p className="game-page__eyebrow">ИГРОКИ</p>
+          <aside className='game-page__players'>
+            <p className='game-page__eyebrow'>ИГРОКИ</p>
 
-            <div className="game-page__players-list">
+            <div className='game-page__players-list'>
               {gameState.players.map((player) => {
                 const isCurrent = player.id === gameState.currentPlayerId;
 
-                const isFinalInitiator =
-                  player.id === gameState.finalRoundStartedBy;
+                const isFinalInitiator = player.id === gameState.finalRoundStartedBy;
 
                 const isDisconnected = playersConnection[player.id] === false;
 
                 return (
                   <article
                     className={[
-                      "game-page__player",
-                      isCurrent ? "game-page__player--active" : "",
-                      isFinalInitiator ? "game-page__player--final" : "",
-                      isDisconnected ? "game-page__player--disconnected" : "",
+                      'game-page__player',
+                      isCurrent ? 'game-page__player--active' : '',
+                      isFinalInitiator ? 'game-page__player--final' : '',
+                      isDisconnected ? 'game-page__player--disconnected' : ''
                     ]
                       .filter(Boolean)
-                      .join(" ")}
+                      .join(' ')}
                     key={player.id}
                   >
-                    <div className="game-page__player-header">
+                    <div className='game-page__player-header'>
                       <strong>{player.name}</strong>
 
-                      <div className="game-page__player-tags">
+                      <div className='game-page__player-tags'>
                         {isFinalInitiator && (
-                          <span className="game-page__player-tag game-page__player-tag--final">
+                          <span className='game-page__player-tag game-page__player-tag--final'>
                             Финал
                           </span>
                         )}
 
                         {isDisconnected && (
-                          <span className="game-page__player-tag game-page__player-tag--offline">
+                          <span className='game-page__player-tag game-page__player-tag--offline'>
                             Отключён
                           </span>
                         )}
 
                         {isCurrent && !isDisconnected && (
-                          <span className="game-page__player-tag">Ходит</span>
+                          <span className='game-page__player-tag'>Ходит</span>
                         )}
                       </div>
                     </div>
 
-                    <div className="game-page__player-stats">
+                    <div className='game-page__player-stats'>
                       <div>
                         <span>Soul</span>
 
@@ -725,7 +681,7 @@ function GamePage() {
                     </div>
 
                     {isDisconnected && isCurrent && (
-                      <p className="game-page__player-offline-hint">
+                      <p className='game-page__player-offline-hint'>
                         Ход будет передан через 30 секунд.
                       </p>
                     )}
@@ -735,45 +691,42 @@ function GamePage() {
             </div>
 
             {history.length > 0 && (
-              <div className="game-page__history">
-                <p className="game-page__eyebrow">ИСТОРИЯ ХОДОВ</p>
+              <div className='game-page__history'>
+                <p className='game-page__eyebrow'>ИСТОРИЯ ХОДОВ</p>
 
-                <div className="game-page__history-list">
+                <div className='game-page__history-list'>
                   {history.map((entry, index) => {
                     const isRisk = entry.risk;
 
                     const resultLabel = !isRisk
                       ? entry.success
-                        ? "успех"
-                        : "провал"
+                        ? 'успех'
+                        : 'провал'
                       : entry.riskWon
-                        ? "риск сработал"
-                        : "риск не сработал";
+                        ? 'риск сработал'
+                        : 'риск не сработал';
 
                     const soulText =
                       entry.soulDelta > 0
                         ? `+${entry.soulDelta}`
                         : entry.soulDelta < 0
                           ? `${entry.soulDelta}`
-                          : "0";
+                          : '0';
 
                     return (
                       <div
                         className={[
-                          "game-page__history-entry",
+                          'game-page__history-entry',
                           entry.success
-                            ? "game-page__history-entry--success"
-                            : "game-page__history-entry--failure",
-                        ].join(" ")}
+                            ? 'game-page__history-entry--success'
+                            : 'game-page__history-entry--failure'
+                        ].join(' ')}
                         key={`${entry.turnNumber}-${index}`}
                       >
-                        <span className="game-page__history-turn">
-                          Ход {entry.turnNumber}
-                        </span>
+                        <span className='game-page__history-turn'>Ход {entry.turnNumber}</span>
 
-                        <span className="game-page__history-text">
-                          <strong>{entry.playerName}</strong>: {resultLabel} (
-                          {soulText})
+                        <span className='game-page__history-text'>
+                          <strong>{entry.playerName}</strong>: {resultLabel} ({soulText})
                         </span>
                       </div>
                     );
@@ -786,52 +739,42 @@ function GamePage() {
 
         {self && (
           <section
-            className={[
-              "game-page__hand",
-              isMyTurn ? "game-page__hand--active" : "",
-            ]
+            className={['game-page__hand', isMyTurn ? 'game-page__hand--active' : '']
               .filter(Boolean)
-              .join(" ")}
+              .join(' ')}
           >
-            {isMyTurn && (
-              <div className="game-page__your-turn-banner">Твой ход</div>
-            )}
+            {isMyTurn && <div className='game-page__your-turn-banner'>Твой ход</div>}
 
-            <div className="game-page__section-header">
+            <div className='game-page__section-header'>
               <div>
-                <p className="game-page__eyebrow">ТВОИ ПЕРСОНАЖИ</p>
+                <p className='game-page__eyebrow'>ТВОИ ПЕРСОНАЖИ</p>
 
-                <h2 className="game-page__section-title">
-                  {isMyTurn ? "Выбери персонажей" : "Ждём хода"}
+                <h2 className='game-page__section-title'>
+                  {isMyTurn ? 'Выбери персонажей' : 'Ждём хода'}
                 </h2>
               </div>
 
-              <div className="game-page__counter-wrap">
+              <div className='game-page__counter-wrap'>
                 <button
-                  className="game-page__ability-button"
-                  type="button"
+                  className='game-page__ability-button'
+                  type='button'
                   onClick={() => openAbilityModal(null)}
                 >
-                  <span className="game-page__ability-button-icon">?</span>
+                  <span className='game-page__ability-button-icon'>?</span>
 
-                  <span className="game-page__ability-button-label">
-                    Способности
-                  </span>
+                  <span className='game-page__ability-button-label'>Способности</span>
                 </button>
 
-                <span className="game-page__counter">
+                <span className='game-page__counter'>
                   Выбрано: {selectedCardIds.length} / {MAX_CARDS_PER_ACTION}
                 </span>
               </div>
             </div>
 
             <div
-              className={[
-                "game-page__cards",
-                !isMyTurn ? "game-page__cards--inactive" : "",
-              ]
+              className={['game-page__cards', !isMyTurn ? 'game-page__cards--inactive' : '']
                 .filter(Boolean)
-                .join(" ")}
+                .join(' ')}
               key={gameState.turnNumber}
             >
               {self.characters.map((card, index) => (
@@ -849,14 +792,13 @@ function GamePage() {
             </div>
 
             {selectedCardIds.length > 0 && (
-              <div className="game-page__selection">
-                <div className="game-page__selection-stats">
+              <div className='game-page__selection'>
+                <div className='game-page__selection-stats'>
                   <div
                     className={
-                      requirementByStat &&
-                      stats.farmila >= requirementByStat.farmila
-                        ? "game-page__selection-stat--met"
-                        : "game-page__selection-stat--unmet"
+                      requirementByStat && stats.farmila >= requirementByStat.farmila
+                        ? 'game-page__selection-stat--met'
+                        : 'game-page__selection-stat--unmet'
                     }
                   >
                     <span>Фармила</span>
@@ -866,10 +808,9 @@ function GamePage() {
 
                   <div
                     className={
-                      requirementByStat &&
-                      stats.perekup >= requirementByStat.perekup
-                        ? "game-page__selection-stat--met"
-                        : "game-page__selection-stat--unmet"
+                      requirementByStat && stats.perekup >= requirementByStat.perekup
+                        ? 'game-page__selection-stat--met'
+                        : 'game-page__selection-stat--unmet'
                     }
                   >
                     <span>Перекуп</span>
@@ -879,10 +820,9 @@ function GamePage() {
 
                   <div
                     className={
-                      requirementByStat &&
-                      stats.tuller >= requirementByStat.tuller
-                        ? "game-page__selection-stat--met"
-                        : "game-page__selection-stat--unmet"
+                      requirementByStat && stats.tuller >= requirementByStat.tuller
+                        ? 'game-page__selection-stat--met'
+                        : 'game-page__selection-stat--unmet'
                     }
                   >
                     <span>Туллер</span>
@@ -891,24 +831,18 @@ function GamePage() {
                   </div>
                 </div>
 
-                <div className="game-page__selection-actions">
+                <div className='game-page__selection-actions'>
                   <button
-                    className="
-                      game-page__button
-                      game-page__button--primary
-                    "
-                    type="button"
+                    className='game-page__button game-page__button--primary'
+                    type='button'
                     onClick={() => handlePlayEvent(false)}
                   >
                     Выполнить
                   </button>
 
                   <button
-                    className="
-                      game-page__button
-                      game-page__button--risk
-                    "
-                    type="button"
+                    className='game-page__button game-page__button--risk'
+                    type='button'
                     onClick={() => handlePlayEvent(true)}
                   >
                     Рискнуть ({riskPercent}%)
@@ -918,42 +852,33 @@ function GamePage() {
             )}
 
             {selectedCardIds.length > 0 && !canSatisfy && (
-              <p className="game-page__selection-hint">
-                Требования события не выполнены. Шанс риска{" "}
-                <strong>{RISK_FAILURE_PERCENT}%</strong>. Если риск не сыграет —
-                сработает провал по основной характеристике.
+              <p className='game-page__selection-hint'>
+                Требования события не выполнены. Шанс риска <strong>{RISK_FAILURE_PERCENT}%</strong>
+                . Если риск не сыграет — сработает провал по основной характеристике.
               </p>
             )}
 
-            {actionError && (
-              <p className="game-page__action-error">{actionError}</p>
-            )}
+            {actionError && <p className='game-page__action-error'>{actionError}</p>}
 
             {isMyTurn && (
-              <div className="game-page__turn-actions">
+              <div className='game-page__turn-actions'>
                 {!canSkip ? (
-                  <p className="game-page__skip-limit">
+                  <p className='game-page__skip-limit'>
                     Лимит пропусков исчерпан — придётся ходить
                   </p>
                 ) : isConfirmingSkip ? (
                   <>
                     <button
-                      className="
-                        game-page__button
-                        game-page__button--risk
-                      "
-                      type="button"
+                      className='game-page__button game-page__button--risk'
+                      type='button'
                       onClick={handleSkipTurn}
                     >
                       Пропустить (−{GAME_RULES.SKIP_PENALTY} Soul)
                     </button>
 
                     <button
-                      className="
-                        game-page__button
-                        game-page__button--secondary
-                      "
-                      type="button"
+                      className='game-page__button game-page__button--secondary'
+                      type='button'
                       onClick={() => setIsConfirmingSkip(false)}
                     >
                       Отмена
@@ -961,15 +886,11 @@ function GamePage() {
                   </>
                 ) : (
                   <button
-                    className="
-                      game-page__button
-                      game-page__button--secondary
-                    "
-                    type="button"
+                    className='game-page__button game-page__button--secondary'
+                    type='button'
                     onClick={() => setIsConfirmingSkip(true)}
                   >
-                    Пропустить ход ({skipsRemaining} из{" "}
-                    {GAME_RULES.MAX_CONSECUTIVE_SKIPS})
+                    Пропустить ход ({skipsRemaining} из {GAME_RULES.MAX_CONSECUTIVE_SKIPS})
                   </button>
                 )}
               </div>
@@ -981,11 +902,7 @@ function GamePage() {
       <AbilityModal
         isOpen={isAbilityModalOpen}
         onClose={closeAbilityModal}
-        title={
-          highlightedCharacterId
-            ? "Способность персонажа"
-            : "Способности твоих персонажей"
-        }
+        title={highlightedCharacterId ? 'Способность персонажа' : 'Способности твоих персонажей'}
         characters={selfAbilities}
         highlightId={highlightedCharacterId}
       />
@@ -1010,25 +927,25 @@ function CharacterCard({
   isSelectable,
   onToggle,
   onOpenAbility,
-  index,
+  index
 }: CharacterCardProps) {
   const disabled = !isSelectable || card.exhausted;
 
   return (
     <button
       className={[
-        "game-page__card",
-        isSelected ? "game-page__card--selected" : "",
-        card.exhausted ? "game-page__card--exhausted" : "",
+        'game-page__card',
+        isSelected ? 'game-page__card--selected' : '',
+        card.exhausted ? 'game-page__card--exhausted' : ''
       ]
         .filter(Boolean)
-        .join(" ")}
+        .join(' ')}
       style={{ animationDelay: `${index * 60}ms` }}
-      type="button"
+      type='button'
       disabled={disabled}
       onClick={onToggle}
     >
-      <div className="game-page__card-image">
+      <div className='game-page__card-image'>
         <CardImage
           src={character?.image}
           fallbackSrc={`/cards/characters/${card.characterId}.webp`}
@@ -1037,28 +954,22 @@ function CharacterCard({
         />
 
         {card.exhausted && (
-          <span className="game-page__card-overlay game-page__card-overlay--exhausted">
-            Устал
-          </span>
+          <span className='game-page__card-overlay game-page__card-overlay--exhausted'>Устал</span>
         )}
 
         {isSelected && (
-          <span className="game-page__card-overlay game-page__card-overlay--selected">
-            Выбран
-          </span>
+          <span className='game-page__card-overlay game-page__card-overlay--selected'>Выбран</span>
         )}
       </div>
 
-      <div className="game-page__card-header">
+      <div className='game-page__card-header'>
         <strong>{character?.name ?? card.characterId}</strong>
 
-        {card.abilityUsed && (
-          <span className="game-page__card-tag">Способность использована</span>
-        )}
+        {card.abilityUsed && <span className='game-page__card-tag'>Способность использована</span>}
       </div>
 
       {character && (
-        <div className="game-page__card-stats">
+        <div className='game-page__card-stats'>
           <div>
             <span>Фармила</span>
 
@@ -1080,26 +991,24 @@ function CharacterCard({
       )}
 
       {character?.ability && (
-        <div className="game-page__card-ability">
-          <div className="game-page__card-ability-header">
-            <span className="game-page__card-ability-name">
-              {character.ability.name}
-            </span>
+        <div className='game-page__card-ability'>
+          <div className='game-page__card-ability-header'>
+            <span className='game-page__card-ability-name'>{character.ability.name}</span>
 
             {onOpenAbility && (
-              <Tooltip content="Подробнее о способности">
+              <Tooltip content='Подробнее о способности'>
                 <span
-                  className="game-page__card-ability-help"
-                  role="button"
+                  className='game-page__card-ability-help'
+                  role='button'
                   tabIndex={0}
-                  aria-label="Подробнее о способности"
+                  aria-label='Подробнее о способности'
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
                     onOpenAbility(character.id);
                   }}
                   onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
+                    if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
                       event.stopPropagation();
                       onOpenAbility(character.id);

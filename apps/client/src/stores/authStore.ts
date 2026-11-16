@@ -1,17 +1,12 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 import {
   getCurrentUser,
   login as apiLogin,
   logout as apiLogout,
-  register as apiRegister,
-} from "../services/api/auth";
-
-import type {
-  CurrentUser,
-  LoginInput,
-  RegisterInput,
-} from "../services/api/auth";
+  register as apiRegister
+} from '../services/api/auth';
+import type { CurrentUser, LoginInput, RegisterInput } from '../services/api/auth';
 
 type AuthState = {
   user: CurrentUser | null;
@@ -48,16 +43,16 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       set({
         user,
-        isAuthenticated: true,
+        isAuthenticated: true
       });
     } catch {
       set({
         user: null,
-        isAuthenticated: false,
+        isAuthenticated: false
       });
     } finally {
       set({
-        isLoading: false,
+        isLoading: false
       });
     }
   },
@@ -67,7 +62,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({
       user,
-      isAuthenticated: true,
+      isAuthenticated: true
     });
   },
 
@@ -76,7 +71,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({
       user,
-      isAuthenticated: true,
+      isAuthenticated: true
     });
   },
 
@@ -85,14 +80,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({
       user: null,
-      isAuthenticated: false,
+      isAuthenticated: false
     });
   },
 
   setUser: (user) => {
     set({
       user,
-      isAuthenticated: true,
+      isAuthenticated: true
     });
-  },
+  }
 }));

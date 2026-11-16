@@ -1,4 +1,4 @@
-import type { GameResultPlayerDto } from "./game-result.js";
+import type { GameResultPlayerDto } from './game-result.js';
 
 export type GameHistoryItemDto = {
   gameId: string;

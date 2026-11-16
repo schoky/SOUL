@@ -1,4 +1,4 @@
-import { database } from "@soul/database";
+import { database } from '@soul/database';
 
 type CreateRoomData = {
   code: string;
@@ -6,7 +6,7 @@ type CreateRoomData = {
   maxPlayers: number;
 };
 
-type RoomStatusValue = "WAITING" | "PLAYING" | "FINISHED";
+type RoomStatusValue = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 class RoomRepository {
   /**
@@ -15,7 +15,7 @@ class RoomRepository {
   async findById(id: string) {
     return database.room.findUnique({
       where: {
-        id,
+        id
       },
 
       include: {
@@ -27,10 +27,10 @@ class RoomRepository {
               select: {
                 id: true,
                 nickname: true,
-                avatar: true,
-              },
-            },
-          },
+                avatar: true
+              }
+            }
+          }
         },
 
         members: {
@@ -48,18 +48,18 @@ class RoomRepository {
                   select: {
                     id: true,
                     nickname: true,
-                    avatar: true,
-                  },
-                },
-              },
-            },
+                    avatar: true
+                  }
+                }
+              }
+            }
           },
 
           orderBy: {
-            joinedAt: "asc",
-          },
-        },
-      },
+            joinedAt: 'asc'
+          }
+        }
+      }
     });
   }
 
@@ -69,7 +69,7 @@ class RoomRepository {
   async findByCode(code: string) {
     return database.room.findUnique({
       where: {
-        code,
+        code
       },
 
       include: {
@@ -81,10 +81,10 @@ class RoomRepository {
               select: {
                 id: true,
                 nickname: true,
-                avatar: true,
-              },
-            },
-          },
+                avatar: true
+              }
+            }
+          }
         },
 
         members: {
@@ -102,18 +102,18 @@ class RoomRepository {
                   select: {
                     id: true,
                     nickname: true,
-                    avatar: true,
-                  },
-                },
-              },
-            },
+                    avatar: true
+                  }
+                }
+              }
+            }
           },
 
           orderBy: {
-            joinedAt: "asc",
-          },
-        },
-      },
+            joinedAt: 'asc'
+          }
+        }
+      }
     });
   }
 
@@ -123,7 +123,7 @@ class RoomRepository {
   async findWaitingRooms() {
     return database.room.findMany({
       where: {
-        status: "WAITING",
+        status: 'WAITING'
       },
 
       include: {
@@ -135,10 +135,10 @@ class RoomRepository {
               select: {
                 id: true,
                 nickname: true,
-                avatar: true,
-              },
-            },
-          },
+                avatar: true
+              }
+            }
+          }
         },
 
         members: {
@@ -156,22 +156,22 @@ class RoomRepository {
                   select: {
                     id: true,
                     nickname: true,
-                    avatar: true,
-                  },
-                },
-              },
-            },
+                    avatar: true
+                  }
+                }
+              }
+            }
           },
 
           orderBy: {
-            joinedAt: "asc",
-          },
-        },
+            joinedAt: 'asc'
+          }
+        }
       },
 
       orderBy: {
-        createdAt: "asc",
-      },
+        createdAt: 'asc'
+      }
     });
   }
 
@@ -185,15 +185,15 @@ class RoomRepository {
         data: {
           code: data.code,
           hostUserId: data.hostUserId,
-          maxPlayers: data.maxPlayers,
-        },
+          maxPlayers: data.maxPlayers
+        }
       });
 
       await transaction.roomMember.create({
         data: {
           roomId: room.id,
-          userId: data.hostUserId,
-        },
+          userId: data.hostUserId
+        }
       });
 
       return room;
@@ -207,8 +207,8 @@ class RoomRepository {
     return database.roomMember.create({
       data: {
         roomId,
-        userId,
-      },
+        userId
+      }
     });
   }
 
@@ -220,9 +220,9 @@ class RoomRepository {
       where: {
         roomId_userId: {
           roomId,
-          userId,
-        },
-      },
+          userId
+        }
+      }
     });
   }
 
@@ -232,12 +232,12 @@ class RoomRepository {
   async findMemberByUserId(userId: string) {
     return database.roomMember.findUnique({
       where: {
-        userId,
+        userId
       },
 
       include: {
-        room: true,
-      },
+        room: true
+      }
     });
   }
 
@@ -251,12 +251,12 @@ class RoomRepository {
   async findActiveByUserId(userId: string) {
     const member = await database.roomMember.findUnique({
       where: {
-        userId,
+        userId
       },
 
       select: {
-        roomId: true,
-      },
+        roomId: true
+      }
     });
 
     if (!member) {
@@ -274,13 +274,13 @@ class RoomRepository {
       where: {
         roomId_userId: {
           roomId,
-          userId,
-        },
+          userId
+        }
       },
 
       data: {
-        isReady,
-      },
+        isReady
+      }
     });
   }
 
@@ -292,9 +292,9 @@ class RoomRepository {
       where: {
         roomId_userId: {
           roomId,
-          userId,
-        },
-      },
+          userId
+        }
+      }
     });
   }
 
@@ -304,12 +304,12 @@ class RoomRepository {
   async updateStatus(roomId: string, status: RoomStatusValue) {
     return database.room.update({
       where: {
-        id: roomId,
+        id: roomId
       },
 
       data: {
-        status,
-      },
+        status
+      }
     });
   }
 
@@ -319,12 +319,12 @@ class RoomRepository {
   async setFinishedAt(roomId: string, finishedAt: Date) {
     return database.room.update({
       where: {
-        id: roomId,
+        id: roomId
       },
 
       data: {
-        finishedAt,
-      },
+        finishedAt
+      }
     });
   }
 
@@ -334,12 +334,12 @@ class RoomRepository {
   async updateHost(roomId: string, userId: string) {
     return database.room.update({
       where: {
-        id: roomId,
+        id: roomId
       },
 
       data: {
-        hostUserId: userId,
-      },
+        hostUserId: userId
+      }
     });
   }
 
@@ -349,8 +349,8 @@ class RoomRepository {
   async delete(id: string) {
     return database.room.delete({
       where: {
-        id,
-      },
+        id
+      }
     });
   }
 
@@ -360,8 +360,8 @@ class RoomRepository {
   async countMembers(roomId: string) {
     return database.roomMember.count({
       where: {
-        roomId,
-      },
+        roomId
+      }
     });
   }
 }

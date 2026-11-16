@@ -1,58 +1,56 @@
-import type { Character } from "../types/character.js";
-import type { GameState } from "../types/game.js";
-import type { RoomDto } from "../types/room.js";
-import type { Status } from "../types/status.js";
-
+import type { Character } from '../types/character.js';
 // NEW
-import type { FriendDto, IncomingFriendRequestDto } from "../types/friend.js";
-
-import type { RoomInvitationDto } from "../types/invitation.js";
+import type { FriendDto, IncomingFriendRequestDto } from '../types/friend.js';
+import type { GameState } from '../types/game.js';
+import type { RoomInvitationDto } from '../types/invitation.js';
+import type { RoomDto } from '../types/room.js';
+import type { Status } from '../types/status.js';
 
 export const SOCKET_EVENTS = {
-  CONNECTED: "connected",
+  CONNECTED: 'connected',
 
-  ROOM_SUBSCRIBE: "room:subscribe",
-  ROOM_UNSUBSCRIBE: "room:unsubscribe",
-  ROOM_UPDATED: "room:updated",
-  ROOM_DELETED: "room:deleted",
+  ROOM_SUBSCRIBE: 'room:subscribe',
+  ROOM_UNSUBSCRIBE: 'room:unsubscribe',
+  ROOM_UPDATED: 'room:updated',
+  ROOM_DELETED: 'room:deleted',
 
-  LOBBY_SUBSCRIBE: "lobby:subscribe",
-  LOBBY_UNSUBSCRIBE: "lobby:unsubscribe",
-  LOBBY_UPDATED: "lobby:updated",
+  LOBBY_SUBSCRIBE: 'lobby:subscribe',
+  LOBBY_UNSUBSCRIBE: 'lobby:unsubscribe',
+  LOBBY_UPDATED: 'lobby:updated',
 
-  ROOM_CREATE: "room:create",
-  ROOM_JOIN: "room:join",
-  ROOM_LEAVE: "room:leave",
-  ROOM_READY: "room:ready",
+  ROOM_CREATE: 'room:create',
+  ROOM_JOIN: 'room:join',
+  ROOM_LEAVE: 'room:leave',
+  ROOM_READY: 'room:ready',
 
-  GAME_START: "game:start",
-  GAME_STARTED: "game:started",
-  GAME_STATE: "game:state",
-  GAME_STATE_UPDATED: "game:state-updated",
-  GAME_PLAY_EVENT: "game:play-event",
-  GAME_END_TURN: "game:end-turn",
-  GAME_EVENT_RESOLVED: "game:event-resolved",
+  GAME_START: 'game:start',
+  GAME_STARTED: 'game:started',
+  GAME_STATE: 'game:state',
+  GAME_STATE_UPDATED: 'game:state-updated',
+  GAME_PLAY_EVENT: 'game:play-event',
+  GAME_END_TURN: 'game:end-turn',
+  GAME_EVENT_RESOLVED: 'game:event-resolved',
 
-  PLAYER_CONNECTION: "game:player-connection",
-  PLAYERS_CONNECTION: "game:players-connection",
+  PLAYER_CONNECTION: 'game:player-connection',
+  PLAYERS_CONNECTION: 'game:players-connection',
 
   // Админка (realtime)
-  ADMIN_LOG_ADDED: "admin:log-added",
-  ADMIN_GAMES_UPDATED: "admin:games-updated",
-  ADMIN_ROOMS_UPDATED: "admin:rooms-updated",
+  ADMIN_LOG_ADDED: 'admin:log-added',
+  ADMIN_GAMES_UPDATED: 'admin:games-updated',
+  ADMIN_ROOMS_UPDATED: 'admin:rooms-updated',
 
   // NEW — друзья
-  FRIEND_REQUEST_RECEIVED: "friend:request-received",
-  FRIEND_REQUEST_ACCEPTED: "friend:request-accepted",
-  FRIEND_REQUEST_DECLINED: "friend:request-declined",
-  FRIEND_REMOVED: "friend:removed",
+  FRIEND_REQUEST_RECEIVED: 'friend:request-received',
+  FRIEND_REQUEST_ACCEPTED: 'friend:request-accepted',
+  FRIEND_REQUEST_DECLINED: 'friend:request-declined',
+  FRIEND_REMOVED: 'friend:removed',
 
   // NEW — приглашения в игру
-  ROOM_INVITATION_RECEIVED: "room:invitation-received",
-  ROOM_INVITATION_ACCEPTED: "room:invitation-accepted",
-  ROOM_INVITATION_DECLINED: "room:invitation-declined",
+  ROOM_INVITATION_RECEIVED: 'room:invitation-received',
+  ROOM_INVITATION_ACCEPTED: 'room:invitation-accepted',
+  ROOM_INVITATION_DECLINED: 'room:invitation-declined',
 
-  ERROR: "error",
+  ERROR: 'error'
 } as const;
 
 export type RoomCreatePayload = {
